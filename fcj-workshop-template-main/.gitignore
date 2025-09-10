@@ -11,4 +11,4 @@
 #jetbrainIDE
 .idea/
 *.iml
-*.iws
+*.iws.idea/
