@@ -1,12 +1,14 @@
 {{ partial "header.html" . }}
 <span id="sidebar-toggle-span">
-  <a href="#" id="sidebar-toggle" data-sidebar-toggle=""
-    ><i class="fas fa-bars"></i> navigation</a
-  >
+  <a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
 </span>
 
-{{if .Site.Home.Content }} {{.Site.Home.Content}} {{else}} {{if eq
-.Site.Language.Lang "fr"}}
+{{/* Check if a homepage content file (_index.md) exists */}}
+{{ if .Site.Home.Content }}
+{{ .Site.Home.Content }}
+{{ else }}
+{{/* If no content file, show a default message based on language */}}
+{{ if eq .Site.Language.Lang "fr" }}
 <h1>Personaliser la page d'accueil</h1>
 <p>
   Le site fonctionne. Ne pas oublier de personaliser cette page avec votre
@@ -26,7 +28,7 @@
     homepage vers la page de votre choix dans le site
   </li>
 </ul>
-{{else}}
+{{ else }}
 <h1>Customize your own home page</h1>
 <p>
   The site is working. Don't forget to customize this homepage with your own.
@@ -46,4 +48,7 @@
     your documentation page
   </li>
 </ul>
-{{end}} {{ end }} {{ partial "footer.html" . }}
+{{ end }}
+{{ end }}
+
+{{ partial "footer.html" . }}
