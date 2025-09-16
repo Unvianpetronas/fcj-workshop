@@ -1,3 +1,10 @@
+---
+title: "Blog 1"
+date: "`r Sys.Date()`"
+weight: 1
+chapter: false
+pre: " <b> 3.1. </b> "
+---
 # How Smartsheet Reduced Latency and Optimized Costs in Their Serverless Architecture
 
 > **📖 Original Article**: [How Smartsheet reduced latency and optimized costs in their serverless architecture](https://aws.amazon.com/blogs/architecture/how-smartsheet-reduced-latency-and-optimized-costs-in-their-serverless-architecture/)  

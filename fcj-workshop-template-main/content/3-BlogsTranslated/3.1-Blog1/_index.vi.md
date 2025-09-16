@@ -1,3 +1,10 @@
+---
+title: "Blog 1"
+date: "`r Sys.Date()`"
+weight: 1
+chapter: false
+pre: " <b> 3.1. </b> "
+---
 # Cách Smartsheet Giảm Độ Trễ và Tối Ưu Chi Phí trong Kiến Trúc Serverless
 
 > **📖 Bài viết gốc**: [How Smartsheet reduced latency and optimized costs in their serverless architecture](https://aws.amazon.com/blogs/architecture/how-smartsheet-reduced-latency-and-optimized-costs-in-their-serverless-architecture/)  
