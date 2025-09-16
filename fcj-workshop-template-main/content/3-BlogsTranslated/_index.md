@@ -1,6 +1,6 @@
 ---
 title: "Translated Blogs"
-date: "`r Sys.Date()`"
+date: 2025-09-16
 weight: 3
 chapter: false
 pre: " <b> 3. </b> "

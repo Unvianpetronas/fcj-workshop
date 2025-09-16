@@ -1,4 +1,4 @@
-baseURL = "https://thienluhoan.github.io/workshop-template/"
+baseURL = "https://github.com/Unvianpetronas/fcj-workshop"
 relativeURLs = true
 canonifyURLs = true
 
@@ -15,7 +15,7 @@ home = [ "HTML", "RSS", "JSON"]
   # Git hub repo link
   editURL = ""
   description = ""
-  author = "thienlh@thienlu.com"
+  author = "unviantruong.com"
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false
