@@ -65,4 +65,29 @@
 {{/* A 'tabs' shortcode was used without any child 'tab' shortcodes inside. */}}
 {{ end }}
 
-{{/* Self-contained JavaScript to
+{{/* Self-contained JavaScript to power the tabs without jQuery, added only once per page. */}}
+{{ if not (.Page.Scratch.Get "tabs-js-added") }}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabContainers = document.querySelectorAll('.tabs-container');
+    tabContainers.forEach(container => {
+      const navLinks = container.querySelectorAll('.tab-nav-link');
+      const tabPanels = container.querySelectorAll('.tab-panel');
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          const targetId = this.getAttribute('href');
+
+          navLinks.forEach(l => l.classList.remove('active'));
+          tabPanels.forEach(p => p.classList.remove('active'));
+
+          this.classList.add('active');
+          container.querySelector(targetId).classList.add('active');
+        });
+      });
+    });
+  });
+</script>
+{{ .Page.Scratch.Set "tabs-js-added" true }}
+{{ end }}
