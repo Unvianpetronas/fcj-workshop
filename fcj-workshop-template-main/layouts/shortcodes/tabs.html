@@ -62,7 +62,7 @@
 {{ .Scratch.Delete "tabs" }}
 
 {{ else }}
-{{ warnf "A 'tabs' shortcode was used without any child 'tab' shortcodes inside. File: %s" .Page.Path }}
+{{/* A 'tabs' shortcode was used without any child 'tab' shortcodes inside. */}}
 {{ end }}
 
 {{/* Self-contained JavaScript to
