@@ -1,18 +1,4 @@
-{{ $_hugo_config := `{ "version": 1 }` }}
-<div
-  class="notices {{ .Get 0 }}"
-  {{
-  if
-  len
-  .Params
-  |
-  eq
-  2
-  }}
-  id="{{ .Get 1 }}"
-  {{
-  end
-  }}
->
-  {{ .Inner }}
+{{ $style := .Get 0 | default "info" }}
+<div class="notices {{ $style }}" {{ with .Get "id" }}id="{{ . }}"{{ end }}>
+{{ .Inner | markdownify }}
 </div>
