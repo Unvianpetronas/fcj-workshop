@@ -1,10 +1,31 @@
-{{ if .Parent }} {{ $name := trim (.Get "name") " " }}
-{{ $include := trim (.Get "include") " "}} {{ $codelang := .Get "codelang" }}
-{{ if not (.Parent.Scratch.Get "tabs") }} {{ .Parent.Scratch.Set "tabs" slice }} {{ end }}
-{{ with .Inner }} {{ if $codelang }}
-{{ $.Parent.Scratch.Add "tabs" (dict "name" $name "content" (highlight . $codelang "")) }}
+{{/* Check if this shortcode is nested within a parent, otherwise throw an error */}}
+{{ if .Parent }}
+{{/* Get parameters, trimming whitespace from name */}}
+{{ $name := trim (.Get "name") " " }}
+{{ $include := .Get "include" }}
+{{ $codelang := .Get "codelang" }}
+
+{{/* Initialize the "tabs" scratchpad on the parent if it's the first tab */}}
+{{ if not (.Parent.Scratch.Get "tabs") }}
+{{ .Parent.Scratch.Set "tabs" slice }}
+{{ end }}
+
+{{/* Handle content from either .Inner or an included file */}}
+{{ with .Inner }}
+{{ $content := . }}
+{{ if $codelang }}
+{{/* If a language is set, syntax highlight the raw inner content */}}
+{{ $content = highlight . $codelang "" }}
 {{ else }}
-{{ $.Parent.Scratch.Add "tabs" (dict "name" $name "content" . ) }} {{ end }}
+{{/* Otherwise, render the inner content to process Markdown and shortcodes */}}
+{{ $content = .Page.RenderString . }}
+{{ end }}
+{{ $.Parent.Scratch.Add "tabs" (dict "name" $name "content" $content) }}
 {{ else }}
-{{ $.Parent.Scratch.Add "tabs" (dict "name" $name "include" $include "codelang" $codelang) }} {{ end }}
-{{ else }} {{- errorf "[%s] %q: tab shortcode missing its parent" .Page.Site.Language.Lang .Page.Path -}} {{ end}}
+{{/* If .Inner is empty, pass the include file info to the parent */}}
+{{ .Parent.Scratch.Add "tabs" (dict "name" $name "include" $include "codelang" $codelang) }}
+{{ end }}
+
+{{ else }}
+{{- errorf "The 'tab' shortcode must be used inside a parent shortcode (e.g., 'tabs')." -}}
+{{ end }}
