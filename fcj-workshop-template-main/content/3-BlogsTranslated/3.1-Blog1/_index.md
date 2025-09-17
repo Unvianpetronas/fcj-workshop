@@ -56,7 +56,7 @@ Smartsheet's traffic pattern is spiky during business hours and mostly dormant d
 
 The following diagram illustrates the high-level architecture of the Smartsheet event processing pipeline.
 
-![High-level architecture of the Smartsheet event processing pipeline](./src_image/ARCHBLOG-1168-img1.png)
+![High-level architecture of the Smartsheet event processing pipeline](/images/3-blog/1-image/ARCHBLOG-1168-img1.png)
 
 ## Optimization Opportunity
 
@@ -64,7 +64,7 @@ Smartsheet uses Lambda functions to serve both batch jobs and API requests. The 
 
 The following diagram illustrates how Lambda functions reach out to external dependencies during initialization.
 
-![Lambda functions reach out to external dependencies during initialization](./src_image/ARCHBLOG-1168-img2-1.png)
+![Lambda functions reach out to external dependencies during initialization](/images/3-blog/1-image/ARCHBLOG-1168-img2-1.png)
 
 These tasks introduced execution environment initialization latency, commonly referred to as a [cold start](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html). Although cold starts typically affect less than 1% of requests, Smartsheet had stringent low latency requirements for their architecture to further prioritize the best possible end-user experience.
 
@@ -74,13 +74,13 @@ These tasks introduced execution environment initialization latency, commonly re
 
 To reduce cold start latency, the Smartsheet team adopted [provisioned concurrency](https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html) in their architecture, a capability that allows developers to specify the number of execution environments that Lambda should keep warm to instantly handle invocations. The following diagram illustrates the difference. Without provisioned concurrency, execution environments are created on demand, which means some invocations (typically less than 1%) need to wait for the execution environment to be created and initialization code to be run. With provisioned concurrency, Lambda creates execution environments and runs initialization code preemptively, making sure invocations are served by warm execution environments.
 
-![Invocations are served by warm execution environments](./src_image/ARCHBLOG-1168-img3.png)
+![Invocations are served by warm execution environments](/images/3-blog/1-image/ARCHBLOG-1168-img3.png)
 
 Provisioned concurrency includes a dynamic spillover mechanism, making your serverless architecture highly resilient to traffic spikes. When incoming traffic exceeds the preconfigured provisioned concurrency, additional requests are automatically served by [on-demand concurrency](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html) rather than being throttled. This provides seamless scalability and maintains service availability even during traffic surges, while still providing the performance benefits of pre-warmed execution environments for the majority of requests.
 
 The Smartsheet team configured provisioned concurrency to match their historical P95 concurrency needs. This resulted in immediate improvements—the number of cold starts dropped dramatically and P95 invocation latency dropped by 83%. As the team monitored system performance, they quickly identified another architecture optimization opportunity—the Lambda functions were heavily used during work hours but had significantly fewer invocations at night and on weekends, as illustrated in the following graph.
 
-![Lambda functions were heavily used during work hours but had significantly fewer invocations at night and on weekends](./src_image/ARCHBLOG-1168-img4.png)
+![Lambda functions were heavily used during work hours but had significantly fewer invocations at night and on weekends](/images/3-blog/1-image/ARCHBLOG-1168-img4.png)
 
 Setting a static provisioned concurrency configuration worked great for busy periods, but was underutilized during off-times. The Smartsheet team wanted to further fine-tune their architecture and increase provisioned concurrency utilization rates to achieve higher cost-efficiency. This led them to look into provisioned concurrency auto scaling to match traffic patterns as well as adopting an [AWS Graviton](https://aws.amazon.com/ec2/graviton/) architecture.
 
@@ -90,17 +90,17 @@ Two common approaches to enable provisioned concurrency are setting a static val
 
 The following figure compares static and dynamic provisioned concurrency.
 
-![Static and dynamic provisioned concurrency comparison](./src_image/ARCHBLOG-1168-img5.png)
+![Static and dynamic provisioned concurrency comparison](/images/3-blog/1-image/ARCHBLOG-1168-img5.png)
 
 To further optimize the architecture for cost-efficiency, the Smartsheet team has implemented provisioned concurrency auto scaling based on utilization metrics. Smartsheet used an infrastructure as code (IaC) approach with Terraform to define auto scaling policies for maximum reusability across hundreds of functions. The policies track the [LambdaProvisionedConcurrencyUtilization](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#concurrency-metrics) metric and define the scaling threshold according to the function purpose. For functions implementing interactive APIs, the auto scale threshold is 60% utilization to pre-provision execution environments early, keeping latency extra-low, and making functions more resilient towards traffic surges. For functions that implement asynchronous data processing, Smartsheet's goal was to achieve the highest utilization rate and cost-efficiency, so they've defined the auto scale threshold at 90%.
 
 The following diagram illustrates the architecture of auto scaling policies based on provisioned concurrency utilization rate and workload type.
 
-![Auto scaling policies based on provisioned concurrency utilization rate and workload type](./src_image/ARCHBLOG-1168-img6.png)
+![Auto scaling policies based on provisioned concurrency utilization rate and workload type](/images/3-blog/1-image/ARCHBLOG-1168-img6.png)
 
 Another optimization technique Smartsheet employed was switching the CPU architecture used by their Lambda functions from x86_64 to arm64 Graviton. To achieve this, Smartsheet adopted the ARM versions of Lambda layers they've used, such as Datadog and Lambda Insights extensions. This was required because binaries built using one architecture might be incompatible with a different one. Because Smartsheet functions were implemented with Java and packaged as JAR files, they didn't have any compatibility issues when moving to Graviton. With Terraform used for codifying the infrastructure, this architecture switch was a simple property change in `aws_lambda_function` resources, as illustrated in the following code:
 
-![Property change in aws_lambda_function resources](./src_image/ARCHBLOG-1168-img7.png)
+![Property change in aws_lambda_function resources](/images/3-blog/1-image/ARCHBLOG-1168-img7.png)
 
 By switching to a Graviton architecture, Smartsheet saved 20% on function GB-second costs. See [AWS Lambda pricing](https://aws.amazon.com/lambda/pricing/) for details.
 
@@ -124,25 +124,25 @@ To learn more about serverless architectures, see [Serverless Land](https://serv
 
 ## About the Authors
 
-![Anton Aleksandrov](./src_image/antonaws.png)
+![Anton Aleksandrov](/images/3-blog/1-image/antonaws.png)
 
 ### **Anton Aleksandrov**
 
 Anton is a Principal Solutions Architect for AWS Serverless and Event-Driven architectures. Having over two decades of hands-on engineering and architecture experience, Anton works with major ISV and SaaS customers to design highly scalable, innovative, and secure cloud solutions.
 
-<img alt="Rony Blum" height="200" src="./src_image/026A9027.jpg" width="200"/>
+<img alt="Rony Blum" height="200" src="/images/3-blog/1-image/026A9027.jpg" width="200"/>
 
 ### **Rony Blum**
 
 Rony Blum is a Senior Solutions Architect at AWS based in Seattle, working with ISV customers to design and implement advanced cloud architectures, specializing in SaaS solutions, multi-tenant systems, and Generative AI applications.
 
-![Donovan Allen](./src_image/blog-donovan.jpeg)
+![Donovan Allen](/images/3-blog/1-image/blog-donovan.jpeg)
 
 ### **Donovan Allen**
 
 Donovan Allen is a Senior Software Engineer 1 and Technical Lead for the Sheet Linking Team at SmartSheet. With over 8 years of experience architecting scalable cloud applications, he enjoys digging deep into the details of high-demand, low-latency systems.
 
-![Ted Bieber](./src_image/blog-ted.jpg)
+![Ted Bieber](/images/3-blog/1-image/blog-ted.jpg)
 
 ### **Ted Bieber**
 
