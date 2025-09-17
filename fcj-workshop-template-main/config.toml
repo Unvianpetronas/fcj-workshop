@@ -1,5 +1,7 @@
-baseURL = "https://github.com/Unvianpetronas/fcj-workshop"
-relativeURLs = true
+# --- BẮT ĐẦU NỘI DUNG SỬA LỖI ---
+
+baseURL = "https://unvianpetronas.github.io/fcj-workshop/"
+relativeURLs = false
 canonifyURLs = true
 
 # Change the default theme to be use when building the site with Hugo
@@ -10,15 +12,15 @@ theme = "hugo-theme-learn"
 home = [ "HTML", "RSS", "JSON"]
 
 [params]
-  # Change default color scheme with a variant one. Can be "red", "blue", "green".
-  themeVariant = "workshop"
-  # Git hub repo link
-  editURL = ""
-  description = ""
-  author = "unviantruong.com"
-  showVisitedLinks = true
-  disableBreadcrumb = false
-  disableNextPrev = false
+# Change default color scheme with a variant one. Can be "red", "blue", "green".
+themeVariant = "workshop"
+# Git hub repo link
+editURL = ""
+description = ""
+author = "unviantruong.com"
+showVisitedLinks = true
+disableBreadcrumb = false
+disableNextPrev = false
 
 [Languages]
 [Languages.en]
@@ -43,7 +45,39 @@ identifier = "AWS Study Group FB"
 url = "https://www.facebook.com/groups/awsstudygroupfcj/"
 weight = 20
 
+# Bổ sung các mục menu chính cho phiên bản Tiếng Việt (Phần bị thiếu)
+[[languages.vi.menu.main]]
+name = "Nhật ký công việc"
+identifier = "Worklog"
+weight = 10
+[[languages.vi.menu.main]]
+name = "Đề xuất"
+identifier = "Proposal"
+weight = 20
+[[languages.vi.menu.main]]
+name = "Blog đã dịch"
+identifier = "BlogsTranslated"
+weight = 30
+[[languages.vi.menu.main]]
+name = "Sự kiện tham gia"
+identifier = "EventParticipated"
+weight = 40
+[[languages.vi.menu.main]]
+name = "Workshop"
+identifier = "Workshop"
+weight = 50
+[[languages.vi.menu.main]]
+name = "Tự đánh giá"
+identifier = "Self-evaluation"
+weight = 60
+[[languages.vi.menu.main]]
+name = "Phản hồi"
+identifier = "Feedback"
+weight = 70
+
 [markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
+[markup.goldmark]
+[markup.goldmark.renderer]
+unsafe = true
+
+# --- KẾT THÚC NỘI DUNG ĐÃ SỬA ---
