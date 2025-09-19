@@ -1,7 +1,7 @@
 ---
 title: "Blog 1"
 date: "`r Sys.Date()`"
-weight: 3
+weight: 301
 chapter: false
 pre: " <b> 3.1. </b> "
 ---
