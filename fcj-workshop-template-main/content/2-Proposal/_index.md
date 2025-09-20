@@ -1,7 +1,7 @@
 ---
 title: "Proposal"
 date: "`r Sys.Date()`"
-weight: 2
+weight: 200
 chapter: false
 pre: " <b> 2. </b> "
 ---

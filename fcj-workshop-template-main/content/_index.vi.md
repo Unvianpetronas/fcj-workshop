@@ -1,7 +1,7 @@
 ---
 title: "Báo cáo thực tập"
 date: "`r Sys.Date()`"
-weight: 1
+weight: 700
 chapter: false
 ---
 

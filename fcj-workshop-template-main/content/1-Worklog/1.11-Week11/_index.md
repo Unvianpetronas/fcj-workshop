@@ -1,7 +1,7 @@
 ---
 title: "Week 11 Worklog"
 date: "`r Sys.Date()`"
-weight: 2
+weight: 111
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
