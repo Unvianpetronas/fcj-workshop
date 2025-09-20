@@ -1,57 +1,78 @@
 ---
-title: "Week 2 Worklog"
+title: "Worklog Week 2"
 date: "`r Sys.Date()`"
 weight: 102
 chapter: false
 pre: " <b> 1.2. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
 
 
 ### Week 2 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Find project ideas, create plans, and identify services to use
+* Understand AWS S3 service and S3 applications
+* Translate blog posts
 
-### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+### Tasks to be implemented this week:
+| Day | Task                                                                                                              | Start Date   | Completion Date | Reference Materials                       |
+|-----|-------------------------------------------------------------------------------------------------------------------|--------------|-----------------|-------------------------------------------|
+| 2   | - Learn about AWS S3 service and how to deploy S3 on AWS                                                         | 15/09/2025   | 16/09/2025      | <https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=104>                                        |
+| 3   | - Team meeting, brainstorm ideas, languages, and technologies to be used in the project                          | 17/09/2025   | 17/09/2025      |  |
+| 4   | - Vietnam Cloud Day                                                                                               | 18/09/2025   | 18/09/2025      |  |
+| 5   | - Research project features and assign roles based on individual interests and strengths within the team         | 19/09/2025   | 20/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| 6   | - **Hands-on Practice:** <br>&emsp; + Create S3  <br>&emsp; + Create CloudFront <br>&emsp; + Create static web    | 21/09/2025   | 21/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
 
 ### Week 2 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **AWS S3 Service Learning (Monday - 15-16/09):**
+  * Understood basic concepts and functions of Amazon S3
+  * Grasped key concepts: bucket, object, key, storage classes
+  * Learned about security features: IAM policies, bucket policies, ACLs
+  * Understood how S3 works and common use cases
+  * Learned how to deploy S3 on AWS Management Console
 
-* Successfully created and configured an AWS Free Tier account.
+* **Team Meeting and Project Ideation (Tuesday - 17/09):**
+  * Successfully organized team meeting with full member attendance
+  * Discussed and proposed feasible project ideas
+  * Decided on technology stack to use:
+    * Frontend framework
+    * Backend technology
+    * Database solution
+    * AWS services
+  * Agreed on common direction for the project
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+* **Vietnam Cloud Day Participation (Wednesday - 18/09):**
+  * Attended Vietnam's largest cloud computing event
+  * Updated on latest trends and best practices
+  * Networked with cloud community and AWS professionals
+  * Learned practical experience from case studies
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+* **Project Feature Research and Role Assignment (Thursday - 19-20/09):**
+  * Analyzed and identified main project features
+  * Researched technical requirements for each module
+  * Assessed skills and interests of team members
+  * Assigned specific roles:
+    * Frontend Developer
+    * Backend Developer
+    * DevOps/AWS Architect
+    * UI/UX Designer
+  * Created project timeline and milestones
 
-* Used AWS CLI to perform basic operations such as:
+* **AWS Hands-on Practice (Friday - 21/09):**
+  * **Create S3 bucket:**
+    * Configured bucket settings and permissions
+    * Uploaded and managed objects
+    * Tested access controls
+  * **Create CloudFront distribution:**
+    * Set up CDN for S3 content
+    * Configured caching and security headers
+  * **Deploy static website:**
+    * Hosted website on S3
+    * Integrated with CloudFront
 
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Overall Skills and Knowledge:**
+  * Effective teamwork and clear task division
+  * Successfully applied theory to practice
+  * Proficient use of AWS Console for S3 and CloudFront
+  * Strong foundation to begin the main project
