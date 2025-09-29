@@ -1,7 +1,7 @@
 ---
 title: "Workshop"
 date: "`r Sys.Date()`"
-weight: 5
+weight: 500
 chapter: false
 pre: " <b> 5. </b> "
 ---

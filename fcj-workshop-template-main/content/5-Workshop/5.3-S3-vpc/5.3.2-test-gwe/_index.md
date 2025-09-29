@@ -1,7 +1,7 @@
 ---
 title : "Test the Gateway Endpoint"
 date :  "`r Sys.Date()`" 
-weight : 2
+weight : 532
 chapter : false
 pre : " <b> 5.3.2 </b> "
 ---

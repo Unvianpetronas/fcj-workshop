@@ -1,7 +1,7 @@
 ---
 title : "Truy cập S3 từ môi trường truyền thống"
 date :  "`r Sys.Date()`" 
-weight : 4 
+weight : 540 
 chapter : false
 pre : " <b> 5.4. </b> "
 ---

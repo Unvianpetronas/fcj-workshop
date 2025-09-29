@@ -1,7 +1,7 @@
 ---
 title : "Prerequiste"
 date :  "`r Sys.Date()`" 
-weight : 2 
+weight : 520 
 chapter : false
 pre : " <b> 5.2. </b> "
 ---

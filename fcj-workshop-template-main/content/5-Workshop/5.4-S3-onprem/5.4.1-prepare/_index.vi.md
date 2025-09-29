@@ -1,7 +1,7 @@
 ---
 title : "Chuẩn bị tài nguyên"
 date : "`r Sys.Date()`"
-weight : 1
+weight : 541
 chapter : false
 pre : " <b> 5.4.1 </b> "
 ---

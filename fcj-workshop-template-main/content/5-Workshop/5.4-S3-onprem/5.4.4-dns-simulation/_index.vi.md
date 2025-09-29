@@ -1,7 +1,7 @@
 ---
 title : "Mô phỏng On-premises DNS "
 date : "`r Sys.Date()`"
-weight : 4
+weight : 544
 chapter : false
 pre : " <b> 5.4.4 </b> "
 ---
