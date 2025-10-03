@@ -5,55 +5,54 @@ weight: 104
 chapter: false
 pre: " <b> 1.4. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 4:
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Tìm hiểu hiểu chuyên sâu về dịch vu AWS S3
+* Thực hành các bài lab 
+* Ôn Tập lại kiến thức đã học trong tuần đầu tiên 
+* Triển khai project 
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Thứ | Công việc                                                                                                                     | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
+| --- |-------------------------------------------------------------------------------------------------------------------------------|--------------|-----------------| ----------------------------------------- |
+| 2   | - Hiểu các chức năng của S3 :  <br>&emsp; + Snow Family <br>&emsp; + Disaster Recovery <br>&emsp; + AWS Backup <br>&emsp <br> | 22/09/2025   | 22/09/2025      |<https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=103> |
+| 3   | - Thực hành các bài lab Liên quan tới dịch vụ S3 module 13, 14 ,24 ,25                                                        | 23/09/2025   | 24/08/2025      | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?usp=sharing/> |
+| 4   | - Ôn tập  module đầu tiên về region, az cũng như ề dịch vụ cảu EC2 trên AWS                                                  | 25/09/2025   | 25/09/2025      | <> |
+| 5   | - Triển khai project, bắt đầu coding                                                                                          | 26/09/2025   | 26/09/2025      | <https://github.com/Unvianpetronas/Cloud_health_dashboard> |
 
 
-### Kết quả đạt được tuần 4:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+##### Kết quả đạt được tuần 4:
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+#### 1. Kiến thức về AWS S3 và các dịch vụ liên quan ✅
+**Ngày 22/09/2025:**
+- Đã tìm hiểu chuyên sâu về các chức năng mở rộng của S3:
+  - Snow Family: Hiểu được cách sử dụng Snowcone, Snowball, Snowmobile để di chuyển dữ liệu lớn vào AWS
+  - Disaster Recovery: Nắm được các chiến lược backup và restore dữ liệu với S3
+  - AWS Backup: Biết cách tự động hóa backup cho S3 và các dịch vụ AWS khác
+- Hoàn thành video hướng dẫn và ghi chú các điểm quan trọng
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+#### 2. Thực hành Lab ✅
+**Ngày 23-24/09/2025:**
+- Hoàn thành 4 module lab về S3:
+  - Module 13 & 14: Thực hành cấu hình và quản lý S3 bucket
+  - Module 24 & 25: Thực hành về S3 security và lifecycle policies
+- Nắm được cách áp dụng các tính năng S3 vào thực tế
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
+#### 3. Ôn tập kiến thức cơ bản ✅
+- Ôn lại về Region và Availability Zone
+- Củng cố kiến thức về EC2: các loại instance, security groups, networking
+- Hiểu rõ hơn về kiến trúc AWS cơ bản
 
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
+#### 4. Tiến độ Project - Cloud Health Dashboard 🚧
+**Ngày 14-15/09/2025:**
+- Đã setup repository trên GitHub
+- Hoàn thành thiết kế kiến trúc hệ thống
+- Bắt đầu coding các module cơ bản
+- Dự kiến tiếp tục phát triển các tính năng trong tuần tới
 
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
+**Đánh giá chung:** Hoàn thành 4/4 mục tiêu chính của tuần, project đang trong giai đoạn phát triển tốt.
 
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
 
 
