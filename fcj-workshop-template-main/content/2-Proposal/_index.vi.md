@@ -1,5 +1,3 @@
-
-```markdown
 ---
 title: "Proposal"
 date: "`r Sys.Date()`"
