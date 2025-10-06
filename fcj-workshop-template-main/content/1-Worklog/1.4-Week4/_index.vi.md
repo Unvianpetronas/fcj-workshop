@@ -15,11 +15,11 @@ pre: " <b> 1.4. </b> "
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc                                                                                                                     | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- |-------------------------------------------------------------------------------------------------------------------------------|--------------|-----------------| ----------------------------------------- |
-| 2   | - Hiểu các chức năng của S3 :  <br>&emsp; + Snow Family <br>&emsp; + Disaster Recovery <br>&emsp; + AWS Backup <br>&emsp <br> | 22/09/2025   | 22/09/2025      |<https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=103> |
-| 3   | - Thực hành các bài lab Liên quan tới dịch vụ S3 module 13, 14 ,24 ,25                                                        | 23/09/2025   | 24/08/2025      | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?usp=sharing/> |
-| 4   | - Ôn tập  module đầu tiên về region, az cũng như ề dịch vụ cảu EC2 trên AWS                                                  | 25/09/2025   | 25/09/2025      | <> |
-| 5   | - Triển khai project, bắt đầu coding                                                                                          | 26/09/2025   | 26/09/2025      | <https://github.com/Unvianpetronas/Cloud_health_dashboard> |
+|----|-------------------------------------------------------------------------------------------------------------------------------|--------------|-----------------| ----------------------------------------- |
+| 2  | - Hiểu các chức năng của S3 :  <br>&emsp; + Snow Family <br>&emsp; + Disaster Recovery <br>&emsp; + AWS Backup <br>&emsp <br> | 22/09/2025   | 22/09/2025      |<https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=103> |
+| 3,4 | - Thực hành các bài lab Liên quan tới dịch vụ S3 module 13, 14 ,24 ,25                                                        | 23/09/2025   | 24/08/2025      | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?usp=sharing/> |
+| 5  | - Ôn tập  module đầu tiên về region, az cũng như ề dịch vụ cảu EC2 trên AWS                                                  | 25/09/2025   | 25/09/2025      | <> |
+| 6  | - Triển khai project, bắt đầu coding                                                                                          | 26/09/2025   | 26/09/2025      | <https://github.com/Unvianpetronas/Cloud_health_dashboard> |
 
 
 

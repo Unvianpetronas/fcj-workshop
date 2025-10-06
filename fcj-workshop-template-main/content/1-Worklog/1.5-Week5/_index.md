@@ -5,53 +5,44 @@ weight: 105
 chapter: false
 pre: " <b> 1.5. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
+{{% notice warning %}}
+⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
 {{% /notice %}}
 
 
 ### Week 5 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Study module 5
+* Understand the shared responsibility model for AWS account security and organization services
+* Complete labs related to module 5
+* Code basic features of the project
 
-### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+### Tasks to be implemented this week:
+| Day  | Task                                                                                                                                                                                  | Start Date | Completion Date | Resources                          |
+|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|----------------| --------------------------------------- |
+| 2    | - Study and explore services learned in module 5                                                                                                                                       | 09/27/2025 | 09/27/2025     |<https://www.youtube.com/watch?v=tsobAlSg19g&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=150>|
+| 3, 4 | - Research and complete labs related to: <br>&emsp; + resource group <br>&emsp; + IAM user, role, group  <br>&emsp; + lambda <br>&emsp; + Granting authorization <br>&emsp; + ... <br> | 09/28/2025 | 09/29/2025     | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?tab=t.0> |
+| 5, 6 | - Learn how to connect to AWS services via boto3 and complete basic functions                                                                                                          | 09/30/2025 | 09/31/2025     |  |
 
 
 ### Week 5 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+**1. Module 5 Knowledge:**
+- Completed module 5 on Security and Identity Management
+- Understood the AWS Shared Responsibility Model and distinguished responsibilities between AWS and customers
+- Learned how AWS organizes and manages accounts through AWS Organizations
+- Grasped fundamental concepts of IAM (Identity and Access Management)
 
-* Successfully created and configured an AWS Free Tier account.
+**2. Lab Practice:**
+- Completed Resource Groups lab: created and managed resource groups using tags
+- Practiced creating and managing IAM resources
+- Got familiar with AWS Lambda: created simple functions and tested them
+- Practiced granting authorization and managing policies
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+**3. Project Development:**
+- Integrated boto3 library into the project to connect with AWS services
+- Configured credentials and region for boto3
+- Completed basic functions
+- Code met requirements and was successfully tested in development environment
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+---

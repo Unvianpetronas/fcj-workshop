@@ -25,14 +25,14 @@ pre: " <b> 1.2. </b> "
 
 ### Kết quả đạt được tuần 2:
 
-* **Tìm hiểu về dịch vụ AWS S3 (Thứ 2 - 15-16/09):**
+* **Tìm hiểu về dịch vụ AWS S3 :**
   * Hiểu được khái niệm và chức năng cơ bản của Amazon S3
   * Nắm được các khái niệm: bucket, object, key, storage classes
   * Tìm hiểu về security features: IAM policies, bucket policies, ACLs
   * Hiểu cách S3 hoạt động và các use cases phổ biến
   * Biết cách triển khai S3 trên AWS Management Console
 
-* **Họp nhóm và lên ý tưởng project (Thứ 3 - 17/09):**
+* **Họp nhóm và lên ý tưởng project:**
   * Tổ chức meeting team thành công với đầy đủ thành viên
   * Thảo luận và đưa ra các ý tưởng project khả thi
   * Quyết định stack công nghệ sẽ sử dụng:
@@ -42,13 +42,13 @@ pre: " <b> 1.2. </b> "
     * AWS services
   * Thống nhất hướng đi chung cho project
 
-* **Tham gia Vietnam Cloud Day (Thứ 4 - 18/09):**
+* **Tham gia Vietnam Cloud Day :**
   * Tham dự sự kiện cloud computing lớn nhất Việt Nam
   * Cập nhật được trend và best practices mới nhất
   * Networking với cộng đồng cloud và AWS professionals
   * Học hỏi kinh nghiệm thực tế từ các case study
 
-* **Nghiên cứu chức năng project và phân chia role (Thứ 5 - 19-20/09):**
+* **Nghiên cứu chức năng project và phân chia role :**
   * Phân tích và xác định các chức năng chính của project
   * Research technical requirements cho từng module
   * Đánh giá kỹ năng và sở thích của các thành viên team
@@ -59,7 +59,7 @@ pre: " <b> 1.2. </b> "
     * UI/UX Designer
   * Tạo project timeline và milestone
 
-* **Thực hành hands-on AWS (Thứ 6 - 21/09):**
+* **Thực hành hands-on AWS :**
   * **Tạo S3 bucket:**
     * Cấu hình bucket settings và permissions
     * Upload và manage objects

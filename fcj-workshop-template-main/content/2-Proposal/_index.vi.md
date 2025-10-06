@@ -392,36 +392,6 @@ Sử dụng 4 tables chuyên biệt để tối ưu performance và separation o
 }
 ```
 
-**Design Rationale:**
-
-Tách thành 4 tables chuyên biệt thay vì 2 tables tổng hợp vì:
-
-1. **Query Performance**: Mỗi table optimize cho access pattern riêng
-   - Metrics: Time-series queries với high write throughput
-   - Costs: Aggregation queries theo service và date range
-   - Security: Severity-based filtering và real-time monitoring
-   - Recommendations: Impact-based sorting và status tracking
-
-2. **Separation of Concerns**:
-   - Rõ ràng về data ownership và lifecycle
-   - TTL policies khác nhau cho từng loại data
-   - Dễ maintain và troubleshoot
-
-3. **Scalability**:
-   - Độc lập scale từng table khi cần
-   - Không bị hot partition khi một loại data tăng đột biến
-   - GSI optimize cho query patterns cụ thể
-
-4. **Cost Management**:
-   - Monitor và optimize cost theo từng table
-   - Flexible TTL cho từng use case
-   - On-demand billing phù hợp với variable workload
-
-**Trade-offs:**
-- Chi phí cao hơn ~$2-3/tháng so với 2 tables
-- Complexity cao hơn khi deploy và maintain
-- Nhưng: Better performance, cleaner architecture, easier to scale
-
 ### 4. Triển khai kỹ thuật
 
 **Stack công nghệ:**

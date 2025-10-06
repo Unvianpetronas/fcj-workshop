@@ -12,48 +12,39 @@ pre: " <b> 1.5. </b> "
 
 ### Mục tiêu tuần 5:
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Học module 5 
+* Hiểu được share responsibility model các dịch vụ về security tài khoản, organize tài khoản của aws 
+* Làm các bài lab liên quan tới module 5
+* code các chức năng cơ bản của project 
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Thứ | Công việc                                                                                                                                                                                  | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                          |
+|-----|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|-----------------| --------------------------------------- |
+| 2   | - Học và tìm hiểu các dịch vụ học được ở module 5                                                                                                                                          | 27/09/2025   | 27/09/2025      |<https://www.youtube.com/watch?v=tsobAlSg19g&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=150>|
+| 3,4 | - Tìm hiểu và làm các bài lab liên quan tới  <br>&emsp; + resource group <br>&emsp; + IAM user, role , group  <br>&emsp; + lamda <br>&emsp; + Granting authorization <br>&emsp; + ... <br> | 28/09/2025   | 29/08/2025      | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?tab=t.0> |
+| 5,6 | - Tìm hiểu cách kết nối tơi dịch vụ của AWS qua boto3 và hoàn thành các chức năng cơ bản                                                                                                   | 30/09/2025   | 31/09/2025      |  |
 
 
 ### Kết quả đạt được tuần 5:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+**1. Kiến thức Module 5 :**
+- Đã hoàn thành việc học module 5 về Security và Identity Management
+- Nắm được khái niệm Share Responsibility Model của AWS và phân biệt trách nhiệm giữa AWS và khách hàng
+- Hiểu được cách AWS tổ chức và quản lý tài khoản thông qua AWS Organizations
+- Nắm được các khái niệm cơ bản về IAM (Identity and Access Management)
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+**2. Thực hành Lab :**
+- Hoàn thành lab về Resource Groups: tạo và quản lý nhóm tài nguyên theo tags
+- Thực hành tạo và quản lý IAM:
+- Làm quen với AWS Lambda: tạo function đơn giản và test
+- Thực hành cấp quyền (Authorization) và quản lý policies
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+**3. Phát triển Project :**
+- Tích hợp thư viện boto3 vào project để kết nối với AWS services
+- Cấu hình credentials và region cho boto3
+- Hoàn thành các chức năng cơ bản
+- Code đạt yêu cầu và test thành công trên môi trường development
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
+---
 
 

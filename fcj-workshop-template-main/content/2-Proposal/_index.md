@@ -392,36 +392,6 @@ Using 4 specialized tables to optimize performance and separation of concerns:
 }
 ```
 
-**Design Rationale:**
-
-Splitting into 4 specialized tables instead of 2 consolidated tables because:
-
-1. **Query Performance**: Each table optimized for specific access patterns
-  - Metrics: Time-series queries with high write throughput
-  - Costs: Aggregation queries by service and date range
-  - Security: Severity-based filtering and real-time monitoring
-  - Recommendations: Impact-based sorting and status tracking
-
-2. **Separation of Concerns**:
-  - Clear data ownership and lifecycle
-  - Different TTL policies for each data type
-  - Easier to maintain and troubleshoot
-
-3. **Scalability**:
-  - Independently scale each table when needed
-  - Avoid hot partitions when one data type spikes
-  - GSI optimized for specific query patterns
-
-4. **Cost Management**:
-  - Monitor and optimize cost per table
-  - Flexible TTL for each use case
-  - On-demand billing suitable for variable workload
-
-**Trade-offs:**
-- Higher cost ~$2-3/month compared to 2 tables
-- Higher complexity when deploying and maintaining
-- But: Better performance, cleaner architecture, easier to scale
-
 ### 4. Technical Implementation
 
 **Technology Stack:**
