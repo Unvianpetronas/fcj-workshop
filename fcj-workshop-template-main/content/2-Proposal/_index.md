@@ -15,13 +15,13 @@ pre: " <b> 2. </b> "
 **AWS Cloud Health Dashboard** is a **multi-tenant SaaS platform** that enables businesses to monitor and optimize AWS infrastructure for multiple clients from a single centralized system. The platform demonstrates enterprise-level architecture while maintaining a cost-efficient operation model.
 
 **Key Highlights:**
-* **Multi-tenant architecture**: Monitor 10-50+ client AWS accounts from one platform.
-* **Platform cost**: $10-20/month (supports unlimited clients with minimal incremental cost).
-* **Per-client cost**: ~$0.50-1.00/month in data storage.
-* **Professional features**: Email verification, encrypted credentials, automated alerts, real-time monitoring.
-* **5 DynamoDB tables**: Optimized data model with client isolation.
-* **Background worker system**: Automated data collection for all clients.
-* **Email notification system**: AWS SES integration for critical alerts and verification.
+   * **Multi-tenant architecture**: Monitor 10-50+ client AWS accounts from one platform.
+   * **Platform cost**: $10-20/month (supports unlimited clients with minimal incremental cost).
+   * **Per-client cost**: ~$0.50-1.00/month in data storage.
+   * **Professional features**: Email verification, encrypted credentials, automated alerts, real-time monitoring.
+   * **5 DynamoDB tables**: Optimized data model with client isolation.
+   * **Background worker system**: Automated data collection for all clients.
+   * **Email notification system**: AWS SES integration for critical alerts and verification.
 
 **Technology Stack:** FastAPI (Python) + React + DynamoDB + Redis + AWS SES + EC2 t3.micro
 
@@ -32,67 +32,67 @@ pre: " <b> 2. </b> "
 **Current Challenges:**
 
 Businesses managing AWS infrastructure for multiple clients face:
-* **No centralized monitoring**: Must log into each client's AWS console separately.
-* **Scattered security alerts**: Critical GuardDuty findings go unnoticed.
-* **Cost visibility gaps**: Difficult to track and optimize costs across clients.
-* **Manual credential management**: Insecure storage of AWS access keys.
-* **No proactive notifications**: Missing critical events in real-time.
-* **Time-consuming monitoring**: 30+ minutes daily per client.
+   * **No centralized monitoring**: Must log into each client's AWS console separately.
+   * **Scattered security alerts**: Critical GuardDuty findings go unnoticed.
+   * **Cost visibility gaps**: Difficult to track and optimize costs across clients.
+   * **Manual credential management**: Insecure storage of AWS access keys.
+   * **No proactive notifications**: Missing critical events in real-time.
+   * **Time-consuming monitoring**: 30+ minutes daily per client.
 
 **Our Solution:**
 
 Cloud Health Dashboard provides a **single platform to monitor all clients** with:
 
 **Multi-Tenant Architecture**
-* One platform monitors 10-50+ client AWS accounts.
-* Encrypted AWS credential storage (Fernet encryption).
-* Complete data isolation between clients.
-* Automatic worker management per client.
+   * One platform monitors 10-50+ client AWS accounts.
+   * Encrypted AWS credential storage (Fernet encryption).
+   * Complete data isolation between clients.
+   * Automatic worker management per client.
 
 **Centralized Monitoring**
-* Single dashboard for all clients.
-* Real-time infrastructure health.
-* Historical data retention (30-365 days).
-* 15+ AWS services monitored.
+   * Single dashboard for all clients.
+   * Real-time infrastructure health.
+   * Historical data retention (30-365 days).
+   * 15+ AWS services monitored.
 
 **Email Notification System**
-* Email verification with token expiry.
-* Critical GuardDuty alerts via AWS SES.
-* Beautiful HTML email templates.
-* Customizable notification preferences.
-* Client can update email in Settings.
+   * Email verification with token expiry.
+   * Critical GuardDuty alerts via AWS SES.
+   * Beautiful HTML email templates.
+   * Customizable notification preferences.
+   * Client can update email in Settings.
 
 **Cost Analysis & Optimization**
-* Per-client cost tracking.
-* Historical trends and forecasting.
-* AWS native recommendations.
-* Budget alerts.
+   * Per-client cost tracking.
+   * Historical trends and forecasting.
+   * AWS native recommendations.
+   * Budget alerts.
 
 **Security & Compliance**
-* GuardDuty threat detection.
-* Security Hub integration.
-* Severity-based filtering.
-* Real-time email alerts for critical findings.
+   * GuardDuty threat detection.
+   * Security Hub integration.
+   * Severity-based filtering.
+   * Real-time email alerts for critical findings.
 
 **Rule-based Recommendations**
-* Cost optimization suggestions.
-* Performance improvements.
-* Security enhancements.
-* Impact-based prioritization.
+   * Cost optimization suggestions.
+   * Performance improvements.
+   * Security enhancements.
+   * Impact-based prioritization.
 
 **ROI & Benefits:**
 
 For Platform Operator:
-* Monitor 20 clients for only $15-20/month total.
-* Automated data collection (save 10+ hours/week).
-* Professional portfolio project.
-* Demonstrates enterprise architecture skills.
+   * Monitor 20 clients for only $15-20/month total.
+   * Automated data collection (save 10+ hours/week).
+   * Professional portfolio project.
+   * Demonstrates enterprise architecture skills.
 
 For Each Client:
-* Potential 15-25% cost savings through optimization.
-* Immediate critical security alerts via email.
-* Historical data visibility.
-* Single dashboard instead of multiple AWS consoles.
+   * Potential 15-25% cost savings through optimization.
+   * Immediate critical security alerts via email.
+   * Historical data visibility.
+   * Single dashboard instead of multiple AWS consoles.
 
 ---
 
@@ -126,23 +126,23 @@ For Each Client:
 5.  DASHBOARD DISPLAY
     Customer login → API (filtered by client\_id) → Return only their data
 
-<!-- end list -->
+
 
 ````
 
 ### **Core Components**
 
-**EC2 t3.micro Instance (Single Server):**
-* **Nginx**: Reverse proxy, SSL termination
-* **FastAPI**: RESTful API, authentication, AWS integration
-* **React**: Single-page dashboard application
-* **Redis**: Caching layer (5-min TTL)
-* **Worker Manager**: Multi-client background job orchestration
-* **CloudWatch Agent**: Platform monitoring
+**EC2 t3.micro Instance (Single Server)**:
+   * **Nginx**: Reverse proxy, SSL termination
+   * **FastAPI**: RESTful API, authentication, AWS integration
+   * **React**: Single-page dashboard application
+   * **Redis**: Caching layer (5-min TTL)
+   * **Worker Manager**: Multi-client background job orchestration
+   * **CloudWatch Agent**: Platform monitoring
 
 **5 DynamoDB Tables (Multi-Tenant):**
 
-1.  **CloudHealthClients**
+1. **CloudHealthClients**
     * Stores client accounts with encrypted AWS credentials.
     * Email addresses and verification status.
     * Notification preferences.
@@ -183,51 +183,51 @@ For Each Client:
 ## 4. Key Features
 
 ### **Multi-Tenant Management**
-* Self-service client signup with AWS key validation.
-* Encrypted credential storage (Fernet encryption).
-* Automatic worker spawning per client.
-* Complete data isolation.
-* Per-client dashboard access.
-* Worker health monitoring.
+   * Self-service client signup with AWS key validation.
+   * Encrypted credential storage (Fernet encryption).
+   * Automatic worker spawning per client.
+   * Complete data isolation.
+   * Per-client dashboard access.
+   * Worker health monitoring.
 
 ### **Email Notification System**
-* Email verification with secure tokens (24h expiry).
-* Critical GuardDuty alerts via AWS SES.
-* Customizable notification preferences:
-    * Critical security alerts
-    * Warning alerts
-    * Cost optimization tips
-    * Daily infrastructure summary
-* Email editing in Settings page.
-* Resend verification email option.
+   * Email verification with secure tokens (24h expiry).
+   * Critical GuardDuty alerts via AWS SES.
+   * Customizable notification preferences:
+       * Critical security alerts
+       * Warning alerts
+       * Cost optimization tips
+       * Daily infrastructure summary
+   * Email editing in Settings page.
+   * Resend verification email option.
 
 ### **Infrastructure Monitoring**
-* Real-time metrics from 15+ AWS services.
-* Historical data retention (30+ days).
-* EC2, S3, RDS, Lambda monitoring.
-* Custom CloudWatch metrics.
-* Service health dashboards.
+   * Real-time metrics from 15+ AWS services.
+   * Historical data retention (30+ days).
+   * EC2, S3, RDS, Lambda monitoring.
+   * Custom CloudWatch metrics.
+   * Service health dashboards.
 
 ### **Cost Optimization**
-* Daily cost tracking per service.
-* Monthly cost trends.
-* AWS Cost Explorer recommendations.
-* Budget alerts.
-* Resource utilization analysis.
+   * Daily cost tracking per service.
+   * Monthly cost trends.
+   * AWS Cost Explorer recommendations.
+   * Budget alerts.
+   * Resource utilization analysis.
 
 ### **Security Monitoring**
-* GuardDuty threat detection.
-* Security Hub findings aggregation.
-* Severity-based filtering.
-* Email alerts for critical findings.
-* Compliance status tracking.
+   * GuardDuty threat detection.
+   * Security Hub findings aggregation.
+   * Severity-based filtering.
+   * Email alerts for critical findings.
+   * Compliance status tracking.
 
 ### **Recommendations Engine**
-* Cost optimization suggestions.
-* Performance improvements.
-* Security enhancements.
-* Impact-based prioritization.
-* Implementation tracking.
+   * Cost optimization suggestions.
+   * Performance improvements.
+   * Security enhancements.
+   * Impact-based prioritization.
+   * Implementation tracking.
 
 ---
 
@@ -236,31 +236,31 @@ For Each Client:
 ### **Technology Stack**
 
 **Backend:**
-* Python 3.9+ with FastAPI
-* boto3 (AWS SDK)
-* cryptography (Fernet encryption)
-* asyncio for concurrent workers
-* Redis for caching
+   * Python 3.9+ with FastAPI
+   * boto3 (AWS SDK)
+   * cryptography (Fernet encryption)
+   * asyncio for concurrent workers
+   * Redis for caching
 
 **Frontend:**
-* React 18 with Vite
-* TanStack Query for data fetching
-* Recharts for visualization
-* Tailwind CSS for styling
+   * React 18 with Vite
+   * TanStack Query for data fetching
+   * Recharts for visualization
+   * Tailwind CSS for styling
 
 **Database:**
-* DynamoDB (5 tables, on-demand pricing)
-* Redis (in-memory caching)
+   * DynamoDB (5 tables, on-demand pricing)
+   * Redis (in-memory caching)
 
 **Email:**
-* AWS SES for transactional emails
-* HTML email templates
-* Token-based verification
+   * AWS SES for transactional emails
+   * HTML email templates
+   * Token-based verification
 
 ### **Security Implementation**
 
 **Credential Encryption:**
-```python
+```
 # Fernet symmetric encryption
 from cryptography.fernet import Fernet
 
@@ -271,7 +271,7 @@ encrypted_key = cipher.encrypt(client_aws_key.encode())
 
 **Email Verification:**
 
-```python
+```
 # Token generation with expiry
 import secrets
 from datetime import datetime, timedelta
@@ -283,7 +283,7 @@ expires = datetime.now() + timedelta(hours=24)
 
 **Worker Manager:**
 
-```python
+```
 # Automatic client discovery and worker spawning
 import asyncio
 
@@ -552,7 +552,4 @@ This project demonstrates:
 * **Email:** `unviantruong26@gmail.com`
 * **WhatsApp:** `+84 798806545`
 
-<!-- end list -->
-
-```
 ```
