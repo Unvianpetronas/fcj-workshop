@@ -13,12 +13,16 @@ home = [ "HTML", "RSS", "JSON"]
   # Change default color scheme with a variant one. Can be "red", "blue", "green".
   themeVariant = "workshop"
   # Git hub repo link
-  editURL = ""
+  editURL = "https://github.com/Unvianpetronas/fcj-workshop"
   description = ""
   author = "unviantruong.com"
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false
+# English is the default language
+defaultContentLanguage = "English"
+# Force to have /en/my-page and /fr/my-page routes, even for default language.
+defaultContentLanguageInSubdir= true
 
 [Languages]
 [Languages.en]
