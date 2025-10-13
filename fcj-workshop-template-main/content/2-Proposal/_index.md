@@ -130,11 +130,11 @@ For Each Client:
    Every 5 min → Check for new clients → Start worker per client
 
 4. DATA COLLECTION (per client)
-   Worker → Client AWS API → Collect metrics → Store in DynamoDB (with client_id)
+   Worker → Client AWS API → Collect metrics → Store in DynamoDB (with aws_account_id)
    → If critical finding → Send email alert (AWS SES)
 
 5. DASHBOARD DISPLAY
-   Customer login → API (filtered by client_id) → Return only their data
+   Customer login → API (filtered by aws_account_id) → Return only their data
 ```
 
 ### **Core Components**
@@ -158,7 +158,7 @@ For Each Client:
 
 2. **CloudHealthMetrics**
    - Time-series metrics from CloudWatch.
-   - Partitioned by client_id.
+   - Partitioned by aws_account_id.
    - 30-day retention (TTL).
 
 3. **CloudHealthCosts**
@@ -308,14 +308,14 @@ expires = datetime.now() + timedelta(hours=24)
 import asyncio
 
 for client in active_clients:
-    if client_id not in workers:
-        worker = CloudHealthWorker(client_provider, client_id)
-        workers[client_id] = asyncio.create_task(worker.start())
+    if aws_account_id not in workers:
+        worker = CloudHealthWorker(client_provider, aws_account_id)
+        workers[aws_account_id] = asyncio.create_task(worker.start())
 ```
 
 **Data Isolation:**
 
-- All queries filtered by `client_id`.
+- All queries filtered by `aws_account_id`.
 - DynamoDB partition key includes client identifier.
 - API endpoints require client authentication.
 - No cross-client data leakage.
@@ -442,7 +442,7 @@ for client in active_clients:
 | Budget overrun           | Medium | Low         | AWS Budget alerts, daily monitoring, DynamoDB on-demand.   |
 | EC2 downtime             | High   | Low         | CloudWatch alarms, systemd auto-restart, 98% uptime target.|
 | Client data security     | High   | Low         | Fernet encryption, IAM least privilege, audit logging.     |
-| DynamoDB hot partitions  | Medium | Low         | Proper partition key design, client_id sharding.           |
+| DynamoDB hot partitions  | Medium | Low         | Proper partition key design, aws_account_id sharding.           |
 | Email delivery issues    | Medium | Low         | AWS SES monitoring, retry logic, fallback notifications.   |
 | Worker manager failure   | Medium | Low         | Health checks, auto-restart, error logging.                |
 | Scope creep              | Medium | High        | Strict MVP definition, feature freeze week 8, Phase 2 planning.|
@@ -561,7 +561,7 @@ This project demonstrates:
 ## Appendices
 
 **A. GitHub Repository:** [https://github.com/Unvianpetronas/Cloud_health_dashboard](https://github.com/Unvianpetronas/Cloud_health_dashboard)
-
+[_index.md](_index.md)
 **B. Contact Information:**
 
 - **Project Lead:** Truong Quoc Tuan

@@ -131,11 +131,11 @@ Cho Mỗi Khách hàng:
    Mỗi 5 phút → Kiểm tra khách hàng mới → Khởi động worker cho mỗi khách hàng
 
 4. THU THẬP DỮ LIỆU (mỗi khách hàng)
-   Worker → API AWS của Khách hàng → Thu thập metrics → Lưu vào DynamoDB (với client_id)
+   Worker → API AWS của Khách hàng → Thu thập metrics → Lưu vào DynamoDB (với aws_account_id)
    → Nếu phát hiện quan trọng → Gửi cảnh báo email (AWS SES)
 
 5. HIỂN THỊ DASHBOARD
-   Khách hàng đăng nhập → API (lọc theo client_id) → Trả về chỉ dữ liệu của họ
+   Khách hàng đăng nhập → API (lọc theo aws_account_id) → Trả về chỉ dữ liệu của họ
 ```
 
 ### **Các Thành phần Cốt lõi**
@@ -159,7 +159,7 @@ Cho Mỗi Khách hàng:
 
 2. **CloudHealthMetrics**
     - Metrics chuỗi thời gian từ CloudWatch.
-    - Phân vùng theo client_id.
+    - Phân vùng theo aws_account_id.
     - Lưu trữ 30 ngày (TTL).
 
 3. **CloudHealthCosts**
@@ -309,14 +309,14 @@ expires = datetime.now() + timedelta(hours=24)
 import asyncio
 
 for client in active_clients:
-    if client_id not in workers:
-        worker = CloudHealthWorker(client_provider, client_id)
-        workers[client_id] = asyncio.create_task(worker.start())
+    if aws_account_id not in workers:
+        worker = CloudHealthWorker(client_provider, aws_account_id)
+        workers[aws_account_id] = asyncio.create_task(worker.start())
 ```
 
 **Cách ly Dữ liệu:**
 
-- Tất cả truy vấn được lọc theo `client_id`.
+- Tất cả truy vấn được lọc theo `aws_account_id`.
 - Khóa phân vùng DynamoDB bao gồm định danh khách hàng.
 - Endpoint API yêu cầu xác thực khách hàng.
 - Không có rò rỉ dữ liệu giữa khách hàng.
@@ -440,14 +440,14 @@ for client in active_clients:
 
 ## 8. Đánh giá Rủi ro
 
-| Rủi ro                      | Tác động  | Xác suất | Giảm thiểu                                                      |
-| --------------------------- | --------- | -------- | --------------------------------------------------------------- |
-| Vượt ngân sách              | Trung bình | Thấp     | Cảnh báo AWS Budget, giám sát hàng ngày, DynamoDB on-demand.    |
+| Rủi ro                      | Tác động  | Xác suất | Giảm thiểu                                                     |
+| --------------------------- | --------- | -------- | -------------------------------------------------------------- |
+| Vượt ngân sách              | Trung bình | Thấp     | Cảnh báo AWS Budget, giám sát hàng ngày, DynamoDB on-demand.   |
 | Ngừng hoạt động EC2        | Cao       | Thấp     | Cảnh báo CloudWatch, tự động khởi động lại systemd, mục tiêu uptime 98%. |
 | Bảo mật dữ liệu khách hàng | Cao       | Thấp     | Mã hóa Fernet, đặc quyền tối thiểu IAM, ghi nhật ký kiểm toán. |
-| Phân vùng nóng DynamoDB     | Trung bình | Thấp     | Thiết kế khóa phân vùng đúng, phân mảnh client_id.             |
-| Vấn đề gửi email           | Trung bình | Thấp     | Giám sát AWS SES, logic thử lại, thông báo dự phòng.           |
-| Lỗi worker manager          | Trung bình | Thấp     | Kiểm tra sức khỏe, tự động khởi động lại, ghi nhật ký lỗi.     |
+| Phân vùng nóng DynamoDB     | Trung bình | Thấp     | Thiết kế khóa phân vùng đúng, phân mảnh aws_account_id.             |
+| Vấn đề gửi email           | Trung bình | Thấp     | Giám sát AWS SES, logic thử lại, thông báo dự phòng.          |
+| Lỗi worker manager          | Trung bình | Thấp     | Kiểm tra sức khỏe, tự động khởi động lại, ghi nhật ký lỗi.    |
 | Mở rộng phạm vi            | Trung bình | Cao      | Định nghĩa MVP nghiêm ngặt, đóng băng tính năng tuần 8, kế hoạch Giai đoạn 2. |
 
 ---
