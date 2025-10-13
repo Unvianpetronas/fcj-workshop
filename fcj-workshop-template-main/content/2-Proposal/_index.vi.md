@@ -7,815 +7,516 @@ pre: " <b> 2. </b> "
 ---
 
 # AWS Cloud Health Dashboard
-## Giải pháp giám sát và tối ưu hóa hạ tầng AWS toàn diện
-
-### 1. Tóm tắt điều hành
-
-AWS Cloud Health Dashboard là nền tảng giám sát và tối ưu hóa hạ tầng AWS được thiết kế nhằm giúp các doanh nghiệp và cá nhân quản lý hiệu quả chi phí, bảo mật, và hiệu suất của hệ thống cloud. Nền tảng sử dụng kiến trúc đơn giản với EC2 và DynamoDB, kết hợp các dịch vụ AWS như CloudWatch, Cost Explorer, Security Hub để cung cấp giám sát thời gian thực và phân tích dữ liệu.
-
-**Điểm nổi bật:**
-- Chi phí vận hành: $12-18/tháng (tận dụng Free Tier)
-- Giám sát CloudWatch metrics và AWS costs
-- Phân tích chi phí và đề xuất tối ưu hóa dựa trên AWS APIs
-- Dashboard real-time với data caching
-- Kiến trúc đơn giản, dễ maintain và scale
-
-### 2. Vấn đề
-
-**Vấn đề hiện tại:**
-
-Nhiều doanh nghiệp và cá nhân sử dụng AWS đang gặp phải các thách thức:
-
-1. **Chi phí không kiểm soát**: Thiếu công cụ giám sát chi phí tập trung dẫn đến hoá đơn AWS bất ngờ tăng cao
-2. **Bảo mật thiếu visibility**: Không có dashboard tổng hợp cho security findings
-3. **Metrics phân tán**: Phải chuyển đổi giữa nhiều console AWS khác nhau
-4. **Thiếu historical data**: CloudWatch chỉ giữ metrics 15 ngày (free tier)
-5. **Không có alerting tùy chỉnh**: Khó setup alerts phức tạp
-
-**Giải pháp:**
-
-Cloud Health Dashboard cung cấp một nền tảng tập trung với các tính năng:
-
-- **Centralized monitoring**: Dashboard duy nhất cho CloudWatch, Cost Explorer, Security Hub
-- **Data persistence với DynamoDB**: 
-  - 4 bảng chuyên biệt: CloudHealthMetrics, CloudHealthCosts, SecurityFindings, Recommendations
-  - TTL tự động để xóa dữ liệu cũ (30 ngày cho metrics, 365 ngày cho costs, 90 ngày cho security, 180 ngày cho recommendations)
-  - On-demand pricing để tiết kiệm chi phí
-  - Optimized query patterns với GSI cho từng loại data
-- **Cost analysis**: 
-  - Historical cost trends
-  - Service breakdown
-  - AWS Cost Explorer recommendations integration
-  - Budget alerts
-- **Security monitoring**: 
-  - Security Hub findings aggregation
-  - GuardDuty threat detection display
-  - Compliance status tracking
-  - Severity-based filtering
-- **Intelligent recommendations**:
-  - Cost optimization suggestions
-  - Performance improvements
-  - Security enhancements
-  - Impact-based prioritization
-- **Performance**: 
-  - Redis caching để giảm AWS API calls
-  - Pre-collected data trong DynamoDB
-  - WebSocket cho real-time updates
-
-**Lợi ích và ROI:**
-
-1. **Tiết kiệm chi phí**: 
-   - Visibility vào unutilized resources
-   - AWS native recommendations (Cost Explorer, Trusted Advisor)
-   - Chi phí nền tảng chỉ $12-18/tháng
-   - Potential savings: 15-25% bằng cách identify waste
-
-2. **Tăng visibility**:
-   - Single dashboard thay vì 5+ AWS consoles
-   - Historical data retention
-   - Custom alerts
-   - Real-time notifications
-
-3. **Cải thiện productivity**:
-   - Giảm thời gian monitoring từ 30 phút/ngày xuống 5 phút/ngày
-   - Automated data collection
-   - Proactive alerts
-   - Actionable recommendations
-
-### 3. Kiến trúc giải pháp
-
-**Tổng quan kiến trúc:**
-
-Nền tảng sử dụng kiến trúc Single EC2 Instance + DynamoDB để tối ưu chi phí. EC2 instance chạy tất cả application components, trong khi DynamoDB lưu trữ historical data với 4 tables chuyên biệt.
-
-![Architecture Diagram](/images/2-Proposal/project_aws.drawio.png)
-
-**Dịch vụ AWS sử dụng:**
-
-1. **Amazon EC2** (Compute):
-   - t3.micro instance (750h/month Free Tier)
-   - Single public subnet (no NAT Gateway needed)
-   - Components: Nginx, FastAPI, Redis, React, CloudWatch Agent
-   - Security: Restrictive security groups, Systems Manager Session Manager
-
-2. **Amazon DynamoDB** (Storage):
-   - 4 bảng chuyên biệt: Metrics, Costs, Security, Recommendations
-   - On-demand pricing mode
-   - TTL enabled cho tự động cleanup
-   - Global Secondary Indexes cho query optimization
-   - Point-in-time recovery for backups
-
-3. **Amazon CloudWatch**:
-   - Metrics collection từ EC2, RDS, S3, Lambda, etc.
-   - Custom metrics cho application monitoring
-   - Logs aggregation
-   - Alarms và notifications
-
-4. **AWS Cost Explorer**:
-   - Cost và usage data via API
-   - Rightsizing recommendations (AWS native)
-   - Cost forecast (AWS native)
-   - Service breakdown
-
-5. **AWS Security Hub**:
-   - Security findings aggregation
-   - Compliance checking
-   - Integration với GuardDuty
-
-6. **Amazon GuardDuty** (Optional):
-   - Threat detection
-   - Anomaly monitoring
-
-7. **Amazon S3** (Backup):
-   - DynamoDB backup exports
-   - CloudWatch logs archive
-
-**Single Public Subnet Design:**
-
-EC2 instance được đặt trong public subnet với các biện pháp bảo mật:
-
-1. **Security Group Configuration:**
-   - Inbound: Port 80, 443 từ 0.0.0.0/0
-   - Inbound: Port 22 chỉ từ trusted IPs (hoặc disable)
-   - Outbound: Unrestricted (cho AWS API calls)
-
-2. **Access Management:**
-   - AWS Systems Manager Session Manager thay cho SSH
-   - IAM roles với least privilege principle
-   - No hardcoded credentials trong code
-
-3. **Monitoring & Logging:**
-   - VPC Flow Logs enabled
-   - CloudWatch alarms cho security events
-   - GuardDuty threat detection
-
-**Architecture Decision:**
-Private subnet architecture được cân nhắc nhưng không implement vì:
-- Tăng chi phí 100% ($33/tháng cho NAT Gateway hoặc $14/tháng cho VPC Endpoints)
-- Không phù hợp với learning/portfolio project scope
-- Public subnet + security best practices đủ cho use case này
-- Demonstrate cost-aware decision making
-
-Kiến trúc này phù hợp cho development/demo environment. Production deployment trong enterprise sẽ cần private subnet với NAT Gateway hoặc VPC Endpoints.
-
-**Components trong EC2 Instance:**
-
-1. **Nginx (Port 80/443)**
-   - Reverse proxy và web server
-   - Serve React static files
-   - Proxy API requests tới FastAPI
-   - SSL/TLS termination
-   - Gzip compression
-
-2. **FastAPI (Port 8000)**
-   - RESTful API backend
-   - AWS SDK integration (boto3)
-   - Business logic processing
-   - Authentication/Authorization
-   - Background task scheduling
-
-3. **Redis (Port 6379)**
-   - Cache AWS API responses
-   - Cache DynamoDB query results
-   - Session storage
-   - Rate limiting
-   - Typical cache hit rate: 60-80%
-
-4. **React Frontend**
-   - Single Page Application (SPA)
-   - Dashboard visualization
-   - API client
-   - Real-time updates via polling/WebSocket
-   - Responsive design
-
-5. **CloudWatch Agent**
-   - EC2 metrics collection
-   - Application logs shipping
-   - Custom metrics publishing
-
-**Thiết kế DynamoDB Tables (4 tables):**
-
-Sử dụng 4 tables chuyên biệt để tối ưu performance và separation of concerns:
-
-**Table 1: CloudHealthMetrics**
-```python
-{
-    "TableName": "CloudHealthMetrics",
-    "KeySchema": [
-        {"AttributeName": "pk", "KeyType": "HASH"},   # service#metric_name
-        {"AttributeName": "sk", "KeyType": "RANGE"}   # ISO timestamp
-    ],
-    "AttributeDefinitions": [
-        {"AttributeName": "pk", "AttributeType": "S"},
-        {"AttributeName": "sk", "AttributeType": "S"},
-        {"AttributeName": "gsi1_pk", "AttributeType": "S"}
-    ],
-    "GlobalSecondaryIndexes": [
-        {
-            "IndexName": "MetricNameIndex",
-            "KeySchema": [
-                {"AttributeName": "gsi1_pk", "KeyType": "HASH"},  # metric_name
-                {"AttributeName": "sk", "KeyType": "RANGE"}        # timestamp
-            ],
-            "Projection": {"ProjectionType": "ALL"}
-        }
-    ],
-    "TimeToLiveSpecification": {
-        "AttributeName": "ttl",
-        "Enabled": true  # Auto-delete after 30 days
-    },
-    "BillingMode": "PAY_PER_REQUEST"
-}
-
-# Example item:
-{
-    "pk": "EC2#CPUUtilization",
-    "sk": "2025-09-22T14:30:00Z",
-    "gsi1_pk": "CPUUtilization",  # For cross-service queries
-    "value": 75.5,
-    "unit": "Percent",
-    "service": "EC2",
-    "metric_name": "CPUUtilization",
-    "dimensions": {"InstanceId": "i-1234567890abcdef0"},
-    "ttl": 1669824000  # Unix timestamp
-}
-```
-
-**Table 2: CloudHealthCosts**
-```python
-{
-    "TableName": "CloudHealthCosts",
-    "KeySchema": [
-        {"AttributeName": "pk", "KeyType": "HASH"},   # service
-        {"AttributeName": "sk", "KeyType": "RANGE"}   # date#granularity
-    ],
-    "AttributeDefinitions": [
-        {"AttributeName": "pk", "AttributeType": "S"},
-        {"AttributeName": "sk", "AttributeType": "S"}
-    ],
-    "TimeToLiveSpecification": {
-        "AttributeName": "ttl",
-        "Enabled": true  # Auto-delete after 365 days
-    },
-    "BillingMode": "PAY_PER_REQUEST"
-}
-
-# Example item:
-{
-    "pk": "EC2",
-    "sk": "2025-09-22#DAILY",
-    "date": "2025-09-22",
-    "granularity": "DAILY",
-    "cost": 12.45,
-    "usage_quantity": 24.0,
-    "usage_unit": "Hrs",
-    "currency": "USD",
-    "tags": {"Environment": "Production"},
-    "ttl": 1704067200  # Unix timestamp (1 year)
-}
-```
-
-**Table 3: SecurityFindings**
-```python
-{
-    "TableName": "SecurityFindings",
-    "KeySchema": [
-        {"AttributeName": "pk", "KeyType": "HASH"},   # finding_type
-        {"AttributeName": "sk", "KeyType": "RANGE"}   # finding_id
-    ],
-    "AttributeDefinitions": [
-        {"AttributeName": "pk", "AttributeType": "S"},
-        {"AttributeName": "sk", "AttributeType": "S"},
-        {"AttributeName": "gsi1_pk", "AttributeType": "S"},
-        {"AttributeName": "gsi1_sk", "AttributeType": "S"}
-    ],
-    "GlobalSecondaryIndexes": [
-        {
-            "IndexName": "SeverityIndex",
-            "KeySchema": [
-                {"AttributeName": "gsi1_pk", "KeyType": "HASH"},  # severity
-                {"AttributeName": "gsi1_sk", "KeyType": "RANGE"}  # created_at
-            ],
-            "Projection": {"ProjectionType": "ALL"}
-        }
-    ],
-    "TimeToLiveSpecification": {
-        "AttributeName": "ttl",
-        "Enabled": true  # Auto-delete after 90 days
-    },
-    "BillingMode": "PAY_PER_REQUEST"
-}
-
-# Example item:
-{
-    "pk": "GuardDuty",
-    "sk": "finding-abc123def456",
-    "gsi1_pk": "HIGH",  # For severity-based queries
-    "gsi1_sk": "2025-09-22T14:30:00Z",
-    "finding_id": "finding-abc123def456",
-    "finding_type": "GuardDuty",
-    "severity": "HIGH",
-    "status": "ACTIVE",
-    "title": "Suspicious network traffic detected",
-    "description": "Unusual outbound traffic from EC2 instance to known malicious IP",
-    "service": "EC2",
-    "resource_id": "i-1234567890abcdef0",
-    "resource_type": "Instance",
-    "recommendation": "Review security group rules and investigate instance activity",
-    "created_at": "2025-09-22T14:30:00Z",
-    "updated_at": "2025-09-22T14:30:00Z",
-    "ttl": 1677484800  # Unix timestamp (90 days)
-}
-```
-
-**Table 4: Recommendations**
-```python
-{
-    "TableName": "Recommendations",
-    "KeySchema": [
-        {"AttributeName": "pk", "KeyType": "HASH"},   # type
-        {"AttributeName": "sk", "KeyType": "RANGE"}   # created_at#rec_id
-    ],
-    "AttributeDefinitions": [
-        {"AttributeName": "pk", "AttributeType": "S"},
-        {"AttributeName": "sk", "AttributeType": "S"},
-        {"AttributeName": "gsi1_pk", "AttributeType": "S"},
-        {"AttributeName": "gsi1_sk", "AttributeType": "N"}
-    ],
-    "GlobalSecondaryIndexes": [
-        {
-            "IndexName": "ImpactIndex",
-            "KeySchema": [
-                {"AttributeName": "gsi1_pk", "KeyType": "HASH"},  # impact#service
-                {"AttributeName": "gsi1_sk", "KeyType": "RANGE"}  # estimated_savings
-            ],
-            "Projection": {"ProjectionType": "ALL"}
-        }
-    ],
-    "TimeToLiveSpecification": {
-        "AttributeName": "ttl",
-        "Enabled": true  # Auto-delete after 180 days
-    },
-    "BillingMode": "PAY_PER_REQUEST"
-}
-
-# Example item:
-{
-    "pk": "cost",
-    "sk": "2025-09-22T14:30:00Z#rec-789xyz",
-    "gsi1_pk": "HIGH#EC2",  # For impact-based queries
-    "gsi1_sk": 50.00,  # estimated_savings for sorting
-    "rec_id": "rec-789xyz",
-    "type": "cost",
-    "title": "Rightsize EC2 instance i-1234567890abcdef0",
-    "description": "Instance runs at <10% CPU utilization. Consider downsizing from t3.large to t3.small",
-    "impact": "HIGH",
-    "effort": "LOW",
-    "confidence": 0.92,
-    "estimated_savings": 50.00,
-    "estimated_savings_period": "monthly",
-    "service": "EC2",
-    "resource_id": "i-1234567890abcdef0",
-    "resource_type": "Instance",
-    "current_config": "t3.large",
-    "recommended_config": "t3.small",
-    "action_steps": [
-        "1. Create AMI backup",
-        "2. Stop instance",
-        "3. Change instance type",
-        "4. Restart and monitor"
-    ],
-    "implemented": false,
-    "created_at": "2025-09-22T14:30:00Z",
-    "updated_at": "2025-09-22T14:30:00Z",
-    "ttl": 1685894400  # Unix timestamp (180 days)
-}
-```
-
-### 4. Triển khai kỹ thuật
-
-**Stack công nghệ:**
-
-**Backend:**
-- Python 3.9+ với FastAPI framework
-- boto3 cho AWS SDK
-- Redis cho caching
-- uvicorn ASGI server
-- asyncio cho async operations
-
-**Frontend:**
-- React 18 với Vite
-- TanStack Query (React Query) cho data fetching
-- Recharts cho data visualization
-- Tailwind CSS cho styling
-- Axios cho HTTP client
-
-**Database:**
-- DynamoDB làm primary database (4 tables)
-- Redis cho caching (in-memory)
-
-**DevOps:**
-- Nginx làm reverse proxy
-- Systemd cho service management
-- CloudWatch Agent cho monitoring
-- Bash scripts cho automation
-
-**Core Features Implementation:**
-
-1. **Metrics Collection Service**
-   - Background job chạy mỗi 5 phút
-   - Collect metrics từ CloudWatch API
-   - Store vào CloudHealthMetrics table
-   - Cache trong Redis (5 minute TTL)
-
-2. **Cost Analysis Service**
-   - Daily job collect cost data từ Cost Explorer API
-   - Store historical data trong CloudHealthCosts table
-   - Generate charts và trends
-   - Display AWS native recommendations
-
-3. **Security Monitoring**
-   - Poll Security Hub và GuardDuty findings
-   - Store trong SecurityFindings table
-   - Display active findings với severity filtering
-   - Alert on high/critical severity
-   - Read-only integration
-
-4. **Recommendations Engine**
-   - Analyze metrics, costs, và security data
-   - Generate actionable recommendations
-   - Store trong Recommendations table
-   - Prioritize by impact và confidence
-   - Track implementation status
-
-5**Caching Strategy**
-   - Redis cache cho frequent queries
-   - 5-minute TTL cho metrics data
-   - 1-hour TTL cho cost data
-   - 30-minute TTL cho security findings
-   - 2-hour TTL cho recommendations
-   - Cache invalidation on data refresh
-
-6**Security Measures**
-   - HTTPS only với Let's Encrypt
-   - IAM roles với least privilege
-   - Security groups restrictive rules
-   - No hardcoded credentials
-   - VPC Flow Logs enabled
-
-### 5. Lộ trình & Mốc triển khai
-
-**MVP Features (3 tháng, 4 người):**
-
-```
-THÁNG 1: Core Infrastructure & Basic Features
-├─ Tuần 1: Infrastructure Setup (1 người DevOps + 3 người support)
-│  ├─ EC2 instance launch và configuration
-│  ├─ DynamoDB tables creation (4 tables với GSIs)
-│  ├─ Security groups, IAM roles
-│  ├─ Development environment setup
-│  └─ Deliverable: Working infrastructure với 4 DynamoDB tables
-│
-├─ Tuần 2: Backend Foundation (2 người Backend + 2 người Frontend start)
-│  ├─ FastAPI skeleton với basic endpoints
-│  ├─ DynamoDB connection và basic CRUD cho 4 tables
-│  ├─ CloudWatch integration (read metrics)
-│  ├─ React app initialization
-│  └─ Deliverable: API responding, Frontend routing
-│
-├─ Tuần 3: Core Monitoring (2 Backend + 2 Frontend)
-│  ├─ Metrics collection background job
-│  ├─ Store metrics in CloudHealthMetrics table
-│  ├─ Basic dashboard page với charts
-│  ├─ Display real CloudWatch data
-│  └─ Deliverable: Metrics monitoring working
-│
-└─ Tuần 4: Cost Integration (2 Backend + 2 Frontend)
-   ├─ Cost Explorer API integration
-   ├─ Cost data storage in CloudHealthCosts table
-   ├─ Cost dashboard page
-   ├─ Charts và trends visualization
-   └─ Deliverable: Month 1 MVP - Metrics + Costs monitoring
-
-THÁNG 2: Additional Features & Polish
-├─ Tuần 5: Redis Caching (1 Backend + 1 DevOps + 2 Frontend)
-│  ├─ Redis setup và integration
-│  ├─ Cache layer implementation cho 4 tables
-│  ├─ Performance optimization
-│  ├─ Frontend improvements
-│  └─ Deliverable: Improved performance
-│
-├─ Tuần 6: Security Monitoring (2 Backend + 2 Frontend)
-│  ├─ Security Hub và GuardDuty integration
-│  ├─ Store findings in SecurityFindings table
-│  ├─ Security dashboard page với severity filtering
-│  ├─ Alert system basic
-│  └─ Deliverable: Security visibility
-│
-├─ Tuần 7: Recommendations Engine (2 Backend + 2 Frontend)
-│  ├─ AWS Cost Explorer recommendations integration
-│  ├─ Rule-based cost optimization logic
-│  ├─ Store in Recommendations table
-│  ├─ Recommendations UI với impact sorting
-│  ├─ Testing và bug fixes
-│  └─ Deliverable: Optimization suggestions
-│
-└─ Tuần 8: Integration & Testing (All 4)
-   ├─ End-to-end testing across 4 tables
-   ├─ Bug fixes
-   ├─ Performance tuning
-   ├─ Documentation
-   └─ Deliverable: Stable application
-
-THÁNG 3: Production Ready & Deployment
-├─ Tuần 9: Deployment Automation (1 DevOps + 3 support)
-│  ├─ SSL certificates setup
-│  ├─ Nginx configuration
-│  ├─ Systemd services
-│  ├─ Monitoring setup
-│  └─ Deliverable: Production deployment
-│
-├─ Tuần 10: Documentation & Polish (All 4)
-│  ├─ User documentation
-│  ├─ API documentation
-│  ├─ DynamoDB schema documentation
-│  ├─ Deployment guide
-│  ├─ UI/UX improvements
-│  └─ Deliverable: Production-ready system
-│
-├─ Tuần 11: Testing & Bug Fixes (All 4)
-│  ├─ Load testing
-│  ├─ Security testing
-│  ├─ DynamoDB performance testing
-│  ├─ Bug fixing
-│  ├─ Performance optimization
-│  └─ Deliverable: Stable production
-│
-└─ Tuần 12: Demo Preparation (All 4)
-   ├─ Demo environment setup
-   ├─ Presentation materials
-   ├─ Final testing
-   ├─ Knowledge transfer
-   └─ Deliverable: Project handover
-
-Post-deployment: Maintenance & Enhancements
-└─ Monitoring, bug fixes, feature requests
-```
-
-**Phase 2 (Future Enhancements - 3-6 tháng sau):**
-- Machine Learning cost prediction models
-- Multi-account support
-- Advanced analytics
-- Well-Architected Framework assessment
-- GuardDuty deep integration
-- AWS Config compliance tracking
-- Custom alerting workflows
-- Mobile responsive improvements
-- Advanced recommendation algorithms
-
-### 6. Ước tính ngân sách
-
-**Chi phí hạ tầng AWS (Monthly):**
-
-| Dịch vụ | Mô tả | Tháng 1 | Tháng 2 | Tháng 3 |
-|---------|-------|---------|---------|---------|
-| **EC2 t3.micro** | 750h Free Tier | $0 | $0 | $0 |
-| **DynamoDB** | On-demand, 4 tables | $3-4 | $4-6 | $6-8 |
-| **CloudWatch** | Metrics + Logs (Free Tier) | $0-1 | $1-2 | $2-3 |
-| **Data Transfer** | 15GB Free Tier | $0 | $0-1 | $1 |
-| **S3** | Backup storage (~5GB) | $0 | $0-1 | $1 |
-| **Security Services** | GuardDuty (optional) | $0 | $1 | $1-2 |
-| **TỔNG** | | **$3-5** | **$6-11** | **$11-18** |
-
-**Chi phí trung bình 12 tháng: $12-18/tháng**
-
-**DynamoDB Cost Breakdown (4 tables):**
-- **Lưu trữ**: ~5GB total = $1.25/tháng
-   - CloudHealthMetrics: 2GB ($0.50)
-   - CloudHealthCosts: 1GB ($0.25)
-   - SecurityFindings: 1GB ($0.25)
-   - Recommendations: 1GB ($0.25)
-- **Writes**: ~800K requests/tháng = $1.00/tháng
-   - Metrics: 500K writes ($0.625)
-   - Costs: 100K writes ($0.125)
-   - Security: 100K writes ($0.125)
-   - Recommendations: 100K writes ($0.125)
-- **Reads**: ~4M requests/tháng = $2.00/tháng
-   - Distributed across 4 tables
-- **GSI**: Included in on-demand pricing
-- **Backup**: Free (Point-in-time recovery)
-- **Tổng DynamoDB**: $4-7/tháng
-
-**Note:** Chi phí có thể tăng nếu:
-- Thu thập metrics frequency cao hơn
-- Nhiều AWS services được monitor
-- Retention period dài hơn
-- GuardDuty enabled ($4-6/tháng thêm)
-- Nhiều security findings và recommendations
-
-**Cost Optimization Strategies:**
-- Sử dụng Free Tier tối đa (12 tháng)
-- DynamoDB on-demand thay vì provisioned
-- TTL tự động xóa data cũ cho từng table
-- Redis caching giảm DynamoDB reads
-- CloudWatch log retention 7 ngày
-- Disable unused AWS services monitoring
-- Batch writes khi possible
-- Efficient query patterns với GSI
-
-### 7. Đánh giá rủi ro
-
-**Ma trận rủi ro:**
-
-| Rủi ro | Mức độ ảnh hưởng | Xác suất | Mức độ rủi ro |
-|--------|------------------|----------|---------------|
-| Chi phí vượt ngân sách | Trung bình | Trung bình | Trung bình |
-| EC2 downtime | Cao | Thấp | Trung bình |
-| Scope creep | Trung bình | Cao | Cao |
-| Technical complexity | Trung bình | Trung bình | Trung bình |
-| AWS API rate limits | Thấp | Trung bình | Thấp |
-| DynamoDB hot partitions | Thấp | Thấp | Thấp |
-| Team coordination | Trung bình | Trung bình | Trung bình |
-
-**Chiến lược giảm thiểu:**
-
-1. **Chi phí**:
-   - AWS Budget alerts tại $15, $20
-   - Daily cost monitoring trong Cost Explorer
-   - DynamoDB on-demand (không bị surprise bills)
-   - Monitor DynamoDB costs per table
-   - Weekly cost review meetings
-   - Kill switch để disable data collection nếu vượt budget
-
-2. **EC2 Availability**:
-   - CloudWatch alarms cho health checks
-   - Systemd auto-restart services
-   - Health check endpoint
-   - Backup và recovery procedures documented
-   - Target: 98-99% uptime (realistic cho single instance)
-
-3. **Scope Creep**:
-   - Strict MVP definition
-   - Feature freeze sau week 8
-   - "Nice to have" list cho Phase 2
-   - Weekly standup để track progress
-   - Prioritize must-have features
-   - Document 4-table design clearly
-
-4. **Technical Complexity**:
-   - Start với simplest solution
-   - Extensive use of AWS documentation
-   - Code review process
-   - Technical spikes cho unknown areas
-   - DynamoDB data modeling workshops
-   - Mentor consultation when stuck
-
-5. **API Rate Limits**:
-   - Implement exponential backoff
-   - Cache aggressively với Redis
-   - Monitor API usage
-   - Stay within free tier limits
-   - Batch operations when possible
-
-6. **DynamoDB Hot Partitions**:
-   - Proper partition key design
-   - Write sharding cho high-traffic tables
-   - Monitor CloudWatch metrics cho throttling
-   - Use GSI efficiently
-
-7. **Team Coordination**:
-   - Daily standups (15 minutes)
-   - Clear task assignments
-   - Git workflow (feature branches, PRs)
-   - Documentation from day 1
-   - Shared knowledge base
-   - DynamoDB schema documentation
-
-**Kế hoạch dự phòng:**
-
-1. **Service Failure**: Systemd auto-restart, documented manual recovery
-2. **Data Loss**: Daily S3 backups, DynamoDB PITR enabled
-3. **Cost Spike**: Immediate notification, manual review, throttle data collection
-4. **Behind Schedule**: Cut Phase 2 features, focus on MVP only
-5. **DynamoDB Issues**: Fallback to direct API calls, reduce write frequency
-
-### 8. Kết quả kỳ vọng
-
-**Technical Deliverables:**
-
-1. **Working Dashboard:**
-   - 4 main pages: Metrics, Costs, Security, Recommendations
-   - Real data từ AWS services
-   - Responsive design
-   - Basic authentication
-
-2. **Data Collection System:**
-   - Background jobs collecting metrics mỗi 5 phút
-   - Cost data updated daily
-   - Security findings updated hourly
-   - Recommendations generated daily
-   - Data stored in 4 specialized DynamoDB tables
-
-3. **Performance:**
-   - Cached response time: < 300ms (60-80% requests)
-   - Uncached response time: < 2 seconds
-   - DynamoDB query time: 10-25ms (typical)
-   - GSI query time: 15-30ms
-   - Target uptime: 98-99% (single instance)
-
-4. **Cost Analysis:**
-   - Historical cost trends
-   - Service breakdown charts
-   - AWS Cost Explorer recommendations display
-   - Budget alerts
-   - Cost forecasting
-
-5. **Security Visibility:**
-   - Security Hub findings dashboard
-   - GuardDuty threat detection
-   - Severity-based filtering using GSI
-   - Real-time alerts cho critical findings
-   - Compliance status overview
-
-6. **Recommendations System:**
-   - Cost optimization suggestions
-   - Performance improvement recommendations
-   - Security enhancement suggestions
-   - Impact-based prioritization using GSI
-   - Implementation tracking
-
-**Learning Outcomes:**
-
-1. **AWS Services:**
-   - Hands-on experience với EC2, DynamoDB (advanced), CloudWatch
-   - Cost Explorer API integration
-   - Security Hub và GuardDuty understanding
-   - IAM roles và policies
-   - VPC networking basics
-   - DynamoDB data modeling best practices
-
-2. **Full-Stack Development:**
-   - FastAPI backend development
-   - React frontend development
-   - RESTful API design
-   - NoSQL database design patterns
-   - DynamoDB access patterns và GSI optimization
-   - Caching strategies
-
-3. **DevOps:**
-   - Linux server administration
-   - Nginx configuration
-   - Service management với systemd
-   - SSL/TLS setup
-   - Monitoring và logging
-   - Database backup strategies
-
-4. **Best Practices:**
-   - Security-first design
-   - Cost optimization
-   - Code organization
-   - Documentation
-   - Testing strategies
-   - NoSQL data modeling
-
-**Portfolio Value:**
-
-Project này demonstrate:
-- Real AWS production experience
-- Advanced DynamoDB data modeling (4 tables, GSI)
-- Full-stack development skills
-- Cost-aware architecture decisions
-- Security consciousness
-- Realistic project scoping
-- Team collaboration
-- Professional documentation
-
-**Limitations & Trade-offs:**
-
-Documented limitations:
-- Single instance (không high availability)
-- Public subnet (không private network isolation)
-- Rule-based recommendations (không ML-powered initially)
-- Manual AWS service additions
-- Limited to AWS (không multi-cloud)
-
-Documented trade-offs:
-- 4 tables tăng complexity và cost ($2-3/tháng) nhưng cải thiện performance và maintainability
-- Public subnet giảm security nhưng tiết kiệm $33/tháng
-- Single instance giảm availability nhưng phù hợp với budget constraint
-
-Những limitations và trade-offs này là conscious decisions cho cost efficiency và project timeline, demonstrating real-world engineering judgment.
+**Nền tảng Giám sát Hạ tầng AWS Chuyên nghiệp cho Nhiều Khách hàng**
 
 ---
 
-**A. Links:**
-- [GitHub Repository](https://github.com/Unvianpetronas/Cloud_health_dashboard)
+## 1. Tóm tắt Điều hành
 
-**B. Liên hệ:**
-- Project Lead: Trương Quốc Tuấn
-- Email: unviantruong26@gmail.com
-- WhatsApp: 0798806545
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng (multi-tenant)** cho phép doanh nghiệp giám sát và tối ưu hóa hạ tầng AWS cho nhiều khách hàng từ một hệ thống tập trung duy nhất. Nền tảng này thể hiện kiến trúc cấp doanh nghiệp trong khi vẫn duy trì mô hình vận hành tiết kiệm chi phí.
+
+**Điểm nổi bật chính:**
+- **Kiến trúc đa khách hàng**: Giám sát 10-50+ tài khoản AWS của khách hàng từ một nền tảng
+- **Chi phí nền tảng**: $10-20/tháng (hỗ trợ không giới hạn khách hàng với chi phí tăng thêm tối thiểu)
+- **Chi phí mỗi khách hàng**: ~$0.50-1.00/tháng cho lưu trữ dữ liệu
+- **Tính năng chuyên nghiệp**: Xác thực email, mã hóa thông tin đăng nhập, cảnh báo tự động, giám sát thời gian thực
+- **5 bảng DynamoDB**: Mô hình dữ liệu được tối ưu hóa với cách ly khách hàng
+- **Hệ thống worker nền**: Thu thập dữ liệu tự động cho tất cả khách hàng
+- **Hệ thống thông báo email**: Tích hợp AWS SES cho cảnh báo quan trọng và xác thực
+
+**Công nghệ sử dụng:** FastAPI (Python) + React + DynamoDB + Redis + AWS SES + EC2 t3.micro
+
+---
+
+## 2. Phát biểu Vấn đề
+
+**Thách thức Hiện tại:**
+
+Các doanh nghiệp quản lý hạ tầng AWS cho nhiều khách hàng đang đối mặt với:
+- **Không có giám sát tập trung**: Phải đăng nhập vào từng console AWS của khách hàng riêng biệt
+- **Cảnh báo bảo mật phân tán**: Các phát hiện quan trọng từ GuardDuty bị bỏ lỡ
+- **Thiếu khả năng hiển thị chi phí**: Khó khăn trong việc theo dõi và tối ưu chi phí giữa các khách hàng
+- **Quản lý thông tin đăng nhập thủ công**: Lưu trữ AWS access keys không an toàn
+- **Không có thông báo chủ động**: Bỏ lỡ các sự kiện quan trọng theo thời gian thực
+- **Giám sát tốn thời gian**: 30+ phút mỗi ngày cho mỗi khách hàng
+
+**Giải pháp của chúng tôi:**
+
+Cloud Health Dashboard cung cấp một **nền tảng duy nhất để giám sát tất cả khách hàng** với:
+
+**Kiến trúc Đa khách hàng**
+- Một nền tảng giám sát 10-50+ tài khoản AWS của khách hàng
+- Lưu trữ thông tin đăng nhập AWS được mã hóa (mã hóa Fernet)
+- Cách ly dữ liệu hoàn toàn giữa các khách hàng
+- Quản lý worker tự động cho mỗi khách hàng
+
+**Giám sát Tập trung**
+- Dashboard duy nhất cho tất cả khách hàng
+- Tình trạng hạ tầng thời gian thực
+- Lưu trữ dữ liệu lịch sử (30-365 ngày)
+- 15+ dịch vụ AWS được giám sát
+
+**Hệ thống Thông báo Email**
+- Xác thực email với token có thời hạn
+- Cảnh báo GuardDuty quan trọng qua AWS SES
+- Mẫu email HTML đẹp mắt
+- Tùy chọn thông báo có thể tùy chỉnh
+- Khách hàng có thể cập nhật email trong Cài đặt
+
+**Phân tích & Tối ưu Chi phí**
+- Theo dõi chi phí theo từng khách hàng
+- Xu hướng lịch sử và dự báo
+- Đề xuất gốc từ AWS
+- Cảnh báo ngân sách
+
+**Bảo mật & Tuân thủ**
+- Phát hiện mối đe dọa GuardDuty
+- Tích hợp Security Hub
+- Lọc theo mức độ nghiêm trọng
+- Cảnh báo email thời gian thực cho các phát hiện quan trọng
+
+**Đề xuất Dựa trên Quy tắc**
+- Đề xuất tối ưu chi phí
+- Cải thiện hiệu suất
+- Tăng cường bảo mật
+- Ưu tiên dựa trên tác động
+
+**ROI & Lợi ích:**
+
+Cho Người vận hành Nền tảng:
+- Giám sát 20 khách hàng chỉ với $15-20/tháng tổng cộng
+- Thu thập dữ liệu tự động (tiết kiệm 10+ giờ/tuần)
+- Dự án portfolio chuyên nghiệp
+- Thể hiện kỹ năng kiến trúc doanh nghiệp
+
+Cho Mỗi Khách hàng:
+- Tiết kiệm chi phí tiềm năng 15-25% thông qua tối ưu hóa
+- Cảnh báo bảo mật quan trọng ngay lập tức qua email
+- Hiển thị dữ liệu lịch sử
+- Dashboard duy nhất thay vì nhiều console AWS
+
+---
+
+## 3. Kiến trúc Giải pháp
+
+### **Tổng quan Kiến trúc Đa khách hàng**
+
+![diagram-export-10-13-2025-11_02_08-AM.png](/images/2-Proposal/diagram-export-10-13-2025-11_02_08-AM.png)
+
+### **Sơ đồ Mạng**
+![cloud_dashboard.drawio.png](/images/2-Proposal/cloud_dashboard.drawio.png)
+
+### **Luồng Dữ liệu**
+
 ```
+1. ĐĂNG KÝ KHÁCH HÀNG
+   Khách hàng → API → Mã hóa AWS Keys → Bảng DynamoDB Clients
+   → Gửi Email Xác thực (AWS SES)
+   
+2. XÁC THỰC EMAIL
+   Khách hàng → Click Link → Xác minh Token → Đánh dấu Email đã Xác thực
+   
+3. WORKER MANAGER
+   Mỗi 5 phút → Kiểm tra khách hàng mới → Khởi động worker cho mỗi khách hàng
+   
+4. THU THẬP DỮ LIỆU (mỗi khách hàng)
+   Worker → API AWS của Khách hàng → Thu thập metrics → Lưu vào DynamoDB (với client_id)
+   → Nếu phát hiện quan trọng → Gửi cảnh báo email (AWS SES)
+   
+5. HIỂN THỊ DASHBOARD
+   Khách hàng đăng nhập → API (lọc theo client_id) → Trả về chỉ dữ liệu của họ
+```
+
+### **Các Thành phần Cốt lõi**
+
+**EC2 t3.micro Instance (Máy chủ Đơn):**
+- **Nginx**: Reverse proxy, SSL termination
+- **FastAPI**: RESTful API, xác thực, tích hợp AWS
+- **React**: Ứng dụng dashboard single-page
+- **Redis**: Lớp caching (TTL 5 phút)
+- **Worker Manager**: Điều phối công việc nền đa khách hàng
+- **CloudWatch Agent**: Giám sát nền tảng
+
+**5 Bảng DynamoDB (Đa khách hàng):**
+
+1. **CloudHealthClients**
+   - Lưu trữ tài khoản khách hàng với thông tin đăng nhập AWS được mã hóa
+   - Địa chỉ email và trạng thái xác thực
+   - Tùy chọn thông báo
+   - Metadata khách hàng
+
+2. **CloudHealthMetrics**
+   - Metrics chuỗi thời gian từ CloudWatch
+   - Phân vùng theo client_id
+   - Lưu trữ 30 ngày (TTL)
+
+3. **CloudHealthCosts**
+   - Dữ liệu chi phí từ Cost Explorer
+   - Theo dõi chi phí theo khách hàng
+   - Lưu trữ 365 ngày
+
+4. **SecurityFindings**
+   - Phát hiện từ GuardDuty và Security Hub
+   - Cảnh báo bảo mật theo khách hàng
+   - Lưu trữ 90 ngày
+
+5. **Recommendations**
+   - Đề xuất về chi phí, hiệu suất, bảo mật
+   - Ưu tiên dựa trên tác động
+   - Lưu trữ 180 ngày
+
+**Các Dịch vụ AWS Sử dụng:**
+- **EC2**: Tính toán (t3.micro, Free Tier)
+- **DynamoDB**: Lưu trữ dữ liệu đa khách hàng
+- **AWS SES**: Xác thực email và cảnh báo quan trọng
+- **CloudWatch**: Thu thập metrics
+- **Cost Explorer**: Phân tích chi phí
+- **GuardDuty**: Phát hiện mối đe dọa (tùy chọn)
+- **Security Hub**: Tổng hợp phát hiện bảo mật (tùy chọn)
+- **S3**: Lưu trữ backup
+
+---
+
+## 4. Tính năng Chính
+
+### **Quản lý Đa khách hàng**
+- Đăng ký khách hàng tự phục vụ với xác thực AWS key
+- Lưu trữ thông tin đăng nhập được mã hóa (mã hóa Fernet)
+- Tự động tạo worker cho mỗi khách hàng
+- Cách ly dữ liệu hoàn toàn
+- Truy cập dashboard theo khách hàng
+- Giám sát tình trạng worker
+
+### **Hệ thống Thông báo Email**
+- Xác thực email với token bảo mật (hết hạn 24h)
+- Cảnh báo GuardDuty quan trọng qua AWS SES
+- Tùy chọn thông báo có thể tùy chỉnh:
+   - Cảnh báo bảo mật quan trọng
+   - Cảnh báo cảnh cáo
+   - Mẹo tối ưu chi phí
+   - Tóm tắt hạ tầng hàng ngày
+- Chỉnh sửa email trong trang Cài đặt
+- Tùy chọn gửi lại email xác thực
+
+### **Giám sát Hạ tầng**
+- Metrics thời gian thực từ 15+ dịch vụ AWS
+- Lưu trữ dữ liệu lịch sử (30+ ngày)
+- Giám sát EC2, S3, RDS, Lambda
+- Metrics CloudWatch tùy chỉnh
+- Dashboard tình trạng dịch vụ
+
+### **Tối ưu Chi phí**
+- Theo dõi chi phí hàng ngày theo dịch vụ
+- Xu hướng chi phí hàng tháng
+- Đề xuất từ AWS Cost Explorer
+- Cảnh báo ngân sách
+- Phân tích sử dụng tài nguyên
+
+### **Giám sát Bảo mật**
+- Phát hiện mối đe dọa GuardDuty
+- Tổng hợp phát hiện Security Hub
+- Lọc theo mức độ nghiêm trọng
+- Cảnh báo email cho phát hiện quan trọng
+- Tgiheo dõi trạng thái tuân thủ
+
+### **Công cụ Đề xuất**
+- Đề xuất tối ưu chi phí
+- Cải thiện hiệu suất
+- Tăng cường bảo mật
+- Ưu tiên dựa trên tác động
+- Theo dõi triển khai
+
+---
+
+## 5. Triển khai Kỹ thuật
+
+### **Công nghệ Sử dụng**
+
+**Backend:**
+- Python 3.9+ với FastAPI
+- boto3 (AWS SDK)
+- cryptography (mã hóa Fernet)
+- asyncio cho worker đồng thời
+- Redis cho caching
+
+**Frontend:**
+- React 18 với Vite
+- TanStack Query cho data fetching
+- Recharts cho trực quan hóa
+- Tailwind CSS cho styling
+
+**Cơ sở dữ liệu:**
+- DynamoDB (5 bảng, on-demand pricing)
+- Redis (in-memory caching)
+
+**Email:**
+- AWS SES cho email giao dịch
+- Mẫu email HTML
+- Xác thực dựa trên token
+
+### **Triển khai Bảo mật**
+
+**Mã hóa Thông tin Đăng nhập:**
+```python
+# Mã hóa đối xứng Fernet
+from cryptography.fernet import Fernet
+
+# AWS keys của khách hàng được mã hóa trước khi lưu trữ
+encrypted_key = cipher.encrypt(client_aws_key.encode())
+# Lưu trong DynamoDB, chỉ giải mã khi cần thiết
+```
+
+**Xác thực Email:**
+```python
+# Tạo token với thời hạn
+token = secrets.token_urlsafe(32)
+expires = datetime.now() + timedelta(hours=24)
+# Lưu với bản ghi khách hàng, xác minh khi click
+```
+
+**Worker Manager:**
+```python
+# Tự động phát hiện khách hàng và tạo worker
+for client in active_clients:
+    if client_id not in workers:
+        worker = CloudHealthWorker(client_provider, client_id)
+        workers[client_id] = asyncio.create_task(worker.start())
+```
+
+**Cách ly Dữ liệu:**
+- Tất cả truy vấn được lọc theo `client_id`
+- Khóa phân vùng DynamoDB bao gồm định danh khách hàng
+- Endpoint API yêu cầu xác thực khách hàng
+- Không có rò rỉ dữ liệu giữa khách hàng
+
+---
+
+## 6. Lộ trình Phát triển (3 Tháng)
+
+### **Tháng 1: Nền tảng & Tính năng Cốt lõi**
+
+**Tuần 1-2: Hạ tầng & Thiết lập Đa khách hàng**
+- Thiết lập EC2 instance với tất cả dịch vụ
+- Tạo schema 5 bảng DynamoDB
+- API đăng ký khách hàng với mã hóa
+- Khung worker manager
+- Xác thực cơ bản
+
+**Tuần 3-4: Hệ thống Thu thập Dữ liệu**
+- Thu thập metrics CloudWatch
+- Triển khai worker theo khách hàng
+- Lưu trữ DynamoDB cho tất cả 5 bảng
+- Lớp caching Redis
+- Dashboard cơ bản với metrics
+
+**Sản phẩm Bàn giao:** Thu thập metrics đa khách hàng hoạt động
+
+---
+
+### **Tháng 2: Tính năng & Hệ thống Email**
+
+**Tuần 5-6: Tích hợp Chi phí & Bảo mật**
+- Tích hợp API Cost Explorer
+- Thu thập phát hiện GuardDuty
+- Dashboard bảo mật
+- Biểu đồ phân tích chi phí
+
+**Tuần 7-8: Hệ thống Thông báo Email**
+- Thiết lập và xác minh AWS SES
+- Triển khai luồng xác thực email
+- Mẫu email HTML (xác thực + cảnh báo)
+- Gửi email cảnh báo quan trọng
+- Trang cài đặt với quản lý email
+- Tùy chọn thông báo
+
+**Sản phẩm Bàn giao:** Giám sát đầy đủ + thông báo email
+
+---
+
+### **Tháng 3: Hoàn thiện & Sản xuất**
+
+**Tuần 9-10: Đề xuất & Kiểm thử**
+- Công cụ đề xuất
+- Ưu tiên dựa trên tác động
+- Kiểm thử end-to-end
+- Sửa lỗi
+- Tối ưu hiệu suất
+
+**Tuần 11-12: Triển khai Sản xuất**
+- Thiết lập SSL/TLS
+- Cấu hình Nginx
+- Giám sát và logging
+- Tài liệu
+- Chuẩn bị demo
+
+**Sản phẩm Bàn giao:** Nền tảng SaaS đa khách hàng sẵn sàng sản xuất
+
+---
+
+## 7. Ước tính Ngân sách
+
+### **Chi phí Nền tảng Hàng tháng**
+
+| Dịch vụ | Mô tả | Tháng 1 | Tháng 2 | Tháng 3 |
+|---------|-------|---------|---------|---------|
+| EC2 t3.micro | 750h Free Tier | $0 | $0 | $0 |
+| DynamoDB (5 bảng) | On-demand, đa khách hàng | $3-4 | $5-8 | $8-12 |
+| AWS SES | Gửi email | $0 | $0-1 | $1-2 |
+| CloudWatch | Metrics + Logs | $0-1 | $1-2 | $2-3 |
+| Data Transfer | 15GB Free Tier | $0 | $0-1 | $1 |
+| S3 Backup | Lưu trữ ~5GB | $0 | $0-1 | $1 |
+| **TỔNG CỘNG** | | **$3-5** | **$6-13** | **$13-20** |
+
+### **Chi phí Tăng thêm Mỗi Khách hàng**
+
+**Lưu trữ & Vận hành DynamoDB (mỗi khách hàng/tháng):**
+- Lưu trữ: ~500MB = $0.125
+- Ghi: 43,200/tháng = $0.054
+- Đọc: 30,000/tháng = $0.0075
+- **Tổng mỗi khách hàng: ~$0.19/tháng**
+
+**Ví dụ về Mở rộng:**
+- 10 khách hàng: $5 + ($0.19 × 10) = **$6.90/tháng**
+- 20 khách hàng: $5 + ($0.19 × 20) = **$8.80/tháng**
+- 50 khách hàng: $5 + ($0.19 × 50) = **$14.50/tháng**
+- 100 khách hàng: $5 + ($0.19 × 100) = **$24/tháng**
+
+**Chi phí Email (AWS SES):**
+- 62,000 email đầu tiên/tháng: Miễn phí (nếu gửi từ EC2)
+- Thêm: $0.10 mỗi 1,000 email
+- Sử dụng điển hình: 2-5 email mỗi khách hàng/tháng = **Miễn phí**
+
+### **Chiến lược Tối ưu Chi phí**
+TTL DynamoDB cho dọn dẹp dữ liệu tự động
+Caching Redis giảm chi phí đọc 80%
+Ghi hàng loạt để hiệu quả
+Định giá on-demand (không lãng phí công suất dự phòng)
+Tối đa hóa Free Tier (12 tháng)
+Gửi email hàng loạt để tiết kiệm chi phí
+
+---
+
+## 8. Đánh giá Rủi ro
+
+| Rủi ro | Tác động | Xác suất | Giảm thiểu |
+|--------|----------|----------|------------|
+| Vượt ngân sách | Trung bình | Thấp | Cảnh báo AWS Budget, giám sát hàng ngày, DynamoDB on-demand |
+| Ngừng hoạt động EC2 | Cao | Thấp | Cảnh báo CloudWatch, tự động khởi động lại systemd, mục tiêu uptime 98% |
+| Bảo mật dữ liệu khách hàng | Cao | Thấp | Mã hóa Fernet, đặc quyền tối thiểu IAM, ghi nhật ký kiểm toán |
+| Phân vùng nóng DynamoDB | Trung bình | Thấp | Thiết kế khóa phân vùng đúng, phân mảnh client_id |
+| Vấn đề gửi email | Trung bình | Thấp | Giám sát AWS SES, logic thử lại, thông báo dự phòng |
+| Lỗi worker manager | Trung bình | Thấp | Kiểm tra sức khỏe, tự động khởi động lại, ghi nhật ký lỗi |
+| Mở rộng phạm vi | Trung bình | Cao | Định nghĩa MVP nghiêm ngặt, đóng băng tính năng tuần 8, kế hoạch Giai đoạn 2 |
+
+---
+
+## 9. Kết quả Mong đợi
+
+### **Sản phẩm Bàn giao Kỹ thuật**
+
+**Nền tảng Đa khách hàng Hoạt động:**
+- Đăng ký khách hàng với xác thực email
+- 5 bảng DynamoDB với cách ly dữ liệu đúng
+- Quản lý worker tự động (10-50 khách hàng)
+- Dashboard giám sát thời gian thực cho mỗi khách hàng
+- Hệ thống thông báo email (xác thực + cảnh báo)
+- Tính năng chi phí, bảo mật và đề xuất
+- Trang cài đặt với quản lý email/thông báo
+
+**Mục tiêu Hiệu suất:**
+- Thời gian phản hồi API: <300ms (cached), <2s (uncached)
+- Gửi email: <30 giây
+- Thu thập dữ liệu: Mỗi 5 phút cho mỗi khách hàng
+- Thời gian hoạt động nền tảng: 98-99%
+- Khởi động worker: <10 giây mỗi khách hàng
+
+**Bảo mật & Tuân thủ:**
+- Lưu trữ thông tin đăng nhập được mã hóa
+- Xác thực email trước cảnh báo quan trọng
+- Cách ly dữ liệu giữa khách hàng
+- Vai trò IAM đặc quyền tối thiểu
+- Ghi nhật ký kiểm toán cho tất cả hoạt động
+
+### **Kết quả Học tập**
+
+**Thành thạo Dịch vụ AWS:**
+- DynamoDB nâng cao (đa khách hàng, GSI, TTL)
+- Tích hợp AWS SES (email giao dịch)
+- CloudWatch, Cost Explorer, GuardDuty
+- Vai trò IAM và mã hóa (Fernet)
+
+**Kiến trúc SaaS:**
+- Mô hình hóa dữ liệu đa khách hàng
+- Điều phối worker nền
+- Quản lý thông tin đăng nhập được mã hóa
+- Hệ thống thông báo email
+- Luồng đăng ký tự phục vụ
+
+**Phát triển Full-Stack:**
+- Lập trình bất đồng bộ FastAPI
+- Quản lý trạng thái React
+- Mẫu truy cập DynamoDB
+- Thiết kế mẫu email
+- Thiết kế RESTful API
+
+### **Giá trị Portfolio**
+
+Dự án này thể hiện:
+**Kiến trúc cấp doanh nghiệp** (SaaS đa khách hàng)
+**Thiết kế ưu tiên bảo mật** (mã hóa, xác thực email)
+**Chuyên môn AWS** (tích hợp 10+ dịch vụ)
+**Kỹ năng full-stack** (Python, React, DynamoDB, SES)
+**Tối ưu chi phí** ($0.19/khách hàng/tháng ở quy mô)
+**Sẵn sàng sản xuất** (giám sát, logging, xử lý lỗi)
+**Tính năng chuyên nghiệp** (hệ thống email, cảnh báo tự động)
+
+**Điểm khác biệt chính:**
+- Không phải công cụ giám sát đơn giản - một nền tảng SaaS hoàn chỉnh
+- Thể hiện khả năng thiết kế cho nhiều khách hàng
+- Cho thấy hiểu biết về mã hóa và bảo mật
+- Bao gồm tính năng SaaS hiện đại (xác thực email, thông báo)
+- Mở rộng tiết kiệm chi phí ($20/tháng cho 50+ khách hàng)
+
+---
+
+## 10. Kết luận
+
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng cấp sản xuất** thể hiện:
+
+1. **Kỹ năng Kiến trúc Doanh nghiệp**
+   - Mô hình hóa dữ liệu đa khách hàng
+   - Quản lý thông tin đăng nhập được mã hóa
+   - Điều phối worker nền
+   - Thiết kế có thể mở rộng (10-100+ khách hàng)
+
+2. **Chuyên môn AWS**
+   - Tích hợp sâu với 10+ dịch vụ AWS
+   - Thiết kế hạ tầng tối ưu chi phí
+   - Thực hành tốt nhất về bảo mật
+   - Hệ thống thông báo email (SES)
+
+3. **Phát triển Full-Stack**
+   - Công nghệ hiện đại (FastAPI + React)
+   - UI/UX chuyên nghiệp
+   - Thiết kế mẫu email
+   - Thiết kế RESTful API
+
+4. **Hiểu biết Kinh doanh**
+   - Vận hành tiết kiệm chi phí ($10-20/tháng)
+   - Mô hình định giá có thể mở rộng ($0.19/khách hàng)
+   - ROI rõ ràng cho khách hàng (tiết kiệm chi phí 15-25%)
+   - Tính năng SaaS chuyên nghiệp
+
+**Thời gian:** 3 tháng | **Nhóm:** 4 người | **Ngân sách:** $10-20/tháng
+
+## Phụ lục
+
+**A. GitHub Repository: https://github.com/Unvianpetronas/Cloud_health_dashboard**
+
+**B. Thông tin Liên hệ:**
+- **Trưởng dự án:** Trương Quốc Tuấn
+- **Email:** unviantruong26@gmail.com
+- **WhatsApp:** 0798806545
 
 ---
 
