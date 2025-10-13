@@ -103,7 +103,7 @@ For Each Client:
 
 ![diagram-export-10-13-2025-11_02_08-AM.png](/images/2-Proposal/diagram-export-10-13-2025-11_02_08-AM.png)
 
-# Network Diagram
+# **Network Diagram**
 ![cloud_dashboard.drawio.png](/images/2-Proposal/cloud_dashboard.drawio.png)
 
 ### **Data Flow**
@@ -511,7 +511,7 @@ This project demonstrates:
 
 ## Appendices
 
-**A. GitHub Repository:**
+**A. GitHub Repository:https://github.com/Unvianpetronas/Cloud_health_dashboard**
 
 **B. Contact Information:**
 - **Project Lead:** Truong Quoc Tuan
