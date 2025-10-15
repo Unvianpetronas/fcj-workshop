@@ -1,13 +1,13 @@
 ---
-title : "Prerequiste"
+title : "Preparation Steps"
 date :  "`r Sys.Date()`" 
-weight : 520 
+weight : 520
 chapter : false
 pre : " <b> 5.2. </b> "
 ---
 
-#### IAM permissions
-Add the following IAM permission policy to your user account to deploy and cleanup this workshop.
+#### IAM Permissions
+Attach the following IAM permission policy to your AWS user account to deploy and clean up resources in this workshop.
 ```
 {
     "Version": "2012-10-17",
@@ -215,28 +215,57 @@ Add the following IAM permission policy to your user account to deploy and clean
 }
 
 ```
+In the search bar, search for IAM and then select Policies.
 
-#### Provision resources using CloudFormation
+![1.png](/images/5-Workshop/5.2-Prerequisite/2.png)
 
-In this lab, we will use **N.Virginia region (us-east-1)**.
+Click on Create policy, then select JSON in the Policy editor, copy and paste the IAM permission policy above, and click Next.
 
-To prepare the workshop environment, deploy this **CloudFormation Template** (click link): [PrivateLinkWorkshop ](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.us-east-1.amazonaws.com/reinvent-endpoints-builders-session/Nested.yaml&stackName=PLCloudSetup). Accept all of the defaults when deploying the template. 
+![1.png](/images/5-Workshop/5.2-Prerequisite/1.png)
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack1.png)
+Enter a name and click Create policy.
 
-+ Tick 2 acknowledgement boxes
-+ Choose **Create stack**
+![3.png](/images/5-Workshop/5.2-Prerequisite/3.png)
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack2.png)
+Then go to the Users section in the Dashboard.
 
-The **ClouddFormation** deployment requires about 15 minutes to complete.
+![4.png](/images/5-Workshop/5.2-Prerequisite/4.png)
 
-![complete](/images/5-Workshop/5.2-Prerequisite/complete.png)
+Click on an existing user or create a new user, scroll down to the Permissions policies section and click Add permissions.
 
-+ **2 VPCs** have been created
+![5.png](/images/5-Workshop/5.2-Prerequisite/5.png)
 
-![vpcs](/images/5-Workshop/5.2-Prerequisite/vpcs.png)
+In Add permissions, select Attach policies directly and choose the newly created policy, then click Next.
 
-+ **3 EC2s** have been created
+![6.png](/images/5-Workshop/5.2-Prerequisite/6.png)
 
-![EC2](/images/5-Workshop/5.2-Prerequisite/ec2.png)
+![7.png](/images/5-Workshop/5.2-Prerequisite/7.png)
+
+Click Add permissions.
+
+![8.png](/images/5-Workshop/5.2-Prerequisite/8.png)
+
+#### Initialize Resources with CloudFormation
+
+In this lab, we will use the N.Virginia region (us-east-1).
+
+To prepare the workshop environment, we will deploy the following CloudFormation template (click the link): [PrivateLinkWorkshop](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.us-east-1.amazonaws.com/reinvent-endpoints-builders-session/Nested.yaml&stackName=PLCloudSetup). Leave the default options as they are.
+
+![9.png](/images/5-Workshop/5.2-Prerequisite/9.png)
+
++ Select the 2 acknowledgement checkboxes
++ Click Create stack
+
+![create stack](/images/5-Workshop/5.2-Prerequisite/10.png)
+
+The CloudFormation deployment process takes approximately 15 minutes to complete.
+
+![complete](/images/5-Workshop/5.2-Prerequisite/11.png)
+
++ 2 VPCs have been created
+
+![vpcs](/images/5-Workshop/5.2-Prerequisite/12.png)
+
++ 3 EC2 instances have been created
+
+![EC2](/images/5-Workshop/5.2-Prerequisite/13.png)

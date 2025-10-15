@@ -226,6 +226,7 @@ Bấm vào create policy sau đó chọn vào Policy editor là Json, copy IAM p
 Đặt tên và bấm vào Create policy.
 
 ![3.png](/images/5-Workshop/5.2-Prerequisite/3.png)
+
 Sau đó vào phần vào phần Users trong Dashboard 
 
 ![4.png](/images/5-Workshop/5.2-Prerequisite/4.png)
