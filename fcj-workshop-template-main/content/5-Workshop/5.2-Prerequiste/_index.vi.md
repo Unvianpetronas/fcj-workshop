@@ -216,20 +216,34 @@ Gắn IAM permission policy sau vào tài khoản aws user của bạn để tri
 
 ```
 Trên thanh tìm kiếm, tìm IAM sau đó chọn vào policy.
+
 ![1.png](/images/5-Workshop/5.2-Prerequisite/2.png)
+
 Bấm vào create policy sau đó chọn vào Policy editor là Json, copy IAM permission policy dán vào và bấm next.
+
 ![1.png](/images/5-Workshop/5.2-Prerequisite/1.png)
+
 Đặt tên và bấm vào Create policy.
+
 ![3.png](/images/5-Workshop/5.2-Prerequisite/3.png)
 Sau đó vào phần vào phần Users trong Dashboard 
+
 ![4.png](/images/5-Workshop/5.2-Prerequisite/4.png)
+
 Bấm chọn vào user có sẵn hoặc tạo 1 user mới, kéo xuống ở phần permissions policy bấm chọn Add permissions
+
 ![5.png](/images/5-Workshop/5.2-Prerequisite/5.png)
+
 Trong Add permissions chọn Attach policies directly và chọn policy mới vừa tạo sau đó nhấn next
+
 ![6.png](/images/5-Workshop/5.2-Prerequisite/6.png)
+
 ![7.png](/images/5-Workshop/5.2-Prerequisite/7.png)
+
 Nhấn Add permissions
+
 ![8.png](/images/5-Workshop/5.2-Prerequisite/8.png)
+
 #### Khởi tạo tài nguyên bằng CloudFormation
 
 Trong lab này, chúng ta sẽ dùng N.Virginia region (us-east-1).
@@ -238,7 +252,7 @@ Trong lab này, chúng ta sẽ dùng N.Virginia region (us-east-1).
 
 ![9.png](/images/5-Workshop/5.2-Prerequisite/9.png)
 
-+ Lựa chọn 2 mục acknowledgement 
++ Lựa chọn 2 mục acknowledgement
 + Chọn Create stack
 
 ![create stack](/images/5-Workshop/5.2-Prerequisite/10.png)
