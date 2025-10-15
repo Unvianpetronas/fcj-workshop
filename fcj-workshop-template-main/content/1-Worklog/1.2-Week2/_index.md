@@ -14,13 +14,13 @@ pre: " <b> 1.2. </b> "
 * Translate blog posts
 
 ### Tasks to be implemented this week:
-| Day | Task                                                                                                              | Start Date   | Completion Date | Reference Materials                       |
-|-----|-------------------------------------------------------------------------------------------------------------------|--------------|-----------------|-------------------------------------------|
-| 2   | - Learn about AWS S3 service and how to deploy S3 on AWS                                                         | 15/09/2025   | 16/09/2025      | <https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=104>                                        |
-| 3   | - Team meeting, brainstorm ideas, languages, and technologies to be used in the project                          | 17/09/2025   | 17/09/2025      |  |
-| 4   | - Vietnam Cloud Day                                                                                               | 18/09/2025   | 18/09/2025      |  |
-| 5   | - Research project features and assign roles based on individual interests and strengths within the team         | 19/09/2025   | 20/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Hands-on Practice:** <br>&emsp; + Create S3  <br>&emsp; + Create CloudFront <br>&emsp; + Create static web    | 21/09/2025   | 21/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Task                                                                                                              | Start Date | Completion Date | Reference Materials                       |
+|-----|-------------------------------------------------------------------------------------------------------------------|------------|-----------------|-------------------------------------------|
+| 2   | - Learn about AWS S3 service and how to deploy S3 on AWS                                                         | 15/09/2025 | 16/09/2025      | <https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=104>                                        |
+| 3   | - Team meeting, brainstorm ideas, languages, and technologies to be used in the project                          | 17/09/2025 | 17/09/2025      |  |
+| 4   | - Vietnam Cloud Day                                                                                               | 18/09/2025 | 18/09/2025      |  |
+| 5   | - Research project features and assign roles based on individual interests and strengths within the team         | 19/09/2025 | 19/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| 6   | - **Hands-on Practice:** <br>&emsp; + Create S3  <br>&emsp; + Create CloudFront <br>&emsp; + Create static web    | 19/09/2025 | 19/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
 
 ### Week 2 Achievements:

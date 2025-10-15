@@ -25,31 +25,27 @@ pre: " <b> 1.4. </b> "
 
 ##### Week 4 Results Achieved:
 
-#### 1. Knowledge about AWS S3 and Related Services ✅
-**Date: 09/22/2025:**
+#### Knowledge about AWS S3 and Related Services
 - Completed in-depth study of S3 extended features:
   - Snow Family: Understood how to use Snowcone, Snowball, Snowmobile to migrate large data to AWS
   - Disaster Recovery: Grasped backup and restore strategies with S3
   - AWS Backup: Learned how to automate backup for S3 and other AWS services
 - Completed tutorial video and noted key points
 
-#### 2. Lab Practice ✅
-**Date: 09/23-24/2025:**
+#### Lab Practice
 - Completed 4 S3 lab modules:
   - Module 13 & 14: Practiced S3 bucket configuration and management
   - Module 24 & 25: Practiced S3 security and lifecycle policies
 - Gained understanding of how to apply S3 features in practice
 
-#### 3. Review of Basic Knowledge ✅
+#### Review of Basic Knowledge 
 - Reviewed Region and Availability Zone concepts
 - Reinforced EC2 knowledge: instance types, security groups, networking
 - Better understanding of basic AWS architecture
 
-#### 4. Project Progress - Cloud Health Dashboard 🚧
-**Date: 09/26/2025:**
+#### Project Progress - Cloud Health Dashboard 
 - Set up repository on GitHub
 - Completed system architecture design
 - Started coding basic modules
 - Plan to continue developing features in the coming week
 
-**Overall Assessment:** Completed 4/4 main objectives of the week, project is progressing well.

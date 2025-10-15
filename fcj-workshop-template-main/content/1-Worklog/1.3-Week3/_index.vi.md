@@ -32,7 +32,7 @@ pre: " <b> 1.3. </b> "
   * Storage
   * Networking 
   * Database
-  * ...
+
 
 * Đã tạo và cấu hình AWS Free Tier account thành công.
 
@@ -42,7 +42,6 @@ pre: " <b> 1.3. </b> "
   * Access Key
   * Secret Key
   * Region mặc định
-  * ...
 
 * Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
 
@@ -54,6 +53,6 @@ pre: " <b> 1.3. </b> "
   * ...
 
 * Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
+
 
 

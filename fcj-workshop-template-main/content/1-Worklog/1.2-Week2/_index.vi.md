@@ -18,9 +18,9 @@ pre: " <b> 1.2. </b> "
 |-----|-------------------------------------------------------------------------------------------------------------------|--------------|-----------------|-------------------------------------------|
 | 2   | - Tìm hiểu về dịch vụ S3 của AWS cũng như cách triển khai S3 trên AWS                                             | 15/09/2025   | 16/09/2025      | <https://www.youtube.com/watch?v=hsCfP0IxoaM&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=104>                                        |
 | 3   | - Họp nhóm, đưa ra ý kiến, ý tưởng, các ngôn ngữ,các công nghệ sẽ sửa dụng trong project                          | 17/09/2025   | 17/09/2025      |  |
-| 4   | - Viet Nam Cloud Day                                                                                              | 18/08/2025   | 18/08/2025      |  |
-| 5   | - Nghiên Cứu các chức năng sẽ có trong project, chia role dựa trên sở thích sở trường của từng cá nhân trong team | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo S3  <br>&emsp; + Tạo cloudfront <br>&emsp; + Tạo static web                     | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| 4   | - Viet Nam Cloud Day                                                                                              | 18/09/2025   | 18/09/2025      |  |
+| 5   | - Nghiên Cứu các chức năng sẽ có trong project, chia role dựa trên sở thích sở trường của từng cá nhân trong team | 19/09/2025   | 19/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| 6   | - **Thực hành:** <br>&emsp; + Tạo S3  <br>&emsp; + Tạo cloudfront <br>&emsp; + Tạo static web                     | 19/09/2025   | 19/09/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
 
 ### Kết quả đạt được tuần 2:

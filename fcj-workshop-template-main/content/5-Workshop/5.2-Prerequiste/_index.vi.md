@@ -215,28 +215,42 @@ Gắn IAM permission policy sau vào tài khoản aws user của bạn để tri
 }
 
 ```
-
+Trên thanh tìm kiếm, tìm IAM sau đó chọn vào policy.
+![1.png](/images/5-Workshop/5.2-Prerequisite/2.png)
+Bấm vào create policy sau đó chọn vào Policy editor là Json, copy IAM permission policy dán vào và bấm next.
+![1.png](/images/5-Workshop/5.2-Prerequisite/1.png)
+Đặt tên và bấm vào Create policy.
+![3.png](/images/5-Workshop/5.2-Prerequisite/3.png)
+Sau đó vào phần vào phần Users trong Dashboard 
+![4.png](/images/5-Workshop/5.2-Prerequisite/4.png)
+Bấm chọn vào user có sẵn hoặc tạo 1 user mới, kéo xuống ở phần permissions policy bấm chọn Add permissions
+![5.png](/images/5-Workshop/5.2-Prerequisite/5.png)
+Trong Add permissions chọn Attach policies directly và chọn policy mới vừa tạo sau đó nhấn next
+![6.png](/images/5-Workshop/5.2-Prerequisite/6.png)
+![7.png](/images/5-Workshop/5.2-Prerequisite/7.png)
+Nhấn Add permissions
+![8.png](/images/5-Workshop/5.2-Prerequisite/8.png)
 #### Khởi tạo tài nguyên bằng CloudFormation
 
 Trong lab này, chúng ta sẽ dùng N.Virginia region (us-east-1).
 
 Để chuẩn bị cho môi trường làm workshop, chúng ta deploy CloudFormation template sau (click link): [PrivateLinkWorkshop ](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.us-east-1.amazonaws.com/reinvent-endpoints-builders-session/Nested.yaml&stackName=PLCloudSetup). Để nguyên các lựa chọn mặc định.
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack1.png)
+![9.png](/images/5-Workshop/5.2-Prerequisite/9.png)
 
 + Lựa chọn 2 mục acknowledgement 
 + Chọn Create stack
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack2.png)
+![create stack](/images/5-Workshop/5.2-Prerequisite/10.png)
 
 Quá trình triển khai CloudFormation cần khoảng 15 phút để hoàn thành.
 
-![complete](/images/5-Workshop/5.2-Prerequisite/complete.png)
+![complete](/images/5-Workshop/5.2-Prerequisite/11.png)
 
 + 2 VPCs đã được tạo
 
-![vpcs](/images/5-Workshop/5.2-Prerequisite/vpcs.png)
+![vpcs](/images/5-Workshop/5.2-Prerequisite/12.png)
 
 + 3 EC2s đã được tạo
 
-![EC2](/images/5-Workshop/5.2-Prerequisite/ec2.png)
+![EC2](/images/5-Workshop/5.2-Prerequisite/13.png)

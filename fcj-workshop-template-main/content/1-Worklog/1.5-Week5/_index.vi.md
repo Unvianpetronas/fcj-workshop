@@ -27,19 +27,19 @@ pre: " <b> 1.5. </b> "
 
 ### Kết quả đạt được tuần 5:
 
-**1. Kiến thức Module 5 :**
+**Kiến thức Module 5 :**
 - Đã hoàn thành việc học module 5 về Security và Identity Management
 - Nắm được khái niệm Share Responsibility Model của AWS và phân biệt trách nhiệm giữa AWS và khách hàng
 - Hiểu được cách AWS tổ chức và quản lý tài khoản thông qua AWS Organizations
 - Nắm được các khái niệm cơ bản về IAM (Identity and Access Management)
 
-**2. Thực hành Lab :**
+**Thực hành Lab :**
 - Hoàn thành lab về Resource Groups: tạo và quản lý nhóm tài nguyên theo tags
 - Thực hành tạo và quản lý IAM:
 - Làm quen với AWS Lambda: tạo function đơn giản và test
 - Thực hành cấp quyền (Authorization) và quản lý policies
 
-**3. Phát triển Project :**
+**Phát triển Project :**
 - Tích hợp thư viện boto3 vào project để kết nối với AWS services
 - Cấu hình credentials và region cho boto3
 - Hoàn thành các chức năng cơ bản

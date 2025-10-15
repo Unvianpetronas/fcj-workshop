@@ -27,19 +27,19 @@ pre: " <b> 1.5. </b> "
 
 ### Week 5 Achievements:
 
-**1. Module 5 Knowledge:**
+**Module 5 Knowledge:**
 - Completed module 5 on Security and Identity Management
 - Understood the AWS Shared Responsibility Model and distinguished responsibilities between AWS and customers
 - Learned how AWS organizes and manages accounts through AWS Organizations
 - Grasped fundamental concepts of IAM (Identity and Access Management)
 
-**2. Lab Practice:**
+**Lab Practice:**
 - Completed Resource Groups lab: created and managed resource groups using tags
 - Practiced creating and managing IAM resources
 - Got familiar with AWS Lambda: created simple functions and tested them
 - Practiced granting authorization and managing policies
 
-**3. Project Development:**
+**Project Development:**
 - Integrated boto3 library into the project to connect with AWS services
 - Configured credentials and region for boto3
 - Completed basic functions

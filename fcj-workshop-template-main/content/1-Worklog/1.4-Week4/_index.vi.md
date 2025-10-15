@@ -25,34 +25,33 @@ pre: " <b> 1.4. </b> "
 
 ##### Kết quả đạt được tuần 4:
 
-#### 1. Kiến thức về AWS S3 và các dịch vụ liên quan ✅
-**Ngày 22/09/2025:**
+#### Kiến thức về AWS S3 và các dịch vụ liên quan 
+
 - Đã tìm hiểu chuyên sâu về các chức năng mở rộng của S3:
   - Snow Family: Hiểu được cách sử dụng Snowcone, Snowball, Snowmobile để di chuyển dữ liệu lớn vào AWS
   - Disaster Recovery: Nắm được các chiến lược backup và restore dữ liệu với S3
   - AWS Backup: Biết cách tự động hóa backup cho S3 và các dịch vụ AWS khác
 - Hoàn thành video hướng dẫn và ghi chú các điểm quan trọng
 
-#### 2. Thực hành Lab ✅
-**Ngày 23-24/09/2025:**
+#### Thực hành Lab 
+
 - Hoàn thành 4 module lab về S3:
   - Module 13 & 14: Thực hành cấu hình và quản lý S3 bucket
   - Module 24 & 25: Thực hành về S3 security và lifecycle policies
 - Nắm được cách áp dụng các tính năng S3 vào thực tế
 
-#### 3. Ôn tập kiến thức cơ bản ✅
+#### Ôn tập kiến thức cơ bản 
 - Ôn lại về Region và Availability Zone
 - Củng cố kiến thức về EC2: các loại instance, security groups, networking
 - Hiểu rõ hơn về kiến trúc AWS cơ bản
 
-#### 4. Tiến độ Project - Cloud Health Dashboard 🚧
-**Ngày 14-15/09/2025:**
+#### Tiến độ Project - Cloud Health Dashboard 
 - Đã setup repository trên GitHub
 - Hoàn thành thiết kế kiến trúc hệ thống
 - Bắt đầu coding các module cơ bản
 - Dự kiến tiếp tục phát triển các tính năng trong tuần tới
 
-**Đánh giá chung:** Hoàn thành 4/4 mục tiêu chính của tuần, project đang trong giai đoạn phát triển tốt.
+
 
 
 
