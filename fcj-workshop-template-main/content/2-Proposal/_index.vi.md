@@ -1,606 +1,535 @@
-# AWS Cloud Health Dashboard
-## Nền tảng Giám sát Hạ tầng AWS Chuyên nghiệp cho Nhiều Khách hàng
-
-**Đề xuất Dự án**  
-*13 tháng 10, 2025*
-
-**Trưởng dự án:** Trương Quốc Tuấn  
-**Email:** unviantruong26@gmail.com  
-**WhatsApp:** +84 798806545
+---
+title: "Proposal"
+date: "2025-10-13"
+weight: 200
+chapter: false
+pre: "  2.  "
+---
+# AWS Cloud Health Dashboard 
 
 ---
 
-## Mục lục
+## 1. Tóm Tắt Điều Hành
 
-1. [Tóm tắt Điều hành](#1-tóm-tắt-điều-hành)
-2. [Phát biểu Vấn đề](#2-phát-biểu-vấn-đề)
-3. [Kiến trúc Giải pháp](#3-kiến-trúc-giải-pháp)
-4. [Tính năng Chính](#4-tính-năng-chính)
-5. [Triển khai Kỹ thuật](#5-triển-khai-kỹ-thuật)
-6. [Lộ trình Phát triển](#6-lộ-trình-phát-triển)
-7. [Ước tính Ngân sách](#7-ước-tính-ngân-sách)
-8. [Đánh giá Rủi ro](#8-đánh-giá-rủi-ro)
-9. [Kết quả Mong đợi](#9-kết-quả-mong-đợi)
-10. [Kết luận](#10-kết-luận)
-11. [Phụ lục](#phụ-lục)
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng chuẩn production với triển khai DevSecOps đầy đủ**, cho phép doanh nghiệp giám sát và tối ưu hóa hạ tầng AWS cho nhiều khách hàng từ một hệ thống tập trung duy nhất.
 
----
+**Điểm Nổi Bật:**
 
-## 1. Tóm tắt Điều hành
+- **Kiến trúc DevSecOps**: Pipeline CI/CD hoàn chỉnh với quét bảo mật tự động
+- **Kiến trúc đa khách hàng**: Giám sát 10-50+ tài khoản AWS khách hàng từ một nền tảng
+- **Chi phí nền tảng**: $23-33/tháng (Năm 1) với các tính năng DevSecOps
+- **Chi phí mỗi khách hàng**: ~$0.19/tháng cho lưu trữ dữ liệu
+- **Thiết kế bảo mật tối ưu**: Mã hóa AWS Secrets Manager + KMS
+- **Triển khai tự động**: CodePipeline + CodeBuild với triển khai SSH
+- **5 bảng DynamoDB**: Mô hình dữ liệu tối ưu với cô lập khách hàng
+- **Redis caching**: Giảm 80% chi phí đọc database
+- **Hệ thống email thông báo**: Tích hợp AWS SES cho cảnh báo quan trọng
 
-**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng (multi-tenant)** cho phép doanh nghiệp giám sát và tối ưu hóa hạ tầng AWS cho nhiều khách hàng từ một hệ thống tập trung duy nhất. Nền tảng này thể hiện kiến trúc cấp doanh nghiệp trong khi vẫn duy trì mô hình vận hành tiết kiệm chi phí.
-
-### Điểm nổi bật chính:
-
-- **Kiến trúc đa khách hàng:** Giám sát 10-50+ tài khoản AWS của khách hàng từ một nền tảng.
-- **Chi phí nền tảng:** $10-20/tháng (hỗ trợ không giới hạn khách hàng với chi phí tăng thêm tối thiểu).
-- **Chi phí mỗi khách hàng:** ~$0.50-1.00/tháng cho lưu trữ dữ liệu.
-- **Tính năng chuyên nghiệp:** Xác thực email, mã hóa thông tin đăng nhập, cảnh báo tự động, giám sát thời gian thực.
-- **5 bảng DynamoDB:** Mô hình dữ liệu được tối ưu hóa với cách ly khách hàng.
-- **Hệ thống worker nền:** Thu thập dữ liệu tự động cho tất cả khách hàng.
-- **Hệ thống thông báo email:** Tích hợp AWS SES cho cảnh báo quan trọng và xác thực.
-
-**Công nghệ sử dụng:** FastAPI (Python) + React + DynamoDB + Redis + AWS SES + EC2 t3.micro
+**Công Nghệ:** FastAPI (Python) + React + DynamoDB + Redis + AWS Secrets Manager + KMS + CloudWatch + CloudTrail + CodePipeline + CodeBuild + EC2 t3.micro
 
 ---
 
-## 2. Phát biểu Vấn đề
+## 2. Bài Toán Đặt Ra
 
-### Thách thức Hiện tại:
+**Thách Thức Hiện Tại:**
 
-Các doanh nghiệp quản lý hạ tầng AWS cho nhiều khách hàng đang đối mặt với:
+Các doanh nghiệp quản lý hạ tầng AWS cho nhiều khách hàng gặp phải:
 
-- **Không có giám sát tập trung:** Phải đăng nhập vào từng console AWS của khách hàng riêng biệt.
-- **Cảnh báo bảo mật phân tán:** Các phát hiện quan trọng từ GuardDuty bị bỏ lỡ.
-- **Thiếu khả năng hiển thị chi phí:** Khó khăn trong việc theo dõi và tối ưu chi phí giữa các khách hàng.
-- **Quản lý thông tin đăng nhập thủ công:** Lưu trữ AWS access keys không an toàn.
-- **Không có thông báo chủ động:** Bỏ lỡ các sự kiện quan trọng theo thời gian thực.
-- **Giám sát tốn thời gian:** 30+ phút mỗi ngày cho mỗi khách hàng.
+- **Không có giám sát tập trung**: Phải đăng nhập vào từng AWS console của mỗi khách hàng
+- **Cảnh báo bảo mật phân tán**: Các phát hiện quan trọng từ GuardDuty bị bỏ qua
+- **Thiếu khả năng hiển thị chi phí**: Khó theo dõi và tối ưu chi phí giữa các khách hàng
+- **Quản lý thông tin xác thực không an toàn**: AWS access keys được lưu trong database hoặc config files
+- **Không có triển khai tự động**: Triển khai thủ công dẫn đến lỗi và downtime
+- **Thiếu quét bảo mật**: Các lỗ hổng được triển khai lên production
+- **Không có audit logging**: Không thể theo dõi các sự kiện bảo mật và API calls
+- **Giám sát thủ công**: Mất 30+ phút mỗi ngày cho mỗi khách hàng
 
-### Giải pháp của chúng tôi:
+**Giải Pháp Của Chúng Tôi:**
 
-Cloud Health Dashboard cung cấp một **nền tảng duy nhất để giám sát tất cả khách hàng** với:
+Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** với:
 
-#### Kiến trúc Đa khách hàng
+**Kiến Trúc DevSecOps**
+- Pipeline CI/CD tự động (CodePipeline + CodeBuild)
+- Quét bảo mật (SAST với Bandit, quét dependencies với Safety)
+- Triển khai tự động qua SSH
+- Giám sát hạ tầng với CloudWatch
+- Audit logging với CloudTrail
+- Quản lý secrets với AWS Secrets Manager + KMS
 
-- Một nền tảng giám sát 10-50+ tài khoản AWS của khách hàng.
-- Lưu trữ thông tin đăng nhập AWS được mã hóa (mã hóa Fernet).
-- Cách ly dữ liệu hoàn toàn giữa các khách hàng.
-- Quản lý worker tự động cho mỗi khách hàng.
+**Kiến Trúc Đa Khách Hàng**
+- Một nền tảng giám sát 10-50+ tài khoản AWS khách hàng
+- AWS Secrets Manager để lưu trữ credentials (mã hóa KMS)
+- Cô lập dữ liệu hoàn toàn giữa các khách hàng
+- Quản lý worker tự động cho mỗi khách hàng
 
-#### Giám sát Tập trung
-
-- Dashboard duy nhất cho tất cả khách hàng.
-- Tình trạng hạ tầng thời gian thực.
-- Lưu trữ dữ liệu lịch sử (30-365 ngày).
-- 15+ dịch vụ AWS được giám sát.
-
-#### Hệ thống Thông báo Email
-
-- Xác thực email với token có thời hạn.
-- Cảnh báo GuardDuty quan trọng qua AWS SES.
-- Mẫu email HTML đẹp mắt.
-- Tùy chọn thông báo có thể tùy chỉnh.
-- Khách hàng có thể cập nhật email trong Cài đặt.
-
-#### Phân tích & Tối ưu Chi phí
-
-- Theo dõi chi phí theo từng khách hàng.
-- Xu hướng lịch sử và dự báo.
-- Đề xuất gốc từ AWS.
-- Cảnh báo ngân sách.
-
-#### Bảo mật & Tuân thủ
-
-- Phát hiện mối đe dọa GuardDuty.
-- Tích hợp Security Hub.
-- Lọc theo mức độ nghiêm trọng.
-- Cảnh báo email thời gian thực cho các phát hiện quan trọng.
-
-#### Đề xuất Dựa trên Quy tắc
-
-- Đề xuất tối ưu chi phí.
-- Cải thiện hiệu suất.
-- Tăng cường bảo mật.
-- Ưu tiên dựa trên tác động.
-
-### ROI & Lợi ích:
-
-#### Cho Người vận hành Nền tảng:
-
-- Giám sát 20 khách hàng chỉ với $15-20/tháng tổng cộng.
-- Thu thập dữ liệu tự động (tiết kiệm 10+ giờ/tuần).
-- Dự án portfolio chuyên nghiệp.
-- Thể hiện kỹ năng kiến trúc doanh nghiệp.
-
-#### Cho Mỗi Khách hàng:
-
-- Tiết kiệm chi phí tiềm năng 15-25% thông qua tối ưu hóa.
-- Cảnh báo bảo mật quan trọng ngay lập tức qua email.
-- Hiển thị dữ liệu lịch sử.
-- Dashboard duy nhất thay vì nhiều console AWS.
+**Giám Sát Tập Trung**
+- Dashboard duy nhất cho tất cả khách hàng
+- Tình trạng hạ tầng thời gian thực
+- Lưu giữ dữ liệu lịch sử (30-365 ngày)
+- Giám sát 15+ dịch vụ AWS
+- Redis caching để tối ưu hiệu suất
 
 ---
 
-## 3. Kiến trúc Giải pháp
+## 3. Kiến Trúc Giải Pháp
 
-### Tổng quan Kiến trúc Đa khách hàng
+### **Tổng Quan Kiến Trúc**
 
-![Architecture Diagram](/images/2-Proposal/diagram-export-10-13-2025-11_02_08-AM.png)
+![new.png](/images/2-Proposal/new.png)
 
-### Sơ đồ Mạng
-
-![Network Diagram](/images/2-Proposal/cloud_dashboard.drawio.png)
-
-### Luồng Dữ liệu
-
-**1. ĐĂNG KÝ KHÁCH HÀNG**
-```
-Khách hàng → API → Mã hóa AWS Keys → Bảng DynamoDB Clients
-→ Gửi Email Xác thực (AWS SES)
 ```
 
-**2. XÁC THỰC EMAIL**
+### **Luồng Dữ Liệu**
+
 ```
-Khách hàng → Click Link → Xác minh Token → Đánh dấu Email đã Xác thực
-```
+1. QUY TRÌNH LÀM VIỆC CỦA DEVELOPER (DevSecOps)
+   Developer → Git push → GitHub → CodePipeline được kích hoạt
+   → CodeBuild chạy:
+     • Cài đặt dependencies
+     • Chạy tests (pytest)
+     • Quét bảo mật (Bandit, Safety)
+     • Build frontend
+     • SSH đến EC2 → Triển khai
+   → CloudWatch ghi log mọi thứ
 
-**3. WORKER MANAGER**
-```
-Mỗi 5 phút → Kiểm tra khách hàng mới → Khởi động worker cho mỗi khách hàng
-```
+2. ĐĂNG KÝ KHÁCH HÀNG
+   Khách hàng → Nhập vào email → Nhấn vào xác thực → email xác thực được gửi tới → Nhấn vào link → API → Xác thực AWS keys → Lưu vào Secrets Manager (mã hóa KMS)
+   → Lưu metadata vào DynamoDB → Gửi email xác thực (SES)
 
-**4. THU THẬP DỮ LIỆU (mỗi khách hàng)**
-```
-Worker → API AWS của Khách hàng → Thu thập metrics → Lưu vào DynamoDB (với aws_account_id)
-→ Nếu phát hiện quan trọng → Gửi cảnh báo email (AWS SES)
-```
+3. XÁC THỰC EMAIL
+   Khách hàng → Click link → Xác thực token → Đánh dấu email đã xác thực 
+   → CloudTrail ghi log sự kiện
 
-**5. HIỂN THỊ DASHBOARD**
-```
-Khách hàng đăng nhập → API (lọc theo aws_account_id) → Trả về chỉ dữ liệu của họ
-```
+4. WORKER MANAGER (Đa Khách Hàng)
+   Mỗi 15 phút → Lấy khách hàng đang hoạt động từ DynamoDB
+   → Cho mỗi khách hàng:
+     • Lấy credentials từ Secrets Manager
+     • Khởi động worker nếu chưa chạy
+     • Thu thập dữ liệu AWS
+     • Cache trong Redis (TTL 5 phút)
+     • Lưu vào DynamoDB
 
-### Các Thành phần Cốt lõi
+5. THU THẬP DỮ LIỆU (Mỗi Khách Hàng)
+   Worker → Secrets Manager (lấy credentials)
+   → AWS API của khách hàng → Thu thập metrics
+   → Cache trong Redis → Lưu vào DynamoDB (phân vùng theo aws_account_id)
+   → Nếu phát hiện nghiêm trọng → Gửi email cảnh báo (SES)
+   → CloudWatch ghi log tất cả operations
 
-#### EC2 t3.micro Instance (Máy chủ Đơn):
+6. HIỂN THỊ DASHBOARD
+   Khách hàng đăng nhập → FastAPI kiểm tra Redis cache
+   → Cache HIT: Trả về dữ liệu cached (< 100ms)
+   → Cache MISS: Query DynamoDB (lọc theo aws_account_id)
+   → Lưu vào Redis → Trả về dữ liệu
 
-- **Nginx**: Reverse proxy, SSL termination
-- **FastAPI**: RESTful API, xác thực, tích hợp AWS
-- **React**: Ứng dụng dashboard single-page
-- **Redis**: Lớp caching (TTL 5 phút)
-- **Worker Manager**: Điều phối công việc nền đa khách hàng
-- **CloudWatch Agent**: Giám sát nền tảng
+7. BẢO MẬT & KIỂM TOÁN
+   Tất cả API calls → CloudTrail logging
+   Truy cập credentials → CloudWatch alarm
+   Thử đăng nhập thất bại → Email cảnh báo
+   Sử dụng KMS key → Audit trail
 
-#### 5 Bảng DynamoDB (Đa khách hàng):
+## 4. Tính Năng Chính
 
-1. **CloudHealthClients**
-   - Lưu trữ tài khoản khách hàng với thông tin đăng nhập AWS được mã hóa.
-   - Địa chỉ email và trạng thái xác thực.
-   - Tùy chọn thông báo.
-   - Metadata khách hàng.
+### **Triển Khai DevSecOps**
 
-2. **CloudHealthMetrics**
-   - Metrics chuỗi thời gian từ CloudWatch.
-   - Phân vùng theo aws_account_id.
-   - Lưu trữ 30 ngày (TTL).
+**Pipeline CI/CD Tự Động:**
+- Tích hợp GitHub cho quản lý mã nguồn
+- CodePipeline để điều phối (1 pipeline MIỄN PHÍ)
+- CodeBuild để build tự động (100 phút/tháng MIỄN PHÍ)
+- Quét bảo mật tự động trước khi triển khai
+- Triển khai tự động qua SSH
+- Chiến lược triển khai không downtime
 
-3. **CloudHealthCosts**
-   - Dữ liệu chi phí từ Cost Explorer.
-   - Theo dõi chi phí theo khách hàng.
-   - Lưu trữ 365 ngày.
+**Quét Bảo Mật:**
+- **Bandit**: Static Application Security Testing (SAST)
+- **Safety**: Quét lỗ hổng dependencies
+- Security gates trước triển khai
+- Build thất bại nếu có lỗi HIGH severity
 
-4. **SecurityFindings**
-   - Phát hiện từ GuardDuty và Security Hub.
-   - Cảnh báo bảo mật theo khách hàng.
-   - Lưu trữ 90 ngày.
+**Quản Lý Secrets:**
+- AWS Secrets Manager để lưu trữ credentials
+- Mã hóa KMS cho tất cả secrets
+- Hỗ trợ rotation tự động
+- Không có credentials trong code hoặc biến môi trường
+- Chỉ truy cập qua IAM role
 
-5. **Recommendations**
-   - Đề xuất về chi phí, hiệu suất, bảo mật.
-   - Ưu tiên dựa trên tác động.
-   - Lưu trữ 180 ngày.
+**Giám Sát & Logging:**
+- CloudWatch cho logs và metrics ứng dụng
+- CloudTrail cho API audit logging
+- Custom metrics cho business KPIs
+- Cảnh báo tự động cho bất thường
+- Lưu giữ log 90 ngày
 
-#### Các Dịch vụ AWS Sử dụng:
+**Bảo Mật Hạ Tầng:**
+- Security Groups (tường lửa mạng)
+- IAM roles với quyền tối thiểu
+- AWS Shield Standard (bảo vệ DDoS)
+- Mã hóa dữ liệu lưu trữ (KMS)
+- Mã hóa dữ liệu truyền tải (TLS/HTTPS)
 
-- **EC2**: Tính toán (t3.micro, Free Tier)
-- **DynamoDB**: Lưu trữ dữ liệu đa khách hàng
-- **AWS SES**: Xác thực email và cảnh báo quan trọng
-- **CloudWatch**: Thu thập metrics
-- **Cost Explorer**: Phân tích chi phí
-- **GuardDuty**: Phát hiện mối đe dọa (tùy chọn)
-- **Security Hub**: Tổng hợp phát hiện bảo mật (tùy chọn)
-- **S3**: Lưu trữ backup
+### **Quản Lý Đa Khách Hàng**
+
+- Đăng ký khách hàng tự phục vụ với xác thực AWS key
+- Credentials lưu trong Secrets Manager (mã hóa KMS)
+- Khởi động worker tự động cho mỗi khách hàng
+- Cô lập dữ liệu hoàn toàn
+- Truy cập dashboard theo từng khách hàng
+- Redis caching để tối ưu hiệu suất
+
+### **Hệ Thống Email Thông Báo**
+
+- Xác thực email với token bảo mật (hết hạn 24h)
+- Cảnh báo GuardDuty quan trọng qua AWS SES
+- Tùy chỉnh preferences thông báo
+- HTML email templates
+- Chỉnh sửa email trong trang Settings
+
+### **Giám Sát Hạ Tầng**
+
+- Metrics thời gian thực từ 15+ dịch vụ AWS
+- Lưu giữ dữ liệu lịch sử (30+ ngày)
+- Redis caching (giảm 80% chi phí)
+- Giám sát EC2, S3, RDS, Lambda
+- Dashboard tình trạng dịch vụ
+
+### **Tối Ưu Chi Phí**
+
+- Theo dõi chi phí hàng ngày theo dịch vụ
+- Xu hướng chi phí hàng tháng
+- Đề xuất từ AWS Cost Explorer
+- Cảnh báo ngân sách
+- Phân tích chi phí theo khách hàng
+
+### **Giám Sát Bảo Mật**
+
+- Phát hiện mối đe dọa GuardDuty (tùy chọn)
+- Lọc theo mức độ nghiêm trọng
+- Email cảnh báo cho phát hiện quan trọng
+- CloudTrail audit logging
+- Theo dõi trạng thái tuân thủ
 
 ---
 
-## 4. Tính năng Chính
+## 5. Triển Khai Kỹ Thuật
 
-### Quản lý Đa khách hàng
+### **Ngăn Xếp Công Nghệ**
 
-- Đăng ký khách hàng tự phục vụ với xác thực AWS key.
-- Lưu trữ thông tin đăng nhập được mã hóa (mã hóa Fernet).
-- Tự động tạo worker cho mỗi khách hàng.
-- Cách ly dữ liệu hoàn toàn.
-- Truy cập dashboard theo khách hàng.
-- Giám sát tình trạng worker.
-
-### Hệ thống Thông báo Email
-
-- Xác thực email với token bảo mật (hết hạn 24h).
-- Cảnh báo GuardDuty quan trọng qua AWS SES.
-- Tùy chọn thông báo có thể tùy chỉnh:
-   - Cảnh báo bảo mật quan trọng
-   - Cảnh báo cảnh cáo
-   - Mẹo tối ưu chi phí
-   - Tóm tắt hạ tầng hàng ngày
-- Chỉnh sửa email trong trang Cài đặt.
-- Tùy chọn gửi lại email xác thực.
-
-### Giám sát Hạ tầng
-
-- Metrics thời gian thực từ 15+ dịch vụ AWS.
-- Lưu trữ dữ liệu lịch sử (30+ ngày).
-- Giám sát EC2, S3, RDS, Lambda.
-- Metrics CloudWatch tùy chỉnh.
-- Dashboard tình trạng dịch vụ.
-
-### Tối ưu Chi phí
-
-- Theo dõi chi phí hàng ngày theo dịch vụ.
-- Xu hướng chi phí hàng tháng.
-- Đề xuất từ AWS Cost Explorer.
-- Cảnh báo ngân sách.
-- Phân tích sử dụng tài nguyên.
-
-### Giám sát Bảo mật
-
-- Phát hiện mối đe dọa GuardDuty.
-- Tổng hợp phát hiện Security Hub.
-- Lọc theo mức độ nghiêm trọng.
-- Cảnh báo email cho phát hiện quan trọng.
-- Theo dõi trạng thái tuân thủ.
-
-### Công cụ Đề xuất
-
-- Đề xuất tối ưu chi phí.
-- Cải thiện hiệu suất.
-- Tăng cường bảo mật.
-- Ưu tiên dựa trên tác động.
-- Theo dõi triển khai.
-
----
-
-## 5. Triển khai Kỹ thuật
-
-### Công nghệ Sử dụng
-
-#### Backend:
-
-- Python 3.9+ với FastAPI
+**Backend:**
+- Python 3.12+ với FastAPI
 - boto3 (AWS SDK)
-- cryptography (mã hóa Fernet)
-- asyncio cho worker đồng thời
+- asyncio cho concurrent workers
 - Redis cho caching
+- pytest cho testing
 
-#### Frontend:
-
+**Frontend:**
 - React 18 với Vite
 - TanStack Query cho data fetching
-- Recharts cho trực quan hóa
+- Recharts cho visualization
 - Tailwind CSS cho styling
 
-#### Cơ sở dữ liệu:
-
+**Database:**
 - DynamoDB (5 bảng, on-demand pricing)
-- Redis (in-memory caching)
+- Redis (in-memory caching, localhost)
 
-#### Email:
+**DevSecOps:**
+- GitHub (quản lý mã nguồn)
+- CodePipeline (điều phối CI/CD)
+- CodeBuild (build tự động)
+- Bandit (SAST security scanner)
+- Safety (dependency scanner)
 
-- AWS SES cho email giao dịch
-- Mẫu email HTML
+**Bảo Mật:**
+- AWS Secrets Manager (lưu trữ credentials)
+- AWS KMS (khóa mã hóa)
+- CloudTrail (audit logging)
+- CloudWatch (giám sát & cảnh báo)
+
+**Email:**
+- AWS SES cho transactional emails
+- HTML email templates
 - Xác thực dựa trên token
 
-### Triển khai Bảo mật
+**Cô Lập Dữ Liệu:**
 
-#### Mã hóa Thông tin Đăng nhập:
-
-```python
-# Mã hóa đối xứng Fernet
-from cryptography.fernet import Fernet
-
-# AWS keys của khách hàng được mã hóa trước khi lưu trữ
-encrypted_key = cipher.encrypt(client_aws_key.encode())
-# Lưu trong DynamoDB, chỉ giải mã khi cần thiết
-```
-
-#### Xác thực Email:
-
-```python
-# Tạo token với thời hạn
-import secrets
-from datetime import datetime, timedelta
-
-token = secrets.token_urlsafe(32)
-expires = datetime.now() + timedelta(hours=24)
-# Lưu với bản ghi khách hàng, xác minh khi click
-```
-
-#### Worker Manager:
-
-```python
-# Tự động phát hiện khách hàng và tạo worker
-import asyncio
-
-for client in active_clients:
-    if aws_account_id not in workers:
-        worker = CloudHealthWorker(client_provider, aws_account_id)
-        workers[aws_account_id] = asyncio.create_task(worker.start())
-```
-
-#### Cách ly Dữ liệu:
-
-- Tất cả truy vấn được lọc theo `aws_account_id`.
-- Khóa phân vùng DynamoDB bao gồm định danh khách hàng.
-- Endpoint API yêu cầu xác thực khách hàng.
-- Không có rò rỉ dữ liệu giữa khách hàng.
+- Tất cả queries được lọc theo `aws_account_id`
+- DynamoDB partition key bao gồm client identifier
+- API endpoints yêu cầu client authentication
+- Credentials được cô lập trong Secrets Manager
+- Không có rò rỉ dữ liệu giữa các khách hàng
 
 ---
 
-## 6. Lộ trình Phát triển (3 Tháng)
+## 6. Ước Tính Ngân Sách
 
-### Tháng 1: Nền tảng & Tính năng Cốt lõi
+### **Chi Phí Nền Tảng Hàng Tháng**
 
-#### Tuần 1-2: Hạ tầng & Thiết lập Đa khách hàng
+| Dịch Vụ                    | Mô Tả                          | Tháng 1 | Tháng 2 | Tháng 3 |
+|----------------------------|--------------------------------|---------|---------|---------|
+| **EC2 t3.micro**           | 750h Miễn Phí                  | $0      | $0      | $0      |
+| **DynamoDB (5 bảng)**      | On-demand, đa khách hàng       | $3-4    | $5-8    | $8-12   |
+| **AWS Secrets Manager**    | 20 secrets @ $0.40/secret      | $4-6    | $6-8    | $8      |
+| **AWS KMS**                | 2-3 keys @ $1/key              | $2      | $2-3    | $2-3    |
+| **AWS SES**                | Gửi email                      | $0      | $0-1    | $1-2    |
+| **CloudWatch**             | Logs + Metrics                 | $0-1    | $1-2    | $2-3    |
+| **CloudTrail**             | 1 trail (MIỄN PHÍ)             | $0      | $0      | $0      |
+| **CodePipeline**           | 1 pipeline (MIỄN PHÍ)          | $0      | $0      | $0      |
+| **CodeBuild**              | 100 phút/tháng (MIỄN PHÍ)      | $0      | $0      | $0      |
+| **Truyền Dữ Liệu**         | 15GB Miễn Phí                  | $0      | $0-1    | $1      |
+| **S3 Backup**              | ~5GB storage                   | $0      | $0-1    | $1      |
+| **Redis**                  | Trên EC2 (localhost - MIỄN PHÍ)| $0      | $0      | $0      |
+| **TỔNG**                   |                                | **$9-13** | **$14-24** | **$23-33** |
 
-- Thiết lập EC2 instance với tất cả dịch vụ.
-- Tạo schema 5 bảng DynamoDB.
-- API đăng ký khách hàng với mã hóa.
-- Khung worker manager.
-- Xác thực cơ bản.
+### **Chi Phí Sau Miễn Phí (Năm 2+)**
 
-#### Tuần 3-4: Hệ thống Thu thập Dữ liệu
+| Dịch Vụ                    | Chi Phí Hàng Tháng |
+|----------------------------|--------------------|
+| EC2 t3.micro               | $8-10              |
+| DynamoDB                   | $8-12              |
+| Secrets Manager            | $8                 |
+| KMS                        | $2-3               |
+| SES                        | $1-2               |
+| CloudWatch                 | $2-3               |
+| S3                         | $1                 |
+| Truyền Dữ Liệu             | $1                 |
+| **TỔNG Năm 2+**            | **$31-40/tháng**   |
 
-- Thu thập metrics CloudWatch.
-- Triển khai worker theo khách hàng.
-- Lưu trữ DynamoDB cho tất cả 5 bảng.
-- Lớp caching Redis.
-- Dashboard cơ bản với metrics.
+### **Chi Phí Gia Tăng Mỗi Khách Hàng**
 
-**Sản phẩm Bàn giao:** Thu thập metrics đa khách hàng hoạt động.
-
----
-
-### Tháng 2: Tính năng & Hệ thống Email
-
-#### Tuần 5-6: Tích hợp Chi phí & Bảo mật
-
-- Tích hợp API Cost Explorer.
-- Thu thập phát hiện GuardDuty.
-- Dashboard bảo mật.
-- Biểu đồ phân tích chi phí.
-
-#### Tuần 7-8: Hệ thống Thông báo Email
-
-- Thiết lập và xác minh AWS SES.
-- Triển khai luồng xác thực email.
-- Mẫu email HTML (xác thực + cảnh báo).
-- Gửi email cảnh báo quan trọng.
-- Trang cài đặt với quản lý email.
-- Tùy chọn thông báo.
-
-**Sản phẩm Bàn giao:** Giám sát đầy đủ + thông báo email.
-
----
-
-### Tháng 3: Hoàn thiện & Sản xuất
-
-#### Tuần 9-10: Đề xuất & Kiểm thử
-
-- Công cụ đề xuất.
-- Ưu tiên dựa trên tác động.
-- Kiểm thử end-to-end.
-- Sửa lỗi.
-- Tối ưu hiệu suất.
-
-#### Tuần 11-12: Triển khai Sản xuất
-
-- Thiết lập SSL/TLS.
-- Cấu hình Nginx.
-- Giám sát và logging.
-- Tài liệu.
-- Chuẩn bị demo.
-
-**Sản phẩm Bàn giao:** Nền tảng SaaS đa khách hàng sẵn sàng sản xuất.
-
----
-
-## 7. Ước tính Ngân sách
-
-### Chi phí Nền tảng Hàng tháng
-
-| Dịch vụ | Mô tả | Tháng 1 | Tháng 2 | Tháng 3 |
-|---------|-------|---------|---------|---------|
-| EC2 t3.micro | 750h Free Tier | $0 | $0 | $0 |
-| DynamoDB (5 bảng) | On-demand, đa khách hàng | $3-4 | $5-8 | $8-12 |
-| AWS SES | Gửi email | $0 | $0-1 | $1-2 |
-| CloudWatch | Metrics + Logs | $0-1 | $1-2 | $2-3 |
-| Data Transfer | 15GB Free Tier | $0 | $0-1 | $1 |
-| S3 Backup | Lưu trữ ~5GB | $0 | $0-1 | $1 |
-| **TỔNG CỘNG** | | **$3-5** | **$6-13** | **$13-20** |
-
-### Chi phí Tăng thêm Mỗi Khách hàng
-
-**Lưu trữ & Vận hành DynamoDB (mỗi khách hàng/tháng):**
+**DynamoDB Lưu Trữ & Operations (mỗi khách hàng/tháng):**
 
 - **Lưu trữ:** ~500MB = $0.125
-- **Ghi:** 43,200/tháng = $0.054
-- **Đọc:** 30,000/tháng = $0.0075
+- **Writes:** 43,200/tháng = $0.054
+- **Reads (với Redis):** 6,000/tháng = $0.0015 (giảm 80%)
 - **Tổng mỗi khách hàng: ~$0.19/tháng**
 
-### Ví dụ về Mở rộng:
+**Secrets Manager (mỗi khách hàng):**
+- **Mỗi secret:** $0.40/tháng
+- **Tổng với Secrets Manager: ~$0.59/tháng mỗi khách hàng**
 
-- **10 khách hàng:** $5 + ($0.19 × 10) = **$6.90/tháng**
-- **20 khách hàng:** $5 + ($0.19 × 20) = **$8.80/tháng**
-- **50 khách hàng:** $5 + ($0.19 × 50) = **$14.50/tháng**
-- **100 khách hàng:** $5 + ($0.19 × 100) = **$24/tháng**
+**Ví Dụ Mở Rộng:**
 
-### Chi phí Email (AWS SES):
+- **10 khách hàng:** Nền tảng $23 + (10 × $0.59) = **$28.90/tháng**
+- **20 khách hàng:** Nền tảng $23 + (20 × $0.59) = **$34.80/tháng**
+- **50 khách hàng:** Nền tảng $23 + (50 × $0.59) = **$52.50/tháng**
 
-- **62,000 email đầu tiên/tháng:** Miễn phí (nếu gửi từ EC2).
-- **Thêm:** $0.10 mỗi 1,000 email.
-- **Sử dụng điển hình:** 2-5 email mỗi khách hàng/tháng = **Miễn phí**.
+### **Chiến Lược Tối Ưu Chi Phí**
 
-### Chiến lược Tối ưu Chi phí
-
-- TTL DynamoDB cho dọn dẹp dữ liệu tự động.
-- Caching Redis giảm chi phí đọc 80%.
-- Ghi hàng loạt để hiệu quả.
-- Định giá on-demand (không lãng phí công suất dự phòng).
-- Tối đa hóa Free Tier (12 tháng).
-- Gửi email hàng loạt để tiết kiệm chi phí.
+- **Redis caching**: Giảm DynamoDB reads 80%
+- **DynamoDB TTL**: Tự động dọn dẹp dữ liệu (không tốn phí)
+- **Batch writes**: Ít API calls hơn
+- **On-demand pricing**: Chỉ trả tiền cho usage
+- **Tối đa hóa Free Tier**: 12 tháng miễn phí cho EC2, S3, CloudWatch
+- **Tối ưu CodeBuild**: Giữ builds dưới 100 phút/tháng (MIỄN PHÍ)
+- **Email batching**: Tối đa hóa SES free tier
 
 ---
 
-## 8. Đánh giá Rủi ro
+## 7. Đánh Giá Rủi Ro
 
-| Rủi ro | Tác động | Xác suất | Giảm thiểu |
-|--------|----------|----------|------------|
-| Vượt ngân sách | Trung bình | Thấp | Cảnh báo AWS Budget, giám sát hàng ngày, DynamoDB on-demand. |
-| Ngừng hoạt động EC2 | Cao | Thấp | Cảnh báo CloudWatch, tự động khởi động lại systemd, mục tiêu uptime 98%. |
-| Bảo mật dữ liệu khách hàng | Cao | Thấp | Mã hóa Fernet, đặc quyền tối thiểu IAM, ghi nhật ký kiểm toán. |
-| Phân vùng nóng DynamoDB | Trung bình | Thấp | Thiết kế khóa phân vùng đúng, phân mảnh aws_account_id. |
-| Vấn đề gửi email | Trung bình | Thấp | Giám sát AWS SES, logic thử lại, thông báo dự phòng. |
-| Lỗi worker manager | Trung bình | Thấp | Kiểm tra sức khỏe, tự động khởi động lại, ghi nhật ký lỗi. |
-| Mở rộng phạm vi | Trung bình | Cao | Định nghĩa MVP nghiêm ngặt, đóng băng tính năng tuần 8, kế hoạch Giai đoạn 2. |
+| Rủi Ro                        | Tác Động | Xác Suất | Giảm Thiểu                                                      |
+|-------------------------------|----------|----------|----------------------------------------------------------------|
+| Vượt ngân sách                | Trung bình | Thấp   | AWS Budget alerts, Redis caching, DynamoDB on-demand           |
+| EC2 downtime                  | Cao      | Thấp     | CloudWatch alarms, systemd auto-restart, mục tiêu 98% uptime   |
+| Bảo mật dữ liệu khách hàng    | Cao      | Thấp     | Secrets Manager + KMS, IAM tối thiểu, audit logging            |
+| Lỗi CI/CD pipeline            | Trung bình | Thấp   | CodeBuild retry logic, rollback triển khai, health checks      |
+| Redis cache failure           | Trung bình | Thấp   | Systemd monitor, auto-restart, graceful degradation            |
+| DynamoDB hot partitions       | Trung bình | Thấp   | Thiết kế partition key đúng, sharding aws_account_id           |
+| Chi phí Secrets Manager       | Trung bình | Trung bình | Giám sát usage, tối ưu số lượng secret, xem xét alternatives |
+| Vấn đề gửi email              | Trung bình | Thấp   | Giám sát AWS SES, retry logic, thông báo dự phòng             |
+| Lỗ hổng bảo mật trong deps    | Cao      | Trung bình | Safety scanner trong CI/CD, cập nhật tự động, cảnh báo bảo mật|
+| Scope creep                   | Trung bình | Cao    | Định nghĩa MVP nghiêm ngặt, đóng băng tính năng tuần 8        |
 
 ---
 
-## 9. Kết quả Mong đợi
+## 8. Kết Quả Mong Đợi
 
-### Sản phẩm Bàn giao Kỹ thuật
+### **Sản Phẩm Kỹ Thuật**
 
-**Nền tảng Đa khách hàng Hoạt động:**
+**Nền Tảng DevSecOps:**
 
-- Đăng ký khách hàng với xác thực email.
-- 5 bảng DynamoDB với cách ly dữ liệu đúng.
-- Quản lý worker tự động (10-50 khách hàng).
-- Dashboard giám sát thời gian thực cho mỗi khách hàng.
-- Hệ thống thông báo email (xác thực + cảnh báo).
-- Tính năng chi phí, bảo mật và đề xuất.
-- Trang cài đặt với quản lý email/thông báo.
+- Pipeline CI/CD hoàn chỉnh (GitHub → CodePipeline → CodeBuild → EC2)
+- Quét bảo mật tự động (Bandit SAST, Safety dependency scan)
+- Triển khai tự động qua SSH
+- Giám sát CloudWatch và audit logging CloudTrail
+- AWS Secrets Manager để lưu trữ credentials
+- Mã hóa KMS cho tất cả dữ liệu nhạy cảm
+- Lớp Redis caching trên EC2
 
-### Mục tiêu Hiệu suất:
+**SaaS Đa Khách Hàng:**
 
-- **Thời gian phản hồi API:** <300ms (cached), <2s (uncached).
-- **Gửi email:** <30 giây.
-- **Thu thập dữ liệu:** Mỗi 5 phút cho mỗi khách hàng.
-- **Thời gian hoạt động nền tảng:** 98-99%.
-- **Khởi động worker:** <10 giây mỗi khách hàng.
+- Đăng ký khách hàng với xác thực email
+- 5 bảng DynamoDB với cô lập dữ liệu đúng
+- Quản lý worker tự động (10-50 khách hàng)
+- Dashboard giám sát thời gian thực cho mỗi khách hàng
+- Hệ thống email thông báo
+- Trang Settings với quản lý email/thông báo
 
-### Bảo mật & Tuân thủ:
+**Mục Tiêu Hiệu Suất:**
 
-- Lưu trữ thông tin đăng nhập được mã hóa.
-- Xác thực email trước cảnh báo quan trọng.
-- Cách ly dữ liệu giữa khách hàng.
-- Vai trò IAM đặc quyền tối thiểu.
-- Ghi nhật ký kiểm toán cho tất cả hoạt động.
+- **Thời gian phản hồi API:** <100ms (Redis cache HIT), <2s (cache MISS)
+- **Gửi email:** <30 giây
+- **Thu thập dữ liệu:** Mỗi 15 phút cho mỗi khách hàng
+- **Uptime nền tảng:** 98-99%
+- **Khởi động worker:** <10 giây cho mỗi khách hàng
+- **Thời gian build:** <5 phút (dưới giới hạn free tier)
+- **Thời gian triển khai:** <3 phút
 
-### Kết quả Học tập
+**Bảo Mật & Tuân Thủ:**
 
-#### Thành thạo Dịch vụ AWS:
+- Không có credentials trong code hoặc biến môi trường
+- Tất cả secrets được mã hóa với KMS
+- Xác thực email trước cảnh báo quan trọng
+- Audit trail API hoàn chỉnh (CloudTrail)
+- Cô lập dữ liệu giữa các khách hàng
+- IAM roles với quyền tối thiểu
+- Quét bảo mật tự động trong CI/CD
 
-- DynamoDB nâng cao (đa khách hàng, GSI, TTL).
-- Tích hợp AWS SES (email giao dịch).
-- CloudWatch, Cost Explorer, GuardDuty.
-- Vai trò IAM và mã hóa (Fernet).
+### **Kết Quả Học Tập**
 
-#### Kiến trúc SaaS:
+**Thành Thạo DevSecOps:**
 
-- Mô hình hóa dữ liệu đa khách hàng.
-- Điều phối worker nền.
-- Quản lý thông tin đăng nhập được mã hóa.
-- Hệ thống thông báo email.
-- Luồng đăng ký tự phục vụ.
+- Thiết kế và triển khai CI/CD pipeline
+- Quét bảo mật tự động (SAST, dependency scanning)
+- Khái niệm Infrastructure as Code
+- Best practices quản lý secrets
+- Audit logging và tuân thủ
+- Giám sát và cảnh báo
 
-#### Phát triển Full-Stack:
+**Thành Thạo Dịch Vụ AWS:**
 
-- Lập trình bất đồng bộ FastAPI.
-- Quản lý trạng thái React.
-- Mẫu truy cập DynamoDB.
-- Thiết kế mẫu email.
-- Thiết kế RESTful API.
+- DynamoDB nâng cao (đa khách hàng, GSI, TTL)
+- Tích hợp AWS Secrets Manager + KMS
+- CloudWatch + CloudTrail
+- CodePipeline + CodeBuild
+- Tích hợp AWS SES
+- IAM roles và policies
 
-### Giá trị Portfolio
+**Kiến Trúc SaaS:**
+
+- Mô hình dữ liệu đa khách hàng
+- Điều phối background worker
+- Quản lý credentials an toàn
+- Chiến lược caching (Redis)
+- Hệ thống email thông báo
+
+**Phát Triển Full-Stack:**
+
+- Lập trình async FastAPI
+- Quản lý state React
+- Tích hợp Redis
+- Phát triển bảo mật đầu tiên
+- Thiết kế RESTful API
+
+### **Giá Trị Portfolio**
 
 Dự án này thể hiện:
 
-- **Kiến trúc cấp doanh nghiệp** (SaaS đa khách hàng).
-- **Thiết kế ưu tiên bảo mật** (mã hóa, xác thực email).
-- **Chuyên môn AWS** (tích hợp 10+ dịch vụ).
-- **Kỹ năng full-stack** (Python, React, DynamoDB, SES).
-- **Tối ưu chi phí** ($0.19/khách hàng/tháng ở quy mô).
-- **Sẵn sàng sản xuất** (giám sát, logging, xử lý lỗi).
-- **Tính năng chuyên nghiệp** (hệ thống email, cảnh báo tự động).
+1. **DevSecOps Chuẩn Production**
+    - Pipeline CI/CD hoàn chỉnh
+    - Quét bảo mật tự động
+    - Quản lý secrets với AWS Secrets Manager + KMS
+    - Giám sát và logging toàn diện
 
-#### Điểm khác biệt chính:
+2. **Kiến Trúc Enterprise**
+    - Thiết kế SaaS đa khách hàng
+    - Hạ tầng có thể mở rộng (10-100+ khách hàng)
+    - Lớp Redis caching
+    - Hệ thống background worker
 
-- Không phải công cụ giám sát đơn giản - một nền tảng SaaS hoàn chỉnh.
-- Thể hiện khả năng thiết kế cho nhiều khách hàng.
-- Cho thấy hiểu biết về mã hóa và bảo mật.
-- Bao gồm tính năng SaaS hiện đại (xác thực email, thông báo).
-- Mở rộng tiết kiệm chi phí ($20/tháng cho 50+ khách hàng).
+3. **Chuyên Môn Bảo Mật**
+    - Không có secrets trong code
+    - Mã hóa KMS
+    - CloudTrail audit logging
+    - Quét lỗ hổng tự động
 
----
+4. **Thành Thạo AWS**
+    - Tích hợp 14+ dịch vụ AWS
+    - Thiết kế tối ưu chi phí
+    - Tối đa hóa free tier
+    - Best practices IAM
 
-## 10. Kết luận
+5. **Hiệu Quả Chi Phí**
+    - $23-33/tháng cho nền tảng (Năm 1)
+    - $0.59/khách hàng/tháng gia tăng
+    - Giảm 80% chi phí đọc (Redis)
 
-**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng cấp sản xuất** thể hiện:
+**Điểm Khác Biệt Chính:**
 
-### 1. Kỹ năng Kiến trúc Doanh nghiệp
-
-- Mô hình hóa dữ liệu đa khách hàng.
-- Quản lý thông tin đăng nhập được mã hóa.
-- Điều phối worker nền.
-- Thiết kế có thể mở rộng (10-100+ khách hàng).
-
-### 2. Chuyên môn AWS
-
-- Tích hợp sâu với 10+ dịch vụ AWS.
-- Thiết kế hạ tầng tối ưu chi phí.
-- Thực hành tốt nhất về bảo mật.
-- Hệ thống thông báo email (SES).
-
-### 3. Phát triển Full-Stack
-
-- Công nghệ hiện đại (FastAPI + React).
-- UI/UX chuyên nghiệp.
-- Thiết kế mẫu email.
-- Thiết kế RESTful API.
-
-### 4. Hiểu biết Kinh doanh
-
-- Vận hành tiết kiệm chi phí ($10-20/tháng).
-- Mô hình định giá có thể mở rộng ($0.19/khách hàng).
-- ROI rõ ràng cho khách hàng (tiết kiệm chi phí 15-25%).
-- Tính năng SaaS chuyên nghiệp.
+- Triển khai DevSecOps đầy đủ (không chỉ là app đơn giản)
+- Bảo mật chuẩn production (Secrets Manager + KMS)
+- CI/CD tự động với security gates
+- Kiến trúc đa khách hàng quy mô lớn
+- Giám sát toàn diện và audit logging
+- Redis caching hiệu quả chi phí
 
 ---
 
-**Thời gian:** 3 tháng | **Nhóm:** 4 người | **Ngân sách:** $10-20/tháng
+## 9. Kết Luận
+
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng chuẩn production, hỗ trợ DevSecOps** thể hiện:
+
+1. **Xuất Sắc DevSecOps**
+    - Pipeline CI/CD tự động (CodePipeline + CodeBuild)
+    - Quét bảo mật trước mỗi triển khai
+    - Quản lý secrets với AWS Secrets Manager + KMS
+    - Giám sát toàn diện (CloudWatch + CloudTrail)
+    - Nguyên tắc Infrastructure as Code
+
+2. **Kiến Trúc Enterprise**
+    - Thiết kế đa khách hàng hỗ trợ 10-100+ clients
+    - Hệ thống worker có thể mở rộng
+    - Redis caching cho hiệu suất
+    - Cô lập dữ liệu hoàn toàn
+
+3. **Thiết Kế Bảo Mật Đầu Tiên**
+    - Không có secrets trong code hoặc config files
+    - Mã hóa KMS cho tất cả dữ liệu nhạy cảm
+    - CloudTrail audit logging
+    - Quét lỗ hổng tự động
+
+4. **Chuyên Môn AWS**
+    - Tích hợp sâu với 14+ dịch vụ AWS
+    - Hạ tầng tối ưu chi phí
+    - Best practices bảo mật
+    - Hệ thống email thông báo (SES)
+
+5. **Hiểu Biết Kinh Doanh**
+    - Vận hành hiệu quả chi phí ($23-33/tháng Năm 1)
+    - Mô hình giá có thể mở rộng ($0.59/khách hàng/tháng)
+    - Tính năng SaaS chuyên nghiệp
+    - ROI rõ ràng cho khách hàng
+
+**Thời Gian:** 3 tháng | **Nhóm:** 4 người | **Ngân Sách:** $23-33/tháng (Năm 1), $31-40/tháng (Năm 2+)
+
+**Dự án này thể hiện triển khai DevSecOps sẵn sàng production, làm cho nó trở thành một portfolio piece xuất sắc cho các vai trò cloud engineering và SRE.**
 
 ---
 
-## Phụ lục
+## Phụ Lục
 
-### A. GitHub Repository
+**A. Các Dịch Vụ Sử Dụng (14 Dịch Vụ AWS):**
 
-[https://github.com/Unvianpetronas/Cloud_health_dashboard](https://github.com/Unvianpetronas/Cloud_health_dashboard)
+1. EC2 (Tính toán)
+2. DynamoDB (Cơ sở dữ liệu)
+3. AWS Secrets Manager (Lưu trữ credentials)
+4. AWS KMS (Mã hóa)
+5. CloudWatch (Giám sát)
+6. CloudTrail (Audit logging)
+7. CodePipeline (CI/CD)
+8. CodeBuild (Build tự động)
+9. SES (Email)
+10. S3 (Backup)
+11. VPC (Mạng)
+12. Internet Gateway (Kết nối)
+13. Security Groups (Tường lửa)
+14. IAM (Quản lý truy cập)
+15. Shield Standard (Bảo vệ DDoS - tự động)
 
-### B. Thông tin Liên hệ
-**A. GitHub Repository:** [https://github.com/Unvianpetronas/Cloud_health_dashboard](https://github.com/Unvianpetronas/Cloud_health_dashboard)
-[_index.md](_index.md)
-**B. Contact Information:**
+**B. GitHub Repository:** [https://github.com/Unvianpetronas/Cloud_health_dashboard](https://github.com/Unvianpetronas/Cloud_health_dashboard)
 
-- **Project Lead:** Truong Quoc Tuan
+**C. Thông Tin Liên Hệ:**
+- **Trưởng Dự Án:** Trương Quốc Tuấn
 - **Email:** `unviantruong26@gmail.com`
 - **WhatsApp:** `+84 798806545`
+
+---
