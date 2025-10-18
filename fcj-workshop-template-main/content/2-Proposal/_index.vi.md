@@ -5,7 +5,7 @@ weight: 200
 chapter: false
 pre: "  2.  "
 ---
-# AWS Cloud Health Dashboard 
+# AWS Cloud Health Dashboard
 
 ---
 
@@ -77,8 +77,6 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 ![new.png](/images/2-Proposal/new.png)
 
-```
-
 ### **Luồng Dữ Liệu**
 
 ```
@@ -127,6 +125,9 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
    Truy cập credentials → CloudWatch alarm
    Thử đăng nhập thất bại → Email cảnh báo
    Sử dụng KMS key → Audit trail
+```
+
+---
 
 ## 4. Tính Năng Chính
 
@@ -245,50 +246,50 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - CloudWatch (giám sát & cảnh báo)
 
 **Email:**
-- AWS SES cho transactional emails
+- AWS SES (Simple Email Service)
 - HTML email templates
-- Xác thực dựa trên token
+- Xác thực email với token
+- Cảnh báo GuardDuty
 
-**Cô Lập Dữ Liệu:**
-
-- Tất cả queries được lọc theo `aws_account_id`
-- DynamoDB partition key bao gồm client identifier
-- API endpoints yêu cầu client authentication
-- Credentials được cô lập trong Secrets Manager
-- Không có rò rỉ dữ liệu giữa các khách hàng
+**Hosting:**
+- EC2 t3.micro (1 vCPU, 1GB RAM)
+- Redis trên localhost
+- Ubuntu 22.04 LTS
 
 ---
 
-## 6. Ước Tính Ngân Sách
+## 6. Phân Tích Chi Phí
 
-### **Chi Phí Nền Tảng Hàng Tháng**
+### **Chi Phí Năm Đầu (Free Tier Tối Đa)**
 
-| Dịch Vụ                    | Mô Tả                          | Tháng 1 | Tháng 2 | Tháng 3 |
-|----------------------------|--------------------------------|---------|---------|---------|
-| **EC2 t3.micro**           | 750h Miễn Phí                  | $0      | $0      | $0      |
-| **DynamoDB (5 bảng)**      | On-demand, đa khách hàng       | $3-4    | $5-8    | $8-12   |
-| **AWS Secrets Manager**    | 20 secrets @ $0.40/secret      | $4-6    | $6-8    | $8      |
-| **AWS KMS**                | 2-3 keys @ $1/key              | $2      | $2-3    | $2-3    |
-| **AWS SES**                | Gửi email                      | $0      | $0-1    | $1-2    |
-| **CloudWatch**             | Logs + Metrics                 | $0-1    | $1-2    | $2-3    |
-| **CloudTrail**             | 1 trail (MIỄN PHÍ)             | $0      | $0      | $0      |
-| **CodePipeline**           | 1 pipeline (MIỄN PHÍ)          | $0      | $0      | $0      |
-| **CodeBuild**              | 100 phút/tháng (MIỄN PHÍ)      | $0      | $0      | $0      |
-| **Truyền Dữ Liệu**         | 15GB Miễn Phí                  | $0      | $0-1    | $1      |
-| **S3 Backup**              | ~5GB storage                   | $0      | $0-1    | $1      |
-| **Redis**                  | Trên EC2 (localhost - MIỄN PHÍ)| $0      | $0      | $0      |
-| **TỔNG**                   |                                | **$9-13** | **$14-24** | **$23-33** |
+| Dịch Vụ AWS                   | Chi Phí/Tháng  |
+|-------------------------------|----------------|
+| EC2 t3.micro (750h miễn phí) | $0 (12 tháng)  |
+| DynamoDB (25GB miễn phí)     | $0-3           |
+| S3 (5GB miễn phí)            | $0-1           |
+| CloudWatch (10 metrics miễn phí) | $0-2       |
+| Secrets Manager (1 secret)   | $0.40          |
+| CodePipeline (1 pipeline miễn phí) | $0       |
+| CodeBuild (100 phút/tháng miễn phí) | $0      |
+| CloudTrail (1 trail miễn phí) | $0            |
+| KMS (20,000 requests miễn phí) | $0-1         |
+| SES (3,000 emails miễn phí)  | $0             |
+| Truyền Dữ Liệu (1GB miễn phí) | $0-1          |
+| **TỔNG Năm 1**               | **$23-33/tháng** |
 
-### **Chi Phí Sau Miễn Phí (Năm 2+)**
+### **Chi Phí Năm Thứ Hai Trở Đi**
 
-| Dịch Vụ                    | Chi Phí Hàng Tháng |
+| Dịch Vụ AWS                | Chi Phí/Tháng      |
 |----------------------------|--------------------|
 | EC2 t3.micro               | $8-10              |
-| DynamoDB                   | $8-12              |
-| Secrets Manager            | $8                 |
-| KMS                        | $2-3               |
-| SES                        | $1-2               |
-| CloudWatch                 | $2-3               |
+| DynamoDB                   | $3-5               |
+| CloudWatch                 | $2-4               |
+| Secrets Manager            | $0.40              |
+| CodePipeline               | $0                 |
+| CodeBuild                  | $0                 |
+| CloudTrail                 | $0                 |
+| KMS                        | $1-2               |
+| SES                        | $2-5               |
 | S3                         | $1                 |
 | Truyền Dữ Liệu             | $1                 |
 | **TỔNG Năm 2+**            | **$31-40/tháng**   |
@@ -425,33 +426,33 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 Dự án này thể hiện:
 
 1. **DevSecOps Chuẩn Production**
-    - Pipeline CI/CD hoàn chỉnh
-    - Quét bảo mật tự động
-    - Quản lý secrets với AWS Secrets Manager + KMS
-    - Giám sát và logging toàn diện
+   - Pipeline CI/CD hoàn chỉnh
+   - Quét bảo mật tự động
+   - Quản lý secrets với AWS Secrets Manager + KMS
+   - Giám sát và logging toàn diện
 
 2. **Kiến Trúc Enterprise**
-    - Thiết kế SaaS đa khách hàng
-    - Hạ tầng có thể mở rộng (10-100+ khách hàng)
-    - Lớp Redis caching
-    - Hệ thống background worker
+   - Thiết kế SaaS đa khách hàng
+   - Hạ tầng có thể mở rộng (10-100+ khách hàng)
+   - Lớp Redis caching
+   - Hệ thống background worker
 
 3. **Chuyên Môn Bảo Mật**
-    - Không có secrets trong code
-    - Mã hóa KMS
-    - CloudTrail audit logging
-    - Quét lỗ hổng tự động
+   - Không có secrets trong code
+   - Mã hóa KMS
+   - CloudTrail audit logging
+   - Quét lỗ hổng tự động
 
 4. **Thành Thạo AWS**
-    - Tích hợp 14+ dịch vụ AWS
-    - Thiết kế tối ưu chi phí
-    - Tối đa hóa free tier
-    - Best practices IAM
+   - Tích hợp 14+ dịch vụ AWS
+   - Thiết kế tối ưu chi phí
+   - Tối đa hóa free tier
+   - Best practices IAM
 
 5. **Hiệu Quả Chi Phí**
-    - $23-33/tháng cho nền tảng (Năm 1)
-    - $0.59/khách hàng/tháng gia tăng
-    - Giảm 80% chi phí đọc (Redis)
+   - $23-33/tháng cho nền tảng (Năm 1)
+   - $0.59/khách hàng/tháng gia tăng
+   - Giảm 80% chi phí đọc (Redis)
 
 **Điểm Khác Biệt Chính:**
 
@@ -469,35 +470,35 @@ Dự án này thể hiện:
 **AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng chuẩn production, hỗ trợ DevSecOps** thể hiện:
 
 1. **Xuất Sắc DevSecOps**
-    - Pipeline CI/CD tự động (CodePipeline + CodeBuild)
-    - Quét bảo mật trước mỗi triển khai
-    - Quản lý secrets với AWS Secrets Manager + KMS
-    - Giám sát toàn diện (CloudWatch + CloudTrail)
-    - Nguyên tắc Infrastructure as Code
+   - Pipeline CI/CD tự động (CodePipeline + CodeBuild)
+   - Quét bảo mật trước mỗi triển khai
+   - Quản lý secrets với AWS Secrets Manager + KMS
+   - Giám sát toàn diện (CloudWatch + CloudTrail)
+   - Nguyên tắc Infrastructure as Code
 
 2. **Kiến Trúc Enterprise**
-    - Thiết kế đa khách hàng hỗ trợ 10-100+ clients
-    - Hệ thống worker có thể mở rộng
-    - Redis caching cho hiệu suất
-    - Cô lập dữ liệu hoàn toàn
+   - Thiết kế đa khách hàng hỗ trợ 10-100+ clients
+   - Hệ thống worker có thể mở rộng
+   - Redis caching cho hiệu suất
+   - Cô lập dữ liệu hoàn toàn
 
 3. **Thiết Kế Bảo Mật Đầu Tiên**
-    - Không có secrets trong code hoặc config files
-    - Mã hóa KMS cho tất cả dữ liệu nhạy cảm
-    - CloudTrail audit logging
-    - Quét lỗ hổng tự động
+   - Không có secrets trong code hoặc config files
+   - Mã hóa KMS cho tất cả dữ liệu nhạy cảm
+   - CloudTrail audit logging
+   - Quét lỗ hổng tự động
 
 4. **Chuyên Môn AWS**
-    - Tích hợp sâu với 14+ dịch vụ AWS
-    - Hạ tầng tối ưu chi phí
-    - Best practices bảo mật
-    - Hệ thống email thông báo (SES)
+   - Tích hợp sâu với 14+ dịch vụ AWS
+   - Hạ tầng tối ưu chi phí
+   - Best practices bảo mật
+   - Hệ thống email thông báo (SES)
 
 5. **Hiểu Biết Kinh Doanh**
-    - Vận hành hiệu quả chi phí ($23-33/tháng Năm 1)
-    - Mô hình giá có thể mở rộng ($0.59/khách hàng/tháng)
-    - Tính năng SaaS chuyên nghiệp
-    - ROI rõ ràng cho khách hàng
+   - Vận hành hiệu quả chi phí ($23-33/tháng Năm 1)
+   - Mô hình giá có thể mở rộng ($0.59/khách hàng/tháng)
+   - Tính năng SaaS chuyên nghiệp
+   - ROI rõ ràng cho khách hàng
 
 **Thời Gian:** 3 tháng | **Nhóm:** 4 người | **Ngân Sách:** $23-33/tháng (Năm 1), $31-40/tháng (Năm 2+)
 
