@@ -11,18 +11,18 @@ pre: "  2.  "
 
 ## 1. Tóm Tắt Điều Hành
 
-**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng chuẩn production với triển khai DevSecOps đầy đủ**, cho phép doanh nghiệp giám sát và tối ưu hóa hạ tầng AWS cho nhiều khách hàng từ một hệ thống tập trung duy nhất.
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng với triển khai DevSecOps tự động**, cho phép doanh nghiệp giám sát và tối ưu hóa hạ tầng AWS cho nhiều khách hàng từ một hệ thống tập trung duy nhất.
 
 **Điểm Nổi Bật:**
 
-- **Kiến trúc DevSecOps**: Pipeline CI/CD hoàn chỉnh với quét bảo mật tự động
-- **Kiến trúc đa khách hàng**: Giám sát 10-50+ tài khoản AWS khách hàng từ một nền tảng
+- **Kiến trúc DevSecOps**: Pipeline CI/CD tự động với quét bảo mật tự động
+- **Kiến trúc đa khách hàng**: Được thiết kế để hỗ trợ 10-50+ tài khoản AWS (demo đã test với 3-5 khách hàng)
 - **Chi phí nền tảng**: $23-33/tháng (Năm 1) với các tính năng DevSecOps
 - **Chi phí mỗi khách hàng**: ~$0.19/tháng cho lưu trữ dữ liệu
 - **Thiết kế bảo mật tối ưu**: Mã hóa AWS Secrets Manager + KMS
 - **Triển khai tự động**: CodePipeline + CodeBuild với triển khai SSH
 - **5 bảng DynamoDB**: Mô hình dữ liệu tối ưu với cô lập khách hàng
-- **Redis caching**: Giảm 80% chi phí đọc database
+- **Redis caching**: Tiềm năng giảm 60-80% chi phí đọc database (tùy thuộc access pattern)
 - **Hệ thống email thông báo**: Tích hợp AWS SES cho cảnh báo quan trọng
 
 **Công Nghệ:** FastAPI (Python) + React + DynamoDB + Redis + AWS Secrets Manager + KMS + CloudWatch + CloudTrail + CodePipeline + CodeBuild + EC2 t3.micro
@@ -46,7 +46,7 @@ Các doanh nghiệp quản lý hạ tầng AWS cho nhiều khách hàng gặp ph
 
 **Giải Pháp Của Chúng Tôi:**
 
-Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** với:
+Cloud Health Dashboard cung cấp **một nền tảng với các thực hành DevSecOps** bao gồm:
 
 **Kiến Trúc DevSecOps**
 - Pipeline CI/CD tự động (CodePipeline + CodeBuild)
@@ -57,10 +57,10 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - Quản lý secrets với AWS Secrets Manager + KMS
 
 **Kiến Trúc Đa Khách Hàng**
-- Một nền tảng giám sát 10-50+ tài khoản AWS khách hàng
+- Kiến trúc có thể mở rộng để giám sát 10-50+ tài khoản AWS (MVP demo với 3-5 khách hàng)
 - AWS Secrets Manager để lưu trữ credentials (mã hóa KMS)
 - Cô lập dữ liệu hoàn toàn giữa các khách hàng
-- Quản lý worker tự động cho mỗi khách hàng
+- Hệ thống task scheduling cho thu thập dữ liệu
 
 **Giám Sát Tập Trung**
 - Dashboard duy nhất cho tất cả khách hàng
@@ -102,13 +102,13 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
    Mỗi 15 phút → Lấy khách hàng đang hoạt động từ DynamoDB
    → Cho mỗi khách hàng:
      • Lấy credentials từ Secrets Manager
-     • Khởi động worker nếu chưa chạy
+     • Schedule async task để thu thập dữ liệu
      • Thu thập dữ liệu AWS
      • Cache trong Redis (TTL 5 phút)
      • Lưu vào DynamoDB
 
 5. THU THẬP DỮ LIỆU (Mỗi Khách Hàng)
-   Worker → Secrets Manager (lấy credentials)
+   Async Task → Secrets Manager (lấy credentials)
    → AWS API của khách hàng → Thu thập metrics
    → Cache trong Redis → Lưu vào DynamoDB (phân vùng theo aws_account_id)
    → Nếu phát hiện nghiêm trọng → Gửi email cảnh báo (SES)
@@ -116,7 +116,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 6. HIỂN THỊ DASHBOARD
    Khách hàng đăng nhập → FastAPI kiểm tra Redis cache
-   → Cache HIT: Trả về dữ liệu cached (< 100ms)
+   → Cache HIT: Trả về dữ liệu cached (< 200ms)
    → Cache MISS: Query DynamoDB (lọc theo aws_account_id)
    → Lưu vào Redis → Trả về dữ liệu
 
@@ -139,7 +139,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - CodeBuild để build tự động (100 phút/tháng MIỄN PHÍ)
 - Quét bảo mật tự động trước khi triển khai
 - Triển khai tự động qua SSH
-- Chiến lược triển khai không downtime
+- Chiến lược triển khai với health checks
 
 **Quét Bảo Mật:**
 - **Bandit**: Static Application Security Testing (SAST)
@@ -150,7 +150,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 **Quản Lý Secrets:**
 - AWS Secrets Manager để lưu trữ credentials
 - Mã hóa KMS cho tất cả secrets
-- Hỗ trợ rotation tự động
+- Hỗ trợ rotation policy (có thể cấu hình trong production)
 - Không có credentials trong code hoặc biến môi trường
 - Chỉ truy cập qua IAM role
 
@@ -162,7 +162,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - Lưu giữ log 90 ngày
 
 **Bảo Mật Hạ Tầng:**
-- Security Groups (tường lửa mạng)
+- Security Groups (tường lửa mạng - chỉ cho phép SSH với key-based auth + HTTPS)
 - IAM roles với quyền tối thiểu
 - AWS Shield Standard (bảo vệ DDoS)
 - Mã hóa dữ liệu lưu trữ (KMS)
@@ -172,7 +172,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 - Đăng ký khách hàng tự phục vụ với xác thực AWS key
 - Credentials lưu trong Secrets Manager (mã hóa KMS)
-- Khởi động worker tự động cho mỗi khách hàng
+- Hệ thống task scheduling cho thu thập dữ liệu định kỳ
 - Cô lập dữ liệu hoàn toàn
 - Truy cập dashboard theo từng khách hàng
 - Redis caching để tối ưu hiệu suất
@@ -180,16 +180,17 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 ### **Hệ Thống Email Thông Báo**
 
 - Xác thực email với token bảo mật (hết hạn 24h)
-- Cảnh báo GuardDuty quan trọng qua AWS SES
+- Cảnh báo cho phát hiện quan trọng qua AWS SES
 - Tùy chỉnh preferences thông báo
 - HTML email templates
 - Chỉnh sửa email trong trang Settings
+- **Lưu ý**: SES sandbox mode yêu cầu xác thực email trước khi gửi
 
 ### **Giám Sát Hạ Tầng**
 
 - Metrics thời gian thực từ 15+ dịch vụ AWS
 - Lưu giữ dữ liệu lịch sử (30+ ngày)
-- Redis caching (giảm 80% chi phí)
+- Redis caching (tối ưu hóa hiệu suất)
 - Giám sát EC2, S3, RDS, Lambda
 - Dashboard tình trạng dịch vụ
 
@@ -203,7 +204,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 ### **Giám Sát Bảo Mật**
 
-- Phát hiện mối đe dọa GuardDuty (tùy chọn)
+- Hỗ trợ tích hợp GuardDuty (demo sử dụng dữ liệu mô phỏng)
 - Lọc theo mức độ nghiêm trọng
 - Email cảnh báo cho phát hiện quan trọng
 - CloudTrail audit logging
@@ -218,7 +219,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 **Backend:**
 - Python 3.12+ với FastAPI
 - boto3 (AWS SDK)
-- asyncio cho concurrent workers
+- asyncio cho concurrent task execution
 - Redis cho caching
 - pytest cho testing
 
@@ -249,7 +250,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - AWS SES (Simple Email Service)
 - HTML email templates
 - Xác thực email với token
-- Cảnh báo GuardDuty
+- Cảnh báo qua email
 
 **Hosting:**
 - EC2 t3.micro (1 vCPU, 1GB RAM)
@@ -259,6 +260,8 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 ---
 
 ## 6. Phân Tích Chi Phí
+
+**Lưu ý về Chi phí**: Ước tính dựa trên bảng giá AWS us-east-1 (tháng 10/2025) sử dụng AWS Pricing Calculator. Giả định: 10 khách hàng, thu thập dữ liệu mỗi 15 phút, lưu giữ dữ liệu 30 ngày.
 
 ### **Chi Phí Năm Đầu (Free Tier Tối Đa)**
 
@@ -300,7 +303,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 - **Lưu trữ:** ~500MB = $0.125
 - **Writes:** 43,200/tháng = $0.054
-- **Reads (với Redis):** 6,000/tháng = $0.0015 (giảm 80%)
+- **Reads (với Redis caching):** 6,000/tháng = $0.0015 (giảm đáng kể nhờ cache)
 - **Tổng mỗi khách hàng: ~$0.19/tháng**
 
 **Secrets Manager (mỗi khách hàng):**
@@ -313,9 +316,11 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 - **20 khách hàng:** Nền tảng $23 + (20 × $0.59) = **$34.80/tháng**
 - **50 khách hàng:** Nền tảng $23 + (50 × $0.59) = **$52.50/tháng**
 
+**Lưu ý về Scale**: Với EC2 t3.micro, nền tảng có thể hỗ trợ 10-20 khách hàng hiệu quả. Để mở rộng đến 50+ khách hàng, cần nâng cấp lên instance lớn hơn (t3.small/medium).
+
 ### **Chiến Lược Tối Ưu Chi Phí**
 
-- **Redis caching**: Giảm DynamoDB reads 80%
+- **Redis caching**: Giảm đáng kể DynamoDB read operations (tiềm năng 60-80% tùy access pattern)
 - **DynamoDB TTL**: Tự động dọn dẹp dữ liệu (không tốn phí)
 - **Batch writes**: Ít API calls hơn
 - **On-demand pricing**: Chỉ trả tiền cho usage
@@ -330,15 +335,16 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 | Rủi Ro                        | Tác Động | Xác Suất | Giảm Thiểu                                                      |
 |-------------------------------|----------|----------|----------------------------------------------------------------|
 | Vượt ngân sách                | Trung bình | Thấp   | AWS Budget alerts, Redis caching, DynamoDB on-demand           |
-| EC2 downtime                  | Cao      | Thấp     | CloudWatch alarms, systemd auto-restart, mục tiêu 98% uptime   |
+| EC2 downtime                  | Cao      | Thấp     | CloudWatch alarms, systemd auto-restart, target 95-98% uptime  |
 | Bảo mật dữ liệu khách hàng    | Cao      | Thấp     | Secrets Manager + KMS, IAM tối thiểu, audit logging            |
 | Lỗi CI/CD pipeline            | Trung bình | Thấp   | CodeBuild retry logic, rollback triển khai, health checks      |
 | Redis cache failure           | Trung bình | Thấp   | Systemd monitor, auto-restart, graceful degradation            |
 | DynamoDB hot partitions       | Trung bình | Thấp   | Thiết kế partition key đúng, sharding aws_account_id           |
-| Chi phí Secrets Manager       | Trung bình | Trung bình | Giám sát usage, tối ưu số lượng secret, xem xét alternatives |
+| Chi phí Secrets Manager       | Trung bình | Trung bình | Giám sát usage, đánh giá shared secret patterns, xem xét consolidation strategies trong phiên bản tương lai |
 | Vấn đề gửi email              | Trung bình | Thấp   | Giám sát AWS SES, retry logic, thông báo dự phòng             |
 | Lỗ hổng bảo mật trong deps    | Cao      | Trung bình | Safety scanner trong CI/CD, cập nhật tự động, cảnh báo bảo mật|
 | Scope creep                   | Trung bình | Cao    | Định nghĩa MVP nghiêm ngặt, đóng băng tính năng tuần 8        |
+| Public subnet security        | Trung bình | Thấp   | Security Groups restrict: SSH (key-based only) + HTTPS only. Production nên dùng private subnet + NAT Gateway |
 
 ---
 
@@ -348,7 +354,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 **Nền Tảng DevSecOps:**
 
-- Pipeline CI/CD hoàn chỉnh (GitHub → CodePipeline → CodeBuild → EC2)
+- Pipeline CI/CD tự động (GitHub → CodePipeline → CodeBuild → EC2)
 - Quét bảo mật tự động (Bandit SAST, Safety dependency scan)
 - Triển khai tự động qua SSH
 - Giám sát CloudWatch và audit logging CloudTrail
@@ -360,19 +366,19 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 - Đăng ký khách hàng với xác thực email
 - 5 bảng DynamoDB với cô lập dữ liệu đúng
-- Quản lý worker tự động (10-50 khách hàng)
+- Hệ thống task scheduling cho thu thập dữ liệu (demo với 3-5 khách hàng)
 - Dashboard giám sát thời gian thực cho mỗi khách hàng
 - Hệ thống email thông báo
 - Trang Settings với quản lý email/thông báo
 
 **Mục Tiêu Hiệu Suất:**
 
-- **Thời gian phản hồi API:** <100ms (Redis cache HIT), <2s (cache MISS)
-- **Gửi email:** <30 giây
+- **Thời gian phản hồi API:** Target <200ms (Redis cache HIT), <2s (cache MISS)
+- **Gửi email:** <30 giây (SES sandbox mode, yêu cầu xác thực email)
 - **Thu thập dữ liệu:** Mỗi 15 phút cho mỗi khách hàng
-- **Uptime nền tảng:** 98-99%
-- **Khởi động worker:** <10 giây cho mỗi khách hàng
-- **Thời gian build:** <5 phút (dưới giới hạn free tier)
+- **Uptime nền tảng:** Target 95-98% (single EC2 instance, không có HA trong MVP)
+- **Task execution:** <10 giây để bắt đầu cho mỗi khách hàng
+- **Thời gian build:** Target <5 phút (dưới giới hạn free tier)
 - **Thời gian triển khai:** <3 phút
 
 **Bảo Mật & Tuân Thủ:**
@@ -391,10 +397,10 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 - Thiết kế và triển khai CI/CD pipeline
 - Quét bảo mật tự động (SAST, dependency scanning)
-- Khái niệm Infrastructure as Code
 - Best practices quản lý secrets
 - Audit logging và tuân thủ
 - Giám sát và cảnh báo
+- Automated deployment strategies
 
 **Thành Thạo Dịch Vụ AWS:**
 
@@ -408,7 +414,7 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 **Kiến Trúc SaaS:**
 
 - Mô hình dữ liệu đa khách hàng
-- Điều phối background worker
+- Background task orchestration
 - Quản lý credentials an toàn
 - Chiến lược caching (Redis)
 - Hệ thống email thông báo
@@ -425,17 +431,17 @@ Cloud Health Dashboard cung cấp **một nền tảng hỗ trợ DevSecOps** v�
 
 Dự án này thể hiện:
 
-1. **DevSecOps Chuẩn Production**
-   - Pipeline CI/CD hoàn chỉnh
-   - Quét bảo mật tự động
+1. **DevSecOps Implementation**
+   - Pipeline CI/CD tự động với security scanning
    - Quản lý secrets với AWS Secrets Manager + KMS
    - Giám sát và logging toàn diện
+   - Automated deployment với health checks
 
 2. **Kiến Trúc Enterprise**
-   - Thiết kế SaaS đa khách hàng
-   - Hạ tầng có thể mở rộng (10-100+ khách hàng)
+   - Thiết kế SaaS đa khách hàng scalable
+   - Hạ tầng có thể mở rộng (MVP tested với 3-5, thiết kế cho 10-50+ khách hàng)
    - Lớp Redis caching
-   - Hệ thống background worker
+   - Hệ thống background task scheduling
 
 3. **Chuyên Môn Bảo Mật**
    - Không có secrets trong code
@@ -452,14 +458,14 @@ Dự án này thể hiện:
 5. **Hiệu Quả Chi Phí**
    - $23-33/tháng cho nền tảng (Năm 1)
    - $0.59/khách hàng/tháng gia tăng
-   - Giảm 80% chi phí đọc (Redis)
+   - Redis caching để tối ưu chi phí đọc
 
 **Điểm Khác Biệt Chính:**
 
-- Triển khai DevSecOps đầy đủ (không chỉ là app đơn giản)
+- Automated DevSecOps pipeline với security gates
 - Bảo mật chuẩn production (Secrets Manager + KMS)
-- CI/CD tự động với security gates
-- Kiến trúc đa khách hàng quy mô lớn
+- CI/CD tự động với automated testing
+- Kiến trúc đa khách hàng với data isolation
 - Giám sát toàn diện và audit logging
 - Redis caching hiệu quả chi phí
 
@@ -467,18 +473,18 @@ Dự án này thể hiện:
 
 ## 9. Kết Luận
 
-**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng chuẩn production, hỗ trợ DevSecOps** thể hiện:
+**AWS Cloud Health Dashboard** là một **nền tảng SaaS đa khách hàng với các thực hành DevSecOps tự động** thể hiện:
 
-1. **Xuất Sắc DevSecOps**
+1. **DevSecOps Implementation**
    - Pipeline CI/CD tự động (CodePipeline + CodeBuild)
    - Quét bảo mật trước mỗi triển khai
    - Quản lý secrets với AWS Secrets Manager + KMS
    - Giám sát toàn diện (CloudWatch + CloudTrail)
-   - Nguyên tắc Infrastructure as Code
+   - Automated deployment practices
 
 2. **Kiến Trúc Enterprise**
-   - Thiết kế đa khách hàng hỗ trợ 10-100+ clients
-   - Hệ thống worker có thể mở rộng
+   - Thiết kế đa khách hàng scalable (MVP tested với 3-5, thiết kế cho 10-50+ clients)
+   - Hệ thống task scheduling có thể mở rộng
    - Redis caching cho hiệu suất
    - Cô lập dữ liệu hoàn toàn
 
@@ -502,7 +508,7 @@ Dự án này thể hiện:
 
 **Thời Gian:** 3 tháng | **Nhóm:** 4 người | **Ngân Sách:** $23-33/tháng (Năm 1), $31-40/tháng (Năm 2+)
 
-**Dự án này thể hiện triển khai DevSecOps sẵn sàng production, làm cho nó trở thành một portfolio piece xuất sắc cho các vai trò cloud engineering và SRE.**
+**Dự án này thể hiện implementation các thực hành DevSecOps trong production, làm cho nó trở thành một portfolio piece mạnh mẽ cho các vai trò cloud engineering và SRE.**
 
 ---
 
