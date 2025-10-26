@@ -75,7 +75,7 @@ Cloud Health Dashboard provides **a platform with DevSecOps practices** includin
 
 ### **Architecture Overview**
 
-![new.png](/images/2-Proposal/new.png)
+![final_architecture.drawio.png](/images/2-Proposal/final_architecture.drawio.png)
 
 ### **Data Flow**
 

@@ -12,44 +12,37 @@ pre: " <b> 1.6. </b> "
 * Study and research about SES on aws and how use it 
 * study module 6 
 * do lab related to module 6
+* research and apply redis cached
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ---------- | --------------- | ----------------------------------------- |
-| 2   | - Fix and completed project proposal                                                                                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Study module 6 and research about relation knowledge                                                                                                                                                 | 08/12/2025 | 08/12/2025      | <https://www.youtube.com/watch?v=UvdiRW34aNI&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=219> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Task                                                                                                                                                                                                                                                                                                                                           | Start Date | Completion Date | Reference Material                        |
+| --- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ---------- | --------------- | ----------------------------------------- |
+| 2   | - Fix and completed project proposal                                                                                                                                                                                                                                                                                                           | 08/11/2025 | 08/11/2025      | <https://fcj-workshop-six.vercel.app/>|
+| 3   | - Study module 6 and research about relation knowledge                                                                                                                                                                                                                                                                                         | 08/12/2025 | 08/12/2025      | <https://www.youtube.com/watch?v=OOD2RwWuLRw&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=217> |
+| 4   | - Research redis how do they work and how to apply                                                                                                                                                                                                                                                                                             | 08/13/2025 | 08/13/2025      | <https://redis.io/learn/develop/node/nodecrashcourse/whatisredis> |
+| 5   | - Apply redis to project                                                                                                                                                                                                                                                                                                                       | 08/14/2025 | 08/15/2025      |  |
+| 6   | - Do lab relate to module 6 br>&emsp; +managed database service that simplifies the setup, operation, and scaling  <br>&emsp; + how to handle the complexities of migrating between different database types  <br>&emsp; + creating a data lake, entralized repository for storing all structured and unstructured data at any scale <br>&emsp | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
 
 ### Week 6 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+**Project Development:**
 
-* Successfully created and configured an AWS Free Tier account.
+- Successfully fixed and completed the project proposal with comprehensive documentation
+- Implemented Redis caching into the project to improve performance and data retrieval efficiency
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+**Completed Module 6 coursework and related laboratory exercises covering:**
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+- AWS managed database services for simplified setup, operation, and scaling
+- Database migration strategies between different database types
+- Data lake architecture and implementation for centralized data storage
 
-* Used AWS CLI to perform basic operations such as:
 
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
+- Gained deep understanding of Redis functionality, architecture, and practical applications through hands-on research
+- Successfully integrated Redis caching mechanisms into the project infrastructure
 
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+**Technical Skills Developed:**
+
+- Practical experience with AWS database services and migration tools
+- Redis implementation and configuration for caching optimization
+- Data lake design principles and centralized data management strategies

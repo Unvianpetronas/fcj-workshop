@@ -75,7 +75,7 @@ Cloud Health Dashboard cung cấp **một nền tảng với các thực hành D
 
 ### **Tổng Quan Kiến Trúc**
 
-![new.png](/images/2-Proposal/new.png)
+![final_architecture.drawio.png](/images/2-Proposal/final_architecture.drawio.png)
 
 ### **Luồng Dữ Liệu**
 
