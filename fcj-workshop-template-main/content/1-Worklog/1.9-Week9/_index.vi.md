@@ -1,59 +1,44 @@
 ---
-title: "Worklog Tuần 9"
+title: "Nhật ký tuần 9"
 date: "`r Sys.Date()`"
 weight: 109
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
 
-### Mục tiêu tuần 9:
+# Báo cáo tuần 9
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+### Mục tiêu
+* Nghiên cứu toàn diện Well-Architected Framework để áp dụng vào dự án
+* Viết tài liệu về API references để chuẩn bị thực hiện dự án frontend
+* Sửa lỗi liên quan đến định dạng JSON datetime trong cache
+* Logic tự động hóa để thu thập dữ liệu khách hàng mỗi 10 phút
+* Hotfix lỗi với client provider
 
-### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+### Các nhiệm vụ thực hiện trong tuần:
+| Ngày | Nhiệm vụ                                                                                                                                                             | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| :--- |:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:----------------| :--- |
+| 2 | - **Đánh giá kiến trúc:** <br> - Xem xét dự án theo AWS Well-Architected Framework <br> - Xác định các khoảng trống về bảo mật & độ tin cậy                         | 03/11/2025   | 03/11/2025      | AWS Well-Architected Tool |
+| 3 | - **Tài liệu hóa:** <br> - Viết tài liệu tham khảo API <br> - Định nghĩa request/response schemas để chuẩn bị cho Frontend                                          | 04/11/2025   | 04/11/2025      | Internal Wiki / Swagger |
+| 4 | - **Triển khai tính năng:** <br> - Logic tự động hóa để thu thập dữ liệu khách hàng <br> - Cấu hình scheduler (Cron/Lambda) cho khoảng thời gian 10 phút             | 05/11/2025   | 05/11/2025      | Python Boto3 Docs |
+| 5 | - **Sửa lỗi (Cache):** <br> - Điều tra lỗi JSON serialization <br> - Sửa lỗi định dạng JSON datetime trong Redis cache                                              | 06/11/2025   | 06/11/2025      | StackOverflow / Library Docs |
+| 6 | - **Bảo trì:** <br> - Chẩn đoán vấn đề kết nối Client Provider <br> - Triển khai Hotfix lên production                                                              | 07/11/2025   | 07/11/2025      | System Logs / CloudWatch |
 
+### Thành tựu tuần 9:
 
-### Kết quả đạt được tuần 9:
+* **Tối ưu hóa hạ tầng:**
+  * Thực hiện đánh giá toàn diện dự án sử dụng **AWS Well-Architected Framework**.
+  * Lập bản đồ các cải tiến cho khả năng phục hồi dữ liệu và tuân thủ bảo mật.
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Tài liệu hóa & Chuyển giao Frontend:**
+  * Hoàn thành thành công việc viết và hoàn thiện **Tài liệu tham khảo API**.
+  * Cung cấp các endpoints rõ ràng và cấu trúc dữ liệu để hỗ trợ giai đoạn tích hợp Frontend.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+* **Tự động hóa Backend:**
+  * Phát triển và triển khai logic thu thập dữ liệu.
+  * Thiết lập chu kỳ tự động hóa đáng tin cậy để lấy dữ liệu khách hàng mỗi **10 phút**.
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+* **Giải quyết các lỗi nghiêm trọng:**
+  * **Cache Layer:** Giải quyết lỗi định dạng `JSON datetime`, đảm bảo quá trình serialization dữ liệu trong cache diễn ra suôn sẻ.
+  * **Client Provider:** Xác định và áp dụng **hotfix** cho vấn đề kết nối client provider, khôi phục lại sự ổn định của dịch vụ.

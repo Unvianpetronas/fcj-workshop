@@ -1,59 +1,44 @@
 ---
-title: "Worklog Tuần 10"
+title: "Nhật ký tuần 10"
 date: "`r Sys.Date()`"
 weight: 110
 chapter: false
 pre: " <b> 1.10. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+
 
 
 ### Mục tiêu tuần 10:
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Chuẩn bị tài liệu về cách phân tích kiến trúc và chấm điểm dựa trên các tiêu chí chính
+* Hiểu các dịch vụ AWS cơ bản, cách sử dụng console & CLI
+* Triển khai trên AWS với Clickops để nắm bắt cơ bản cách thiết lập kiến trúc
+* Tham gia sự kiện tại văn phòng để có thêm kiến thức về AI/ML GenAI và các dịch vụ AWS bổ sung
 
-### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
-
-### Kết quả đạt được tuần 10:
-
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Đã tạo và cấu hình AWS Free Tier account thành công.
-
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
+### Các nhiệm vụ thực hiện trong tuần:
+| Ngày | Nhiệm vụ                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| :--- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:----------------| :--- |
+| 2 | - **Tài liệu hóa:** <br> - Nghiên cứu các tiêu chuẩn phân tích kiến trúc (Well-Architected, ISO) <br> - Soạn thảo các tiêu chí chấm điểm kiến trúc dự án (Security, Cost, Performance)    | 10/11/2025   | 10/11/2025      |  |
+| 3 | - **Ôn tập kiến thức AWS cơ bản:** <br> - Xem lại các dịch vụ cốt lõi (EC2, S3, VPC) trên Console <br> - Thực hành các lệnh tương đương sử dụng AWS CLI để củng cố hiểu biết               | 11/11/2025   | 11/11/2025      |  |
+| 4 | - **Triển khai Clickops:** <br> - Cấu hình thủ công VPC, Subnets và Security Groups qua Console <br> - Khởi chạy và cấu hình EC2 instances thủ công                                        | 12/11/2025   | 12/11/2025      | Project Architecture Diagram |
+| 5 | - **Triển khai Clickops:** <br> - Thiết lập thủ công kết nối Database <br> - Xác minh kết nối ứng dụng và ghi chép quy trình thiết lập thủ công                                           | 13/11/2025   | 13/11/2025      | AWS Management Console |
+| 6 | - **Chia sẻ kiến thức:** <br> - Tham gia sự kiện văn phòng về AI/ML & GenAI <br> - Khám phá các dịch vụ AWS mới được giới thiệu trong buổi học                                            | 14/11/2025   | 14/11/2025      | Event Slides / AWS GenAI Docs |
 
 
+### Thành tựu tuần 10:
+
+* **Framework phân tích kiến trúc:**
+  * Tạo tài liệu toàn diện nêu rõ các tiêu chí phân tích kiến trúc hệ thống.
+  * Xác định hệ thống chấm điểm dựa trên các chỉ số chính (Availability, Scalability, Security, Cost).
+
+* **Thành thạo AWS:**
+  * Củng cố hiểu biết về các dịch vụ AWS cơ bản bằng cách điều hướng cả Management Console và Command Line Interface (CLI).
+  * Xác nhận sự khác biệt trong quy trình làm việc giữa các hoạt động GUI và CLI.
+
+* **Triển khai thủ công (Clickops):**
+  * Triển khai thành công kiến trúc dự án theo cách thủ công ("Clickops") mà không sử dụng công cụ IaC.
+  * Hiểu sâu về các phụ thuộc tài nguyên cơ bản (VPC <-> SG <-> EC2 <-> DynamoDB) cần thiết để hệ thống hoạt động.
+
+* **Phát triển chuyên môn:**
+  * Tham dự workshop tại văn phòng về **AI/ML và GenAI**.
+  * Thu được những hiểu biết về cách Generative AI có thể được tích hợp với các dịch vụ AWS hiện tại và các trường hợp sử dụng tiềm năng cho các dự án tương lai.

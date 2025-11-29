@@ -6,9 +6,6 @@ chapter: false
 pre: " <b> 4.1. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy it verbatim** into your report, including this warning.
-{{% /notice %}}
 
 # Summary Report: “VietNam Cloud Day”
 
@@ -121,6 +118,6 @@ Attending the **“GenAI-powered App-DB Modernization”** workshop was extremel
 - AI tools like Amazon Q Developer can significantly **boost productivity** when integrated into the current workflow.  
 
 #### Some event photos
-*Add your event photos here*  
-
-> Overall, the event not only provided technical knowledge but also helped me reshape my thinking about application design, system modernization, and cross-team collaboration.
+![Event1.1.jpg](/images/4-event/Event1.1.jpg)
+![Event1.2.jpg](/images/4-event/Event1.2.jpg)
+![Event1.3.jpg](/images/4-event/Event1.3.jpg)

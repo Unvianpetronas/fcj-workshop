@@ -1,57 +1,51 @@
 ---
 title: "Week 8 Worklog"
 date: "`r Sys.Date()`"
-weight: 108
+weight: 110
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 8 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* prepare document, knowledge for mid test
+* review all lab module 1 to 7
+* research to do a deploy application to ec2 though codePipeline and codeBuild
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Task                                                                                | Start Date | Completion Date | Reference Material                        |
+| --- |-------------------------------------------------------------------------------------|------------|-----------------| ----------------------------------------- |
+| 2   | - Research relate knowledge to prepare document for mid test                        | 10/27/2025 | 10/27/2025      |
+| 3   | - Create a document and do quiz online to practice                                  | 10/28/2025 | 10/28/2025      | <https://simuladoclf.s3.amazonaws.com/english.html/> |
+| 4   | - Review all the lab and learn by heart the document i prepare and continue do quiz | 10/29/2025 | 10/29/2025      |  |
+| 5   | - Continue quiz and review the question which wrong to overview the knowledge       | 10/30/2025 | 10/30/2025      |  |
+| 6   | - Take a test and research how to deploy though codePipeline and codeBuild          | 10/31/2025 | 10/31/2025      | <https://www.youtube.com/watch?v=zZt-LTY9hAE/> |
 
 
 ### Week 8 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+### Week 8 Achievements:
 
-* Successfully created and configured an AWS Free Tier account.
+* **Mid-Test Preparation Documentation**: 
+  * Successfully researched and compiled comprehensive study materials covering all required topics for the mid-test preparation.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+* **Quiz Practice Completion**: 
+   * Completed multiple rounds of online practice quizzes using the CLF simulation platform, progressively improving test-taking skills and knowledge retention.
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+* **Lab Module Review**: 
+  * Thoroughly reviewed all lab modules from Module 1 to Module 7, consolidating hands-on experience and technical understanding.
 
-* Used AWS CLI to perform basic operations such as:
+* **Knowledge Memorization**: 
+  * Memorized key concepts and important details from the prepared study document to ensure quick recall during the examination.
 
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
+* **Performance Analysis**: 
+  * Conducted detailed review of incorrect quiz questions, identified knowledge gaps, and reinforced understanding of weak areas.
 
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Mid-Test Completion**: 
+ * Successfully completed the mid-test, demonstrating acquired knowledge and preparation effectiveness.
+
+* **CI/CD Research**: 
+* Researched and learned the deployment workflow for applications to EC2 using AWS CodePipeline and CodeBuild services.
+
+* **AWS DevOps Concepts**: 
+* Gained foundational understanding of automated deployment pipelines, including build automation, continuous integration, and continuous deployment practices on AWS infrastructure.

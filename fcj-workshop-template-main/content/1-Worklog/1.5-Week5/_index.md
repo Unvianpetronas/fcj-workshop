@@ -19,10 +19,10 @@ pre: " <b> 1.5. </b> "
 
 ### Tasks to be implemented this week:
 | Day  | Task                                                                                                                                                                                  | Start Date | Completion Date | Resources                          |
-|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|----------------| --------------------------------------- |
-| 2    | - Study and explore services learned in module 5                                                                                                                                       | 09/27/2025 | 09/27/2025     |<https://www.youtube.com/watch?v=tsobAlSg19g&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=150>|
-| 3, 4 | - Research and complete labs related to: <br>&emsp; + resource group <br>&emsp; + IAM user, role, group  <br>&emsp; + lambda <br>&emsp; + Granting authorization <br>&emsp; + ... <br> | 09/28/2025 | 09/29/2025     | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?tab=t.0> |
-| 5, 6 | - Learn how to connect to AWS services via boto3 and complete basic functions                                                                                                          | 09/30/2025 | 09/31/2025     |  |
+|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|-----------------| --------------------------------------- |
+| 2    | - Study and explore services learned in module 5                                                                                                                                       | 10/6/2025  | 10/7/2025       |<https://www.youtube.com/watch?v=tsobAlSg19g&list=PLahN4TLWtox2a3vElknwzU_urND8hLn1i&index=150>|
+| 3, 4 | - Research and complete labs related to: <br>&emsp; + resource group <br>&emsp; + IAM user, role, group  <br>&emsp; + lambda <br>&emsp; + Granting authorization <br>&emsp; + ... <br> | 10/8/2025  | 10/9/2025       | <https://docs.google.com/document/d/1kMaKUoLZ3qswxatOHh-npjqK-B9oCWFtpjzY6yKwfsI/edit?tab=t.0> |
+| 5, 6 | - Learn how to connect to AWS services via boto3 and complete basic functions                                                                                                          | 10/9/2025  | 10/10/2025      |  |
 
 
 ### Week 5 Achievements:

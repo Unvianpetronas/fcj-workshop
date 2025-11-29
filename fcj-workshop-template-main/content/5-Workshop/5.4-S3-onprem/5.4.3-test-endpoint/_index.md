@@ -11,7 +11,7 @@ pre : " <b> 5.4.3 </b> "
 
 2. Click the name of newly created endpoint: s3-interface-endpoint. Click details and save the regional DNS name of the endpoint (the first one) to your text-editor for later use. 
 
-![dns name](/images/5-Workshop/5.4-S3-onprem/dns.png)
+![12.png](/images/5-Workshop/5.4-S3-onprem/12.png)
 
 
 #### Connect to EC2 instance in "VPC On-prem"

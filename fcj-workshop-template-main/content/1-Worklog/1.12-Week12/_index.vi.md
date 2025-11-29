@@ -1,58 +1,58 @@
 ---
-title: "Worklog Tuần 12"
+title: "Nhật ký tuần 12"
 date: "`r Sys.Date()`"
 weight: 112
 chapter: false
-pre: " <b> 1.12 </b> "
+pre: " <b> 1.12. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+
 
 ### Mục tiêu tuần 12:
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Tạo tất cả tài nguyên cần thiết cho POC (Proof of Concept)
+* Tạo unit test để xử lý lỗi
+* Tối ưu hóa hiệu suất của các hàm phân tích để nhanh hơn và tối ưu bộ nhớ
+* Sửa UI/UX
+* Chuẩn bị đề xuất dự án
+* Kiểm thử QA
 
-### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
-
-### Kết quả đạt được tuần 12:
-
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Đã tạo và cấu hình AWS Free Tier account thành công.
-
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
+### Các nhiệm vụ thực hiện trong tuần:
+| Ngày | Nhiệm vụ                                                                                                                                                                       | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
+| ---- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|-----------------|--------------------|
+| 2    | - **POC Infrastructure:** <br> - Xác định và liệt kê tất cả tài nguyên AWS cần thiết <br> - Tạo tài nguyên cho POC (VPC, EC2, RDS, S3, Lambda)                                | 24/11/2025   | 24/11/2025      | AWS Architecture Diagram |
+| 3    | - **Testing Framework:** <br> - Thiết lập testing framework (pytest/unittest) <br> - Viết unit tests cho error handling scenarios <br> - Implement exception handling tests   | 25/11/2025   | 25/11/2025      | Pytest Docs / Testing Best Practices |
+| 4    | - **Performance Optimization:** <br> - Profile analyze functions để xác định bottlenecks <br> - Tối ưu hóa thuật toán và cấu trúc dữ liệu <br> - Giảm memory footprint       | 26/11/2025   | 26/11/2025      | Python Profiling Tools |
+| 5    | - **UI/UX Improvements:** <br> - Thu thập feedback về giao diện hiện tại <br> - Sửa các vấn đề về layout và responsive design <br> - Cải thiện user experience flows          | 27/11/2025   | 27/11/2025      | Figma / Material UI Guidelines |
+| 6    | - **Project Proposal & QA:** <br> - Hoàn thiện tài liệu đề xuất dự án <br> - Thực hiện QA testing toàn diện <br> - Ghi chép test cases và bug reports                        | 28/11/2025   | 28/11/2025      | Project Template / QA Checklist |
 
 
+### Thành tựu tuần 12:
+
+**Xây dựng hạ tầng POC:**
+* Xác định và tạo thành công tất cả tài nguyên AWS cần thiết cho Proof of Concept
+* Thiết lập môi trường POC hoàn chỉnh bao gồm VPC, EC2, RDS, S3, và Lambda
+* Cấu hình kết nối và security groups cho các tài nguyên
+
+**Framework kiểm thử:**
+* Triển khai testing framework với pytest
+* Viết và thực thi unit tests toàn diện cho các tình huống xử lý lỗi
+* Đạt được code coverage tốt cho các module quan trọng
+* Implement exception handling và error recovery mechanisms
+
+**Tối ưu hóa hiệu suất:**
+* Profiling thành công các hàm phân tích để xác định performance bottlenecks
+* Tối ưu hóa thuật toán, giảm độ phức tạp thời gian và không gian
+* Cải thiện đáng kể tốc độ xử lý và giảm memory usage
+* Áp dụng caching strategies để tăng tốc độ truy xuất dữ liệu
+
+**Cải tiến UI/UX:**
+* Thu thập và phân tích feedback từ người dùng về giao diện
+* Sửa các vấn đề về layout, alignment và responsive design
+* Cải thiện user flows để tăng trải nghiệm người dùng
+* Đảm bảo giao diện hoạt động tốt trên nhiều thiết bị và kích thước màn hình
+
+**Đề xuất dự án & QA:**
+* Hoàn thiện tài liệu đề xuất dự án với đầy đủ thông tin kỹ thuật và business case
+* Thực hiện QA testing toàn diện cho tất cả các modules
+* Tạo test cases chi tiết và ghi chép bug reports
+* Verify tất cả các chức năng chính hoạt động đúng như mong đợi

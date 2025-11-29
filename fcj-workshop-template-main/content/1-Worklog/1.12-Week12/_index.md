@@ -5,53 +5,54 @@ weight: 112
 chapter: false
 pre: " <b> 1.12. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
 
 
 ### Week 12 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Create all resources needed for POC (Proof of Concept)
+* Create unit tests for error handling
+* Optimize performance of analyze functions for faster execution and memory optimization
+* UI/UX fixes
+* Prepare project proposal
+* QA testing
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Task                                                                                                                                                                       | Start Date | Completion Date | Reference Material |
+| --- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ---------- | --------------- | ------------------ |
+| 2   | - **POC Infrastructure:** <br> - Identify and list all required AWS resources <br> - Create resources for POC (VPC, EC2, RDS, S3, Lambda)                                  | 11/24/2025 | 11/24/2025      | AWS Architecture Diagram |
+| 3   | - **Testing Framework:** <br> - Set up testing framework (pytest/unittest) <br> - Write unit tests for error handling scenarios <br> - Implement exception handling tests | 11/25/2025 | 11/25/2025      | Pytest Docs / Testing Best Practices |
+| 4   | - **Performance Optimization:** <br> - Profile analyze functions to identify bottlenecks <br> - Optimize algorithms and data structures <br> - Reduce memory footprint    | 11/26/2025 | 11/26/2025      | Python Profiling Tools |
+| 5   | - **UI/UX Improvements:** <br> - Gather feedback on current interface <br> - Fix layout and responsive design issues <br> - Improve user experience flows                 | 11/27/2025 | 11/27/2025      | Figma / Material UI Guidelines |
+| 6   | - **Project Proposal & QA:** <br> - Finalize project proposal documentation <br> - Perform comprehensive QA testing <br> - Document test cases and bug reports            | 11/28/2025 | 11/28/2025      | Project Template / QA Checklist |
 
 
 ### Week 12 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+**POC Infrastructure Development:**
+* Successfully identified and created all necessary AWS resources for Proof of Concept
+* Set up complete POC environment including VPC, EC2, RDS, S3, and Lambda
+* Configured connectivity and security groups for all resources
 
-* Successfully created and configured an AWS Free Tier account.
+**Testing Framework:**
+* Deployed testing framework with pytest
+* Wrote and executed comprehensive unit tests for error handling scenarios
+* Achieved good code coverage for critical modules
+* Implemented exception handling and error recovery mechanisms
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+**Performance Optimization:**
+* Successfully profiled analyze functions to identify performance bottlenecks
+* Optimized algorithms, reducing time and space complexity
+* Significantly improved processing speed and reduced memory usage
+* Applied caching strategies to accelerate data retrieval
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+**UI/UX Improvements:**
+* Gathered and analyzed user feedback on the interface
+* Fixed layout, alignment, and responsive design issues
+* Improved user flows to enhance user experience
+* Ensured interface works well across multiple devices and screen sizes
 
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+**Project Proposal & QA:**
+* Finalized project proposal documentation with complete technical information and business case
+* Performed comprehensive QA testing for all modules
+* Created detailed test cases and documented bug reports
+* Verified all major functionalities work as expected

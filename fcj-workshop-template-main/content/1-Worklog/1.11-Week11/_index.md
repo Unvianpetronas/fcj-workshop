@@ -5,53 +5,43 @@ weight: 111
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
+
 
 
 ### Week 11 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Event participate with DevOps on AWS subject
+* Fundamentals to set up IaC (Infrastructure as Code) with Terraform
+* Frontend React With setting page for email sending every day
+* Document for how we score the architecture base on metadata get on AWS
+* Improve email functional and API, set up production on SES
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Task                                                                                                                                                           | Start Date | Completion Date | Reference Material |
+| :--- |:---------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------|:----------------| :--- |
+| 2 | - **Professional Development:** <br> - Attend "DevOps on AWS" event <br> - Network with industry peers and take notes on best practices                        | 11/17/2025 | 11/17/2025      | Event Agenda / Notes |
+| 3 | - **Infrastructure as Code (IaC):** <br> - Install Terraform and configure AWS Provider <br> - Write basic `.tf` files to define simple resources (EC2/S3)     | 11/18/2025 | 11/18/2025      | Terraform Registry / HashiCorp Docs |
+| 4 | - **Frontend Development:** <br> - Build "Email Settings" page in React <br> - Implement UI forms for scheduling daily emails                                  | 11/19/2025 | 11/19/2025      | React Docs / Material UI |
+| 5 | - **Backend & Email Service:** <br> - Refactor Email API for better performance <br> - Request production access for AWS SES and configure domain verification | 11/20/2025 | 11/20/2025      | AWS SES Developer Guide |
+| 6 | - **Documentation:** <br> - Write logic documentation for Architecture Scoring <br> - Define how AWS metadata maps to scoring criteria                         | 11/21/2025 | 11/21/2025      | Internal Wiki / AWS CloudWatch Docs |
 
 
 ### Week 11 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **DevOps Knowledge:**
+  * Participated in the **DevOps on AWS** event, gaining insights into modern CI/CD pipelines and infrastructure automation.
 
-* Successfully created and configured an AWS Free Tier account.
+* **Infrastructure as Code (Terraform):**
+  * Successfully set up the Terraform environment.
+  * Understood core concepts including Providers, Resources, State files, and `plan`/`apply` workflows.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+* **Frontend Implementation:**
+  * Completed the **Email Settings Page** using React.
+  * Users can now configure daily email schedules via the UI.
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+* **AWS SES Production Setup:**
+  * Optimized the email sending API logic.
+  * Successfully moved AWS SES from Sandbox to **Production** mode, enabling email delivery to unverified addresses.
 
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Scoring Logic Documentation:**
+  * Finalized the documentation detailing how the system scores architecture quality based on retrieved AWS metadata.

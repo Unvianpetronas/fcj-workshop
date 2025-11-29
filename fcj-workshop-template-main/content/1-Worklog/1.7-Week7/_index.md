@@ -17,12 +17,12 @@ pre: " <b> 1.7. </b> "
 ### Tasks to be carried out this week:
 
 | Day | Task                                                                                                                                         | Start Date | Completion Date | Reference Material          |
-| --- |----------------------------------------------------------------------------------------------------------------------------------------------| ---------- | --------------- | --------------------------- |
-| 2   | - Coding route EC2, gruadduty,cloudwatch,..                                                                                                  | 08/11/2025 | 08/11/2025      |       |
-| 3   | - Analyze current CI/CD pipeline failures<br>- Identify required services (build, test, deploy)<br>- Create service configuration files      | 08/12/2025 | 08/12/2025      |         |
-| 4   | - Set up CI/CD services in pipeline<br>- Configure build stages and deployment stages<br>- Test pipeline execution                           | 08/13/2025 | 08/13/2025      |       |
-| 5   | - Write shell script for VM installation<br>- Include dependencies, environment setup, and service installation<br>- Test script on clean VM | 08/14/2025 | 08/14/2025      |        |
-| 6   | - Review Module 3 labs and review Module 4 labs                                                                                              | 08/15/2025 | 08/15/2025      |  |
+| --- |----------------------------------------------------------------------------------------------------------------------------------------------|------------|-----------------| --------------------------- |
+| 2   | - Coding route EC2, gruadduty,cloudwatch,..                                                                                                  | 10/20/2025 | 10/20/2025      |       |
+| 3   | - Analyze current CI/CD pipeline failures<br>- Identify required services (build, test, deploy)<br>- Create service configuration files      | 10/21/2025 | 10/21/2025      |         |
+| 4   | - Set up CI/CD services in pipeline<br>- Configure build stages and deployment stages<br>- Test pipeline execution                           | 10/22/2025 | 10/22/2025      |       |
+| 5   | - Write shell script for VM installation<br>- Include dependencies, environment setup, and service installation<br>- Test script on clean VM | 10/23/2025 | 10/23/2025      |        |
+| 6   | - Review Module 3 labs and review Module 4 labs                                                                                              | 10/24/2025 | 10/24/2025      |  |
 
 ### Week 7 Achievements:
 

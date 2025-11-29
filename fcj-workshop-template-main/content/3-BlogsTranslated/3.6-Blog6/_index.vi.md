@@ -6,122 +6,85 @@ chapter: false
 pre: " <b> 3.6. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+# Sử dụng generative AI trên AWS để phân tích tài liệu lâm sàng hiệu quả
 
-# Bắt đầu với healthcare data lakes: Sử dụng microservices
-
-Các data lake có thể giúp các bệnh viện và cơ sở y tế chuyển dữ liệu thành những thông tin chi tiết về doanh nghiệp và duy trì hoạt động kinh doanh liên tục, đồng thời bảo vệ quyền riêng tư của bệnh nhân. **Data lake** là một kho lưu trữ tập trung, được quản lý và bảo mật để lưu trữ tất cả dữ liệu của bạn, cả ở dạng ban đầu và đã xử lý để phân tích. data lake cho phép bạn chia nhỏ các kho chứa dữ liệu và kết hợp các loại phân tích khác nhau để có được thông tin chi tiết và đưa ra các quyết định kinh doanh tốt hơn.
-
-Bài đăng trên blog này là một phần của loạt bài lớn hơn về việc bắt đầu cài đặt data lake dành cho lĩnh vực y tế. Trong bài đăng blog cuối cùng của tôi trong loạt bài, *“Bắt đầu với data lake dành cho lĩnh vực y tế: Đào sâu vào Amazon Cognito”*, tôi tập trung vào các chi tiết cụ thể của việc sử dụng Amazon Cognito và Attribute Based Access Control (ABAC) để xác thực và ủy quyền người dùng trong giải pháp data lake y tế. Trong blog này, tôi trình bày chi tiết cách giải pháp đã phát triển ở cấp độ cơ bản, bao gồm các quyết định thiết kế mà tôi đã đưa ra và các tính năng bổ sung được sử dụng. Bạn có thể truy cập các code samples cho giải pháp tại Git repo này để tham khảo.
+**Tác giả:** Alex Boudreau và John O'Donnell  
+**Ngày:** 05 tháng 2 năm 2025  
+**Tags:** Amazon Bedrock, Amazon Comprehend Medical, Amazon Machine Learning, Amazon SageMaker, Best Practices, Customer Solutions, Generative AI
 
 ---
 
-## Hướng dẫn kiến trúc
+Clinical trial liên quan đến việc thu thập và xử lý một lượng lớn dữ liệu được quản lý chặt chẽ, bao gồm các complex protocol document mô tả cách trial sẽ được thực hiện. Quản lý khối lượng thông tin này có thể rất choáng ngợp, nhưng generative AI cung cấp một giải pháp bằng cách giúp tự động hóa quy trình và cho phép clinical researcher nhanh chóng tập trung vào thông tin có liên quan nhất. Hiện tại, drug approval process trung bình mất 10–12 năm, với clinical trial study startup time chiếm 1 năm trong khung thời gian đó. Phần lớn thách thức với study startup nằm ở tính chất complex và non-standard của protocol document. Những document này thường yêu cầu nhiều tuần hoặc tháng để review và assess. Review time này làm tăng thêm chu kỳ đã dài để đưa một loại thuốc mới ra thị trường.
 
-Thay đổi chính kể từ lần trình bày cuối cùng của kiến trúc tổng thể là việc tách dịch vụ đơn lẻ thành một tập hợp các dịch vụ nhỏ để cải thiện khả năng bảo trì và tính linh hoạt. Việc tích hợp một lượng lớn dữ liệu y tế khác nhau thường yêu cầu các trình kết nối chuyên biệt cho từng định dạng; bằng cách giữ chúng được đóng gói riêng biệt với microservices, chúng ta có thể thêm, xóa và sửa đổi từng trình kết nối mà không ảnh hưởng đến những kết nối khác. Các microservices được kết nối rời thông qua tin nhắn publish/subscribe tập trung trong cái mà tôi gọi là “pub/sub hub”.
+Trong bài viết này, chúng tôi cho thấy cách Clario sử dụng AWS platform để tăng tốc clinical document analysis.
 
-Giải pháp này đại diện cho những gì tôi sẽ coi là một lần lặp nước rút hợp lý khác từ last post của tôi. Phạm vi vẫn được giới hạn trong việc nhập và phân tích cú pháp đơn giản của các **HL7v2 messages** được định dạng theo **Quy tắc mã hóa 7 (ER7)** thông qua giao diện REST.
+## Về Clario
 
-**Kiến trúc giải pháp bây giờ như sau:**
+Clario là leading provider của endpoint data solution cho clinical trials industry cung cấp regulatory-grade clinical evidence cho pharmaceutical, biotech và medical device partner. Kể từ khi Clario được thành lập hơn 50 năm trước, endpoint data solution của họ đã hỗ trợ clinical trial hơn 26,000 lần với hơn 700 regulatory approval trên hơn 100 quốc gia. Một trong những critical challenge mà Clario đối mặt là time-consuming process của việc tạo documentation cho clinical trial, có thể mất nhiều tuần hoặc tháng.
 
-> *Hình 1. Kiến trúc tổng thể; những ô màu thể hiện những dịch vụ riêng biệt.*
+## Thách thức kinh doanh
 
----
+Clinical trial là điều cần thiết cho việc phê duyệt các health innovation mới, bao gồm treatment, procedure và medical device. Chúng yêu cầu thu thập một lượng lớn complex data từ các dispersed clinical trial site để hỗ trợ đánh giá medical benefit và risk, tất cả trong khi duy trì privacy và regulatory compliance. Để làm cho vấn đề trở nên thách thức hơn nữa, việc capturing data trong clinical trial xảy ra không chỉ trong healthcare center mà còn thông qua remote capture thông qua nhiều khía cạnh của daily activity của trial participant.
 
-Mặc dù thuật ngữ *microservices* có một số sự mơ hồ cố hữu, một số đặc điểm là chung:  
-- Chúng nhỏ, tự chủ, kết hợp rời rạc  
-- Có thể tái sử dụng, giao tiếp thông qua giao diện được xác định rõ  
-- Chuyên biệt để giải quyết một việc  
-- Thường được triển khai trong **event-driven architecture**
+Các partner như Clario hiểu những thách thức mà life sciences company phải đối mặt khi phân tích large volume của complex clinical document, chẳng hạn như study protocol. Những document này thường chứa hỗn hợp structured và unstructured data, bao gồm table, image và diagram, khiến việc chính xác interpret và extract key information ở quy mô lớn trở nên khó khăn. Trong bài viết này, chúng tôi khám phá cách Clario đã sử dụng sức mạnh của generative AI trên AWS để phân tích clinical document một cách hiệu quả và thúc đẩy outcome tốt hơn cho client của mình.
 
-Khi xác định vị trí tạo ranh giới giữa các microservices, cần cân nhắc:  
-- **Nội tại**: công nghệ được sử dụng, hiệu suất, độ tin cậy, khả năng mở rộng  
-- **Bên ngoài**: chức năng phụ thuộc, tần suất thay đổi, khả năng tái sử dụng  
-- **Con người**: quyền sở hữu nhóm, quản lý *cognitive load*
+## Khai thác sức mạnh của large language model
 
----
+Sự tiến bộ nhanh chóng trong large language model (LLM) đã mở rộng các potential application của natural language processing vượt ra ngoài simple conversational AI assistant. Clario đã thử nghiệm với nhiều technique khác nhau, chẳng hạn như zero-shot learning, few-shot learning, classification, entity extraction và summarization, để sử dụng hiệu quả LLM trong specialized use case. Bằng cách sử dụng prompt engineering, AI orchestration và content retrieval, Clario có thể hướng dẫn các model để chính xác tạo ra insight và extract relevant information từ key clinical research document, bao gồm complex clinical trial protocol.
 
-## Lựa chọn công nghệ và phạm vi giao tiếp
+## Bốn trụ cột của effective document analysis trên AWS
 
-| Phạm vi giao tiếp                        | Các công nghệ / mô hình cần xem xét                                                        |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Trong một microservice                   | Amazon Simple Queue Service (Amazon SQS), AWS Step Functions                               |
-| Giữa các microservices trong một dịch vụ | AWS CloudFormation cross-stack references, Amazon Simple Notification Service (Amazon SNS) |
-| Giữa các dịch vụ                         | Amazon EventBridge, AWS Cloud Map, Amazon API Gateway                                      |
+Thông qua research và development effort của mình, Clario đã xác định bốn core pillar cho phép effective document analysis sử dụng generative AI trên AWS:
 
----
+**Parsing** – Clario sử dụng AWS service như Amazon Textract và Amazon Comprehend để extract text, image và table từ clinical document, duy trì cả data privacy và security.
 
-## The pub/sub hub
+**Retrieval** – Bằng cách sử dụng embedding model và vector database như Amazon OpenSearch Service, Clario efficiently store và retrieve relevant information từ large document collection dựa trên similarity search. Team đã thử nghiệm với nhiều chunking và retrieval strategy khác nhau để tối ưu hóa accuracy và performance.
 
-Việc sử dụng kiến trúc **hub-and-spoke** (hay message broker) hoạt động tốt với một số lượng nhỏ các microservices liên quan chặt chẽ.  
-- Mỗi microservice chỉ phụ thuộc vào *hub*  
-- Kết nối giữa các microservice chỉ giới hạn ở nội dung của message được xuất  
-- Giảm số lượng synchronous calls vì pub/sub là *push* không đồng bộ một chiều
+**Prompting** – Sử dụng technique như zero-shot và few-shot learning, Clario đã tăng cường accuracy của LLM để classify và extract information. AWS service như Amazon Bedrock đơn giản hóa việc thử nghiệm với các prompting strategy khác nhau và đánh giá model performance.
 
-Nhược điểm: cần **phối hợp và giám sát** để tránh microservice xử lý nhầm message.
+**Generation** – Clario cẩn thận xem xét các yếu tố như context size, reasoning capability và latency khi chọn LLM thích hợp để tạo structured output. AWS cung cấp một loạt pre-trained model và framework tích hợp liền mạch vào Clario's pipeline.
 
----
+## Tổng quan giải pháp
 
-## Core microservice
+Để giải quyết các unique challenge liên quan đến việc phân tích clinical document, Clario đã xây dựng một custom generative AI platform trên AWS. Platform này kết hợp một orchestration engine kết hợp nhiều LLM và deep learning model, cho phép nó extract key information một cách chính xác và ở quy mô lớn. Bằng cách sử dụng AWS service như Amazon Elastic Compute Cloud (Amazon EC2), Amazon Elastic Kubernetes Service (Amazon EKS), Amazon Simple Storage Service (Amazon S3), SageMaker và AWS Lambda, Clario có thể efficiently process hàng ngàn document trong vài giây.
 
-Cung cấp dữ liệu nền tảng và lớp truyền thông, gồm:  
-- **Amazon S3** bucket cho dữ liệu  
-- **Amazon DynamoDB** cho danh mục dữ liệu  
-- **AWS Lambda** để ghi message vào data lake và danh mục  
-- **Amazon SNS** topic làm *hub*  
-- **Amazon S3** bucket cho artifacts như mã Lambda
+Sơ đồ sau đây minh họa solution architecture.
 
-> Chỉ cho phép truy cập ghi gián tiếp vào data lake qua hàm Lambda → đảm bảo nhất quán.
+![ARCHBLOG-1078-clario3-imaging-and-alexb-alex-edit-v3-Page-3.drawio-Copy.png](/images/3-blog/6-image/ARCHBLOG-1078-clario3-imaging-and-alexb-alex-edit-v3-Page-3.drawio-Copy.png)
 
----
+Workflow bao gồm các bước sau:
 
-## Front door microservice
+1. Document được thu thập on premises (1) và upload bằng AWS Direct Connect (2) với encryption in transit đến Amazon S3 (3). Tất cả uploaded document sau đó được tự động và an toàn lưu trữ với server-side object-level encryption.
 
-- Cung cấp API Gateway để tương tác REST bên ngoài  
-- Xác thực & ủy quyền dựa trên **OIDC** thông qua **Amazon Cognito**  
-- Cơ chế *deduplication* tự quản lý bằng DynamoDB thay vì SNS FIFO vì:
-  1. SNS deduplication TTL chỉ 5 phút
-  2. SNS FIFO yêu cầu SQS FIFO
-  3. Chủ động báo cho sender biết message là bản sao
+2. Sau khi các document được upload và user đã review chúng, Clario AI Orchestration Engine (4) xác định best document parsing strategy dựa trên file type và extract text bằng Amazon Textract (5). Sau khi extract, text được vectorize và lưu trữ trong Amazon OpenSearch Service vector engine (6) để semantic retrieval sau này.
 
----
+3. Sau vectorization, Clario AI Orchestration Engine (4), chạy như một distributed service trong Amazon EKS, khởi chạy một document classification async task bằng Amazon MQ. Amazon EC2 và Lambda được sử dụng cho additional processing nếu cần. Điều này trigger Document Classification Agent, sử dụng Amazon Bedrock LLM (8), để tự động xác định document type.
 
-## Staging ER7 microservice
+4. Sau khi các document được classify, Clario AI Orchestration Engine (4) khởi chạy appropriate document analysis agent cho further background processing. Trong trường hợp study protocol, engine khởi chạy Protocol Analysis agent, sử dụng predefined analysis graph configuration được lưu trữ trong Amazon Relational Database Service (Amazon RDS) (7), cũng như sự kết hợp của retrieval strategy và AI model, bao gồm custom deep learning model trên SageMaker (9) và pre-trained LLM trên Amazon Bedrock (8). Orchestration này cung cấp advanced document analysis, chuyển đổi massive amount của unstructured multi-modal data thành structured data và insight.
 
-- Lambda “trigger” đăng ký với pub/sub hub, lọc message theo attribute  
-- Step Functions Express Workflow để chuyển ER7 → JSON  
-- Hai Lambda:
-  1. Sửa format ER7 (newline, carriage return)
-  2. Parsing logic  
-- Kết quả hoặc lỗi được đẩy lại vào pub/sub hub
+5. Sau analysis, tất cả structured data sau đó được persist vào Amazon RDS (7) để visualization, review và querying sau này.
+
+## Recommendation và best practice
+
+Dựa trên kinh nghiệm của họ trong việc phát triển và triển khai generative AI solution trên AWS, Clario đã học được các best practice sau:
+
+- Áp dụng incremental và iterative development approach để dần dần xây dựng và tinh chỉnh model của bạn
+- Tuân theo standard machine learning approach để đánh giá và validate model performance bằng representative test set
+- Tối ưu hóa bốn pillar của document analysis trước khi đầu tư vào fine-tuning và continuous pre-training của LLM
+- Điều chỉnh approach của bạn cho specific use case, bởi vì không phải tất cả các vấn đề đều yêu cầu cùng model hoặc technique
+
+## Kết luận
+
+Bằng cách sử dụng sức mạnh của generative AI trên AWS, Clario đã có thể efficiently phân tích complex clinical trial document và extract valuable insight cho client của mình trong life sciences industry. Thông qua sự kết hợp của careful model selection, iterative development và tuân thủ best practice, Clario đã xây dựng một scalable và accurate document analysis pipeline bằng AWS. Mở khóa full potential của clinical trial data của bạn bằng cách áp dụng các best practice này với AWS generative AI solution ngay hôm nay.
+
+## Về các tác giả
+
+![1624904528953.jpg](/images/3-blog/6-image/1624904528953.jpg)### Alex Boudreau
+
+Alex Boudreau là Director of AI tại Clario. Ông dẫn dắt Generative AI department đổi mới của công ty và giám sát việc phát triển advanced multi-modal GenAI Platform của công ty, bao gồm cutting-edge cloud engineering, AI engineering và foundational AI research. Với distinguished career trong AI và machine learning, Alex trước đây đã pioneering Deep Learning speech analysis system cho automotive application, dẫn đầu cloud-based enterprise fraud detection solution, advanced conversational AI technology và groundbreaking project trong medical image analysis. Chuyên môn của ông trong việc leading high-impact initiative đặt ông ở vị trí độc đáo để thúc đẩy ranh giới của AI technology trong business world.
+
+![1675893031202-1-1.jpg](/images/3-blog/6-image/1675893031202-1-1.jpg)### John O'Donnell
+
+John O'Donnell là Principal Solutions Architect tại Amazon Web Services (AWS) nơi ông cung cấp CIO-level engagement và design cho complex cloud-based solution trong healthcare và life sciences (HCLS) industry. Với hơn 20 năm hands-on experience, ông có proven track record trong việc cung cấp value và innovation cho HCLS customer trên toàn cầu. Là một trusted technical leader, ông đã hợp tác với AWS team để dive deep vào customer challenge, đề xuất outcome và đảm bảo high-value, predictable và successful cloud transformation. John đam mê giúp HCLS customer đạt được mục tiêu của họ và tăng tốc cloud native modernization effort của họ.
 
 ---
-
-## Tính năng mới trong giải pháp
-
-### 1. AWS CloudFormation cross-stack references
-Ví dụ *outputs* trong core microservice:
-```yaml
-Outputs:
-  Bucket:
-    Value: !Ref Bucket
-    Export:
-      Name: !Sub ${AWS::StackName}-Bucket
-  ArtifactBucket:
-    Value: !Ref ArtifactBucket
-    Export:
-      Name: !Sub ${AWS::StackName}-ArtifactBucket
-  Topic:
-    Value: !Ref Topic
-    Export:
-      Name: !Sub ${AWS::StackName}-Topic
-  Catalog:
-    Value: !Ref Catalog
-    Export:
-      Name: !Sub ${AWS::StackName}-Catalog
-  CatalogArn:
-    Value: !GetAtt Catalog.Arn
-    Export:
-      Name: !Sub ${AWS::StackName}-CatalogArn
