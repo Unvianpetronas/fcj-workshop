@@ -1,6 +1,6 @@
 ---
 title: "Nhật ký tuần 3"
-date: `r Sys.Date()`
+date: "`r Sys.Date()`"
 weight: 103
 chapter: false
 pre: " <b> 1.3. </b> "
