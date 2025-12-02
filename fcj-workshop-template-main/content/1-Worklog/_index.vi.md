@@ -1,6 +1,6 @@
 ---
 title: "Nhật ký công việc"
-date: `r Sys.Date()`
+date: "r Sys.Date()`"
 weight: 100
 chapter: false
 pre: " <b> 1. </b> "
