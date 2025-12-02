@@ -7,14 +7,14 @@ pre: " <b> 4.2. </b> "
 ---
 
 
-# Summary Report: “Amazon Q Developer for SAP ABAP”
+# Summary Report: "GenAI-powered App-DB Modernization Workshop"
 
 ### Event Objectives
 
-- About SAP ABAP
-- How Amazon Q impact with SAP ABAP
-- How to promt Amazon Q
-- Hand on Lab
+- Share best practices in modern application design
+- Introduce Domain-Driven Design (DDD) and event-driven architecture
+- Provide guidance on selecting the right compute services
+- Present AI tools to support the development lifecycle
 
 ### Speakers
 
