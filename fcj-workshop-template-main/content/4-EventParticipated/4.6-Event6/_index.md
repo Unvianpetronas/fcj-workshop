@@ -6,330 +6,482 @@ chapter: false
 pre: " <b> 4.6. </b> "
 ---
 
-
-# AWS Well-Architected Security Pillar Event Report
+# BUILDING AGENTIC AI Context Optimization with Amazon Bedrock
 
 ---
 
 ## Executive Summary
 
-I attended a comprehensive half-day workshop on the AWS Well-Architected Security Pillar at the AWS Vietnam Office. The session provided deep technical insights into the five core security pillars: Identity & Access Management, Detection, Infrastructure Protection, Data Protection, and Incident Response. The content was particularly valuable for my Cloud Health Dashboard project, offering practical guidance on implementing production-grade security practices across multi-account AWS environments.
+I attended a comprehensive half-day workshop on Agentic AI using Amazon Bedrock at the AWS Vietnam Office. The session covered the architecture and implementation of AI agents from foundational concepts through hands-on development. The workshop was particularly valuable for understanding how to build production-grade agentic systems that can autonomously orchestrate complex workflows, make decisions, and integrate with external tools. While my Cloud Health Dashboard currently uses traditional monitoring approaches, the concepts presented here open possibilities for AI-powered security analysis, automated remediation recommendations, and intelligent anomaly detection.
 
 ---
 
-## Opening Session: Security Foundation (8:30 - 8:50 AM)
+## Opening Session: Agentic AI Landscape (9:00 - 9:10 AM)
 
-The workshop began with foundational security principles that directly apply to my dashboard architecture. The instructors emphasized three core tenets: **Least Privilege**, **Zero Trust**, and **Defense in Depth**. These aren't just theoretical concepts—they represent the practical security posture that production SaaS applications must maintain.
-
-The discussion of the **Shared Responsibility Model** was particularly relevant. AWS handles security "of" the cloud (physical infrastructure, hypervisor, networking), while we're responsible for security "in" the cloud (application code, data, access controls, configuration). For my Cloud Health Dashboard, this means I own the security of my FastAPI application, JWT authentication implementation, DynamoDB data protection, and IAM role configurations—even though AWS secures the underlying services.
-
-The session highlighted top security threats in Vietnamese cloud environments, including credential leakage through GitHub commits, overly permissive IAM policies, unencrypted data at rest, and inadequate logging. This resonated with my current implementation, where I've already addressed some issues (JWT tokens, encrypted secrets) but have opportunities to strengthen others (comprehensive logging, stricter IAM policies).
+Nguyen Gia Hung, Head of Solutions Architect, framed the workshop by distinguishing between traditional AI applications and agentic systems. The key difference: **agency** - the ability of AI systems to perceive environments, make decisions, take actions, and learn from outcomes without constant human intervention.
 
 ---
 
-## Pillar 1: Identity & Access Management (8:50 - 9:30 AM)
+## AWS Bedrock Agent Core Architecture (9:10 - 9:40 AM)
 
-The IAM deep dive challenged several assumptions I had about credential management. The key principle emphasized repeatedly was **avoid long-term credentials at all costs**. Static access keys stored in environment variables or configuration files represent a significant attack vector. Instead, the recommended approach uses IAM roles with temporary credentials that rotate automatically.
+Kien Nguyen's technical deep dive into Bedrock Agents revealed the underlying architecture that makes autonomous AI systems possible.
 
-For my Cloud Health Dashboard, this has immediate implications:
+**What is Amazon Bedrock?**
+Bedrock is AWS's fully managed service for foundation models (FMs) from providers like Anthropic (Claude), Meta (Llama), Cohere, AI21, and Amazon's own Titan models. Key differentiators:
+- **No infrastructure management:** No EC2 instances, no model hosting, no scaling concerns
+- **Model choice flexibility:** Switch between models via API without code changes
+- **Security & compliance:** Models run within AWS infrastructure, data doesn't leave your VPC
+- **Fine-tuning & customization:** Train models on proprietary data while maintaining data privacy
 
-**Current State vs. Best Practice:**
-- Currently, my EC2 instance likely uses long-term credentials or instance profiles. The session demonstrated how IAM roles attached to EC2 instances automatically provide temporary credentials that rotate every few hours without any application code changes.
-- The background workers that scan client accounts should use **cross-account IAM roles with assume-role** rather than storing separate credentials for each client account. This provides better auditability and automatic credential rotation.
+**Bedrock Agents - The Core Concept:**
 
-**IAM Identity Center & SSO:**
-The introduction to IAM Identity Center (formerly AWS SSO) was eye-opening for multi-account architectures. While my current dashboard isn't quite at the scale where this is necessary, the pattern is clear: as I scale to more client accounts, IAM Identity Center would provide centralized user management with permission sets that define what users can do across all accounts. This eliminates the need to manage IAM users separately in each account.
+Agents are autonomous systems that can:
+1. **Understand user intent** through natural language
+2. **Break down complex requests** into executable steps (reasoning)
+3. **Select and invoke appropriate tools** (APIs, Lambda functions, knowledge bases)
+4. **Orchestrate multi-step workflows** dynamically
+5. **Return structured responses** with citations and reasoning traces
 
-**Service Control Policies (SCPs) & Permission Boundaries:**
-SCPs act as guardrails at the organization level, preventing even administrators from performing dangerous actions like disabling CloudTrail or deleting KMS keys. Permission boundaries provide another layer by setting the maximum permissions that can be granted through IAM policies. For my multi-tenant dashboard, permission boundaries would ensure that even if a client's IAM credentials were compromised, they couldn't exceed predefined limits.
+The architecture diagram showed:
 
-**Practical Tools Demonstrated:**
-- **IAM Access Analyzer:** Identifies resources shared with external entities and generates least-privilege policies based on CloudTrail activity. I should integrate this into my dashboard to show clients which of their resources have overly permissive access.
-- **IAM Policy Simulator:** Allows testing whether a specific action would be allowed before implementing it. This would be invaluable during development to validate that my cross-account roles have exactly the permissions needed—no more, no less.
-
-**Key Takeaway for My Project:**
-Implement cross-account IAM roles with assume-role for client account access, attach IAM roles to my EC2 instance rather than using static credentials, and integrate IAM Access Analyzer findings into my dashboard alongside GuardDuty findings.
-
----
-
-## Pillar 2: Detection & Continuous Monitoring (9:30 - 9:55 AM)
-
-This session validated several architectural decisions I've already made while highlighting critical gaps in my current implementation.
-
-**CloudTrail at Organization Level:**
-The emphasis on organization-level CloudTrail was significant. Instead of enabling CloudTrail separately in each client account, organization-level trails capture API activity across all accounts in a single location. This provides comprehensive audit logs without per-account configuration. For my Cloud Health Dashboard, this means I should recommend that clients enable organization CloudTrail and grant my dashboard read access to those logs, rather than trying to piece together activity from multiple sources.
-
-**GuardDuty - Beyond Basic Findings:**
-I'm already integrating GuardDuty findings into my dashboard, but the session revealed I'm only scratching the surface. GuardDuty should be enabled with:
-- **S3 Protection:** Monitors S3 data access patterns for anomalies
-- **EKS Protection:** For clients running Kubernetes
-- **RDS Protection:** Detects suspicious database login attempts
-- **Malware Protection:** Scans EBS volumes for malicious software
-
-My current implementation captures basic findings but doesn't categorize by severity or provide contextual recommendations for remediation. The dashboard should prioritize high-severity findings and suggest specific remediation steps.
-
-**Security Hub - Centralized Security Posture:**
-Security Hub aggregates findings from GuardDuty, IAM Access Analyzer, Macie, Inspector, and other services into a unified view. More importantly, it runs continuous compliance checks against standards like CIS AWS Foundations Benchmark and PCI-DSS. I should integrate Security Hub into my dashboard as a comprehensive security score rather than just showing raw GuardDuty findings.
-
-**Logging at Every Layer:**
-The "logging at every layer" principle was stressed repeatedly:
-- **VPC Flow Logs:** Capture network traffic metadata (who's talking to whom)
-- **ALB Access Logs:** HTTP request details, response codes, latencies
-- **S3 Access Logs:** Every object access, modification, deletion
-- **CloudWatch Logs:** Application logs, system logs, custom metrics
-
-For my dashboard, I'm currently missing VPC Flow Logs analysis entirely. This would provide visibility into network-level threats like port scanning, unusual data transfers, or connections to known malicious IPs.
-
-**EventBridge for Automated Response:**
-The most practical part was the demonstration of EventBridge rules that trigger Lambda functions in response to security events. For example, when GuardDuty detects a compromised EC2 instance, an EventBridge rule can automatically trigger a Lambda function that:
-1. Takes a snapshot of the instance for forensic analysis
-2. Isolates the instance by moving it to a quarantine security group
-3. Notifies the security team via SNS
-4. Creates a ticket in the incident response system
-
-This pattern of "detection → automated response" is far superior to just alerting humans and waiting for manual intervention.
-
-**Key Takeaway for My Project:**
-Expand dashboard to include Security Hub aggregated findings, add VPC Flow Logs analysis, implement severity-based prioritization of findings, and build automated response playbooks using EventBridge + Lambda for common scenarios (compromised keys, public S3 buckets, etc.).
-
----
-
-## Pillar 3: Infrastructure Protection (10:10 - 10:40 AM)
-
-This session directly addressed my current production architecture and upcoming migration plans.
-
-**VPC Segmentation:**
-The core principle is workload isolation through subnets. The recommended pattern is:
-- **Public subnets:** Only for resources that must accept internet traffic (ALBs, NAT gateways, bastion hosts)
-- **Private subnets:** Application tier (EC2, ECS, Lambda)
-- **Isolated subnets:** Data tier (RDS, ElastiCache, internal services) with no route to internet
-
-My current Cloud Health Dashboard runs in a public subnet, which is suboptimal. During my planned migration to ECS Fargate, I should restructure to place:
-- Application Load Balancer in public subnet
-- ECS tasks in private subnet with NAT gateway for outbound access
-- DynamoDB and Redis (if moved to ElastiCache) accessible only from private subnet
-
-**Security Groups vs. NACLs:**
-The session clarified when to use each:
-- **Security Groups:** Stateful, operate at instance level, evaluate all rules before deciding, support allow rules only
-- **NACLs:** Stateless, operate at subnet level, process rules in order, support both allow and deny rules
-
-The best practice is to use security groups as the primary control (whitelisting specific ports/protocols/sources) and NACLs as a secondary defense layer to explicitly deny known bad actors or suspicious IP ranges.
-
-For my dashboard:
-- Current security group allows SSH (port 22) from my IP, HTTPS (443) from Cloudflare, Redis (6379) from localhost only
-- Should add NACL rules to explicitly deny known malicious IP ranges
-- Should implement security group rule for backend → DynamoDB using VPC endpoints (no internet routing)
-
-**WAF + Shield + Network Firewall:**
-Three layers of network protection were explained:
-
-**AWS WAF (Web Application Firewall):**
-Protects against common web exploits (SQL injection, XSS, bot traffic). I already use Cloudflare's WAF, but AWS WAF would provide:
-- AWS Managed Rules for OWASP Top 10 protection
-- Rate limiting per IP or API key
-- Geo-blocking (block traffic from specific countries)
-- Custom rules based on request patterns
-
-**AWS Shield:**
-DDoS protection. Shield Standard is free and automatic; Shield Advanced ($3,000/month) provides enhanced protection and cost protection guarantees. For a student project, Shield Standard is sufficient, but clients might want Shield Advanced recommendations.
-
-**AWS Network Firewall:**
-Stateful network inspection at the VPC level. This is what I've been researching for my dashboard's network security enhancement. Network Firewall can:
-- Inspect all traffic entering/leaving the VPC
-- Block traffic to known malicious domains
-- Enforce rules based on protocol, port, and packet inspection
-- Integrate with threat intelligence feeds
-
-The session confirmed my architectural plan: place Network Firewall in an inspection VPC and route all traffic through it for centralized security policy enforcement.
-
-**Workload Protection - EC2/ECS/EKS:**
-Key practices for compute security:
-- **Minimize attack surface:** Remove unnecessary packages, close unused ports, disable unneeded services
-- **Patch management:** Use AWS Systems Manager Patch Manager for automated OS patching
-- **Container security:** Scan images for vulnerabilities (ECR image scanning), use minimal base images, run as non-root users
-- **Secrets management:** Never bake secrets into AMIs or container images; use Secrets Manager or Parameter Store
-
-For my ECS migration, I should:
-- Use AWS-provided base images (regularly patched)
-- Enable ECR image scanning to detect vulnerabilities before deployment
-- Run containers as non-root user
-- Mount secrets as environment variables from Secrets Manager at runtime
-
-**Key Takeaway for My Project:**
-Restructure VPC with proper subnet segmentation (public/private/isolated), migrate from public to private subnet placement during ECS migration, implement AWS WAF on ALB, configure Network Firewall in inspection VPC, and establish container security baseline (image scanning, non-root execution, secrets management).
-
----
-
-## Pillar 4: Data Protection (10:40 - 11:10 AM)
-
-Data protection is where encryption, key management, and access controls converge.
-
-**KMS - Key Management Service:**
-The deep dive into KMS revealed complexities I hadn't fully appreciated:
-
-**Key Policies vs. IAM Policies:**
-KMS keys have their own resource policies (key policies) separate from IAM policies. A principal needs both KMS key policy permissions AND IAM policy permissions to use a key. This dual-authorization model provides defense in depth.
-
-For my DynamoDB encryption, I should:
-- Create a customer-managed KMS key (instead of AWS-managed default)
-- Configure key policy to allow only my application role to use the key
-- Enable automatic key rotation (yearly)
-- Use grants for temporary access (better than modifying key policy repeatedly)
-
-**Encryption at Rest:**
-Every storage service should encrypt at rest:
-- **S3:** Default encryption with SSE-S3 or SSE-KMS (prefer KMS for audit logs)
-- **EBS:** Encrypt all volumes with KMS
-- **RDS/Aurora:** Enable encryption at cluster creation (can't add later without migration)
-- **DynamoDB:** Already encrypted by default, but use customer-managed KMS for better control
-
-My current implementation uses default encryption for DynamoDB, which is acceptable but limits visibility. Customer-managed keys would provide:
-- CloudTrail logs showing every decrypt operation (who accessed data, when, from where)
-- Ability to disable key in emergency (immediately denies all access to data)
-- Cross-account key sharing for multi-tenant scenarios
-
-**Encryption in Transit:**
-The session emphasized TLS everywhere:
-- Public-facing endpoints: TLS 1.2+ (I already have this via Cloudflare)
-- Internal service communication: Even private subnet traffic should use TLS
-- Database connections: Force SSL/TLS for RDS, use encrypted Redis connections
-
-My current backend → Redis connection likely doesn't use TLS since both are on localhost. When migrating to ElastiCache, I must enable encryption in transit.
-
-**Secrets Manager vs. Parameter Store:**
-Both store secrets, but Secrets Manager provides:
-- **Automatic rotation:** Built-in rotation for RDS, Redshift, DocumentDB credentials
-- **Cross-region replication:** Disaster recovery for secrets
-- **Fine-grained access control:** Secrets can have resource policies
-
-Parameter Store is cheaper (free tier) but requires manual rotation logic. For production, Secrets Manager is worth the cost (~$0.40/secret/month + $0.05/10K API calls).
-
-I should migrate my JWT secret, database credentials, and AWS API keys from environment variables or Systems Manager Parameter Store to Secrets Manager with automatic rotation.
-
-**Rotation Patterns:**
-The rotation demonstration showed a zero-downtime pattern:
-1. Secrets Manager creates new credential version
-2. Old and new credentials both valid simultaneously
-3. Application gradually picks up new version
-4. Old version deprecated after all connections migrated
-5. Old version deleted
-
-This is critical for my multi-tenant dashboard where clients might have long-running connections. Immediate rotation would break active sessions.
-
-**Data Classification & Access Guardrails:**
-The session introduced AWS Macie for automated data classification. Macie scans S3 buckets and identifies:
-- Personally Identifiable Information (PII)
-- Credit card numbers
-- API keys and credentials
-- Intellectual property
-
-For clients storing sensitive data in S3, I should recommend Macie integration to automatically detect and alert on PII exposure.
-
-**Key Takeaway for My Project:**
-Migrate to customer-managed KMS keys for DynamoDB with audit logging, implement Secrets Manager with automatic rotation for all credentials, enable encryption in transit for all service communication including Redis/ElastiCache, add Macie scanning to dashboard for clients with S3 buckets, and document data classification requirements for multi-tenant data segregation.
-
----
-
-## Pillar 5: Incident Response (11:10 - 11:40 AM)
-
-The incident response session was the most immediately actionable content of the day.
-
-**IR Lifecycle According to AWS:**
-The framework consists of five phases:
-1. **Prepare:** Build IR tools, runbooks, train team, establish communication channels
-2. **Detect:** Use GuardDuty, Security Hub, CloudWatch Alarms to identify incidents
-3. **Analyze:** Investigate scope, affected resources, attack timeline using CloudTrail and logs
-4. **Contain:** Isolate affected resources, prevent further damage
-5. **Recover:** Restore from clean backups, patch vulnerabilities, return to normal operations
-
-**Playbook 1: Compromised IAM Key**
-
-The demonstration walked through a realistic scenario where an access key was leaked to GitHub:
-
-*Detection:* GuardDuty finding "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration" or Access Analyzer alert
-
-*Analysis:*
-- CloudTrail logs show which actions were taken with compromised key
-- Check origin IP addresses (is this expected location?)
-- Determine scope: which resources were accessed/modified?
-
-*Containment:*
-```bash
-# Immediately disable the compromised access key
-aws iam update-access-key --access-key-id AKIA... --status Inactive --user-name compromised-user
-
-# Attach explicit deny policy to prevent any actions
-aws iam put-user-policy --user-name compromised-user --policy-name DenyAll --policy-document '{...}'
+```
+User Request
+    ↓
+Bedrock Agent (Orchestrator)
+    ↓
+┌─────────────┬──────────────┬─────────────┐
+│ Foundation  │  Action      │  Knowledge  │
+│ Model       │  Groups      │  Bases      │
+│ (Claude)    │  (Tools)     │  (RAG)      │
+└─────────────┴──────────────┴─────────────┘
+    ↓
+Response with reasoning trace
 ```
 
-*Recovery:*
-- Generate new access key for legitimate user
-- Review all resources accessed during compromise period
-- Check for backdoors (new IAM users, roles, lambda functions)
-- Rotate any secrets that may have been exposed
+**Action Groups - Extending Agent Capabilities:**
 
-This playbook is directly applicable to my dashboard. I should build an automated response:
-- EventBridge rule triggered by GuardDuty finding
-- Lambda function that disables key and applies deny policy
-- SNS notification to security team
-- Create CloudWatch dashboard showing compromised key activity timeline
-
-**Playbook 2: S3 Public Exposure**
-
-Scenario: S3 bucket accidentally made public
-
-*Detection:* Security Hub finding "S3.1 - S3 Block Public Access setting should be enabled" or EventBridge event "S3:PutBucketAcl"
+Action groups define what an agent can *do*. Each action group contains:
+- **OpenAPI schema:** Defines available functions, parameters, return types
+- **Lambda function:** Backend logic that executes the action
+- **Description:** Helps the model understand when to use this action
 
 
-3. **Collect Evidence:**
-- Memory dump (if needed for forensics)
-- Copy relevant logs to secure S3 bucket
-- Document timeline of events from CloudTrail
+When a user asks "What should I do about this high-severity GuardDuty finding?", the agent:
+1. Recognizes it needs security analysis capability
+2. Selects `analyzeGuardDutyFinding` function
+3. Invokes Lambda with finding details
+4. Receives structured response
+5. Formulates human-readable recommendation
 
-4. **Terminate or Remediate:**
-- If infrastructure-as-code: Terminate and redeploy clean version
-- If persistent: Scan with antivirus, remove malware, patch vulnerabilities
+**Knowledge Bases - RAG Integration:**
 
-The key insight is **immutable infrastructure**: treating compromised instances as disposable and rebuilding from known-good images is faster and more reliable than trying to clean infected systems.
+Knowledge bases allow agents to query proprietary documents using semantic search. The workflow:
 
-**Auto-Response with Lambda + Step Functions**
+1. **Ingestion:** Documents (PDFs, web pages, text files) stored in S3
+2. **Chunking:** Documents split into smaller segments (1000 tokens default)
+3. **Embedding:** Each chunk converted to vector embeddings using Titan Embeddings
+4. **Storage:** Vectors stored in OpenSearch Serverless (or other vector DBs)
+5. **Retrieval:** Agent queries knowledge base, gets most relevant chunks
+6. **Generation:** Model generates response using retrieved context
 
-The session demonstrated a Step Functions workflow for sophisticated incident response:
+For my dashboard, I could create knowledge bases containing:
+- AWS security best practices documentation
+- CIS Benchmark requirements
+- Internal security runbooks
+- Past incident reports
 
-```yaml
-IR-Workflow:
-  - Detect (EventBridge trigger)
-  - Snapshot (forensic preservation)
-  - Isolate (quarantine security group)
-  - Analyze (Lambda inspection)
-  - Decision:
-      If severity HIGH:
-        - Terminate instance
-        - Notify security team
-        - Create incident ticket
-      If severity MEDIUM:
-        - Keep quarantined
-        - Request manual review
-        - Schedule remediation
-  - Recover (rebuild from clean AMI)
-  - Document (update SIEM/case management)
+When users ask "How should I configure VPC Flow Logs?", the agent would retrieve relevant documentation chunks and provide contextualized answers specific to their environment.
+
+**Guardrails - Responsible AI:**
+
+Bedrock Guardrails ensure agents behave safely:
+- **Content filters:** Block harmful, biased, or inappropriate outputs
+- **Denied topics:** Prevent discussion of specified subjects
+- **Word filters:** Block profanity or sensitive terms
+- **PII redaction:** Automatically mask sensitive information
+- **Hallucination detection:** Reduce factually incorrect responses
+
+For production deployment, guardrails are essential to prevent agents from suggesting dangerous remediation actions (like deleting production databases).
+
+**Prompt Engineering for Agents:**
+
+The session revealed that agent prompts differ from standard LLM prompts. Agent prompts must:
+- Define agent role and responsibilities clearly
+- Specify how to use tools (when to call, what parameters to pass)
+- Provide response formatting instructions
+- Include examples of correct tool usage
+- Set boundaries (what NOT to do)
+
+Example agent instruction for security analysis:
+
+```
+You are a cloud security analyst specializing in AWS environments. Your role is to:
+1. Analyze security findings from GuardDuty, Security Hub, and IAM Access Analyzer
+2. Prioritize findings by severity and business impact
+3. Recommend specific, actionable remediation steps
+4. Explain the risk context in business terms
+
+When analyzing findings:
+- Always check the severity level first
+- Use the analyzeGuardDutyFinding tool for detailed analysis
+- Cross-reference with AWS security best practices knowledge base
+- Provide both immediate containment steps and long-term preventive measures
+
+Do NOT:
+- Make changes to production resources without explicit user confirmation
+- Suggest deleting resources without understanding their purpose
+- Provide generic recommendations without environment-specific context
 ```
 
-This orchestration handles complex scenarios with human-in-the-loop decision points for medium-severity incidents while fully automating high-severity responses.
+---
+
+## Use Case: Building Agentic Workflow on AWS (9:40 - 10:00 AM)
+
+Viet Pham, Founder & CEO of an AI startup, shared a real-world implementation of agentic workflows in production. The use case involved building a customer support automation system for an e-commerce platform.
+
+**The Problem:**
+Traditional chatbots follow decision trees - rigid, limited, and break when users ask unexpected questions. The company needed a system that could:
+- Understand complex, multi-intent customer queries
+- Access order databases, inventory systems, shipping APIs
+- Make intelligent decisions (refund vs. exchange vs. escalate)
+- Handle conversations across multiple turns
+- Maintain context throughout the interaction
+
+**The Solution - Agentic Workflow Architecture:**
+
+```
+Customer Query → Bedrock Agent → Orchestration Logic
+                                        ↓
+                 ┌──────────────────────┼──────────────────────┐
+                 ↓                      ↓                       ↓
+            Order Lookup          Inventory Check        Shipping API
+            (Lambda + RDS)        (Lambda + DynamoDB)    (La   ↓mbda + 3rd-party)
+                 ↓                      ↓                    
+                 └──────────────────────┴───────────────────────┘
+                                        ↓
+                                 Agent Decision Making
+                                        ↓
+                              Response + Action Taken
+```
+
+**Agent Workflow Example:**
+
+User: "I ordered a laptop 3 days ago but haven't received shipping confirmation. Can I change the shipping address?"
+
+Agent reasoning trace (shown in the demo):
+1. **Intent Recognition:** Order status query + shipping address modification
+2. **Tool Selection:** Call `getOrderStatus` with order ID (extracted from customer session)
+3. **Tool Execution:** Lambda queries RDS, returns order details
+4. **Analysis:** Order in "processing" state, not yet shipped
+5. **Decision:** Address modification is possible
+6. **Tool Selection:** Call `updateShippingAddress`
+7. **Confirmation:** Ask user for new address before executing
+8. **Tool Execution:** Update address in database
+9. **Response Generation:** Confirm change + provide estimated shipping date
+
+The beauty of this approach: **no hardcoded decision trees**. The agent dynamically determines workflow based on real-time data and user intent.
+
+**Multi-Step Reasoning Pattern:**
+
+The demo showed how agents handle complex queries requiring multiple API calls:
+
+User: "What's the cheapest laptop under $1000 that can be delivered by Friday?"
+
+Agent workflow:
+1. **Query 1:** `searchProducts(category="laptop", max_price=1000)` → Returns 15 products
+2. **Query 2:** `checkInventory(productIds=[...])` → Returns in-stock items
+3. **Query 3:** `getShippingEstimate(productIds=[...], targetDate="Friday")` → Returns delivery dates
+4. **Synthesis:** Agent compares prices and delivery dates, ranks options
+5. **Response:** "The HP Pavilion 15 at $899 can arrive Thursday. Would you like to proceed?"
+
+This multi-step reasoning is what makes agents "intelligent" - they don't just execute predefined workflows, they construct workflows on the fly.
+
+**Error Handling & Fallbacks:**
+
+A critical part of the presentation covered what happens when tools fail:
+
+- **API timeout:** Agent retries with exponential backoff, or suggests alternative action
+- **Invalid parameters:** Agent reformulates request with corrected parameters
+- **Ambiguous intent:** Agent asks clarifying questions rather than guessing
+- **Out-of-scope request:** Agent escalates to human agent gracefully
+
+The error handling wasn't hardcoded - the agent's foundation model reasoning enabled it to adapt to failures contextually.
+
+**Production Metrics Shared:**
+- **Query resolution rate:** 78% fully automated (vs. 35% with traditional chatbot)
+- **Average response time:** 4.2 seconds for multi-step queries
+- **Customer satisfaction:** 4.1/5 (vs. 3.2/5 for previous system)
+- **Cost:** ~$0.03 per conversation (Bedrock API + Lambda execution)
 
 **Key Takeaway for My Project:**
-Build incident response playbooks into dashboard as automated runbooks, implement EventBridge + Lambda auto-response for compromised keys and public S3 buckets, create snapshot-before-remediation pattern for forensic preservation, develop Step Functions workflows for complex IR scenarios, and add IR timeline visualization to dashboard showing attack progression from CloudTrail logs.
+The multi-step reasoning pattern applies directly to security incident investigation. When a GuardDuty finding appears, an agent could: (1) Fetch finding details, (2) Query CloudTrail for related API calls, (3) Check IAM policies for affected resources, (4) Retrieve similar past incidents from knowledge base, (5) Generate contextual remediation plan. This transforms my dashboard from reactive (show finding) to proactive (investigate and recommend).
 
 ---
-## Conclusion
 
-The AWS Well-Architected Security Pillar workshop provided a comprehensive framework for production-grade cloud security. The five pillars—Identity & Access Management, Detection, Infrastructure Protection, Data Protection, and Incident Response—are interconnected layers that create defense in depth.
+## CloudThinker Introduction (10:00 - 10:10 AM)
 
-The most valuable insight was the shift from reactive security (responding to alerts) to proactive security (automated prevention and response). By codifying security controls in infrastructure-as-code, implementing automated incident response, and continuously monitoring across all pillars, organizations can maintain security at scale without proportionally increasing headcount.
+Thang Ton, Co-founder & COO of CloudThinker, introduced their platform - an agentic orchestration layer built on top of Amazon Bedrock. CloudThinker addresses pain points in building production agentic systems:
 
-For my Cloud Health Dashboard project, this workshop outlined a clear roadmap from basic monitoring to comprehensive security operations platform. The technical knowledge gained will directly improve my architecture while the certifications roadmap provides career progression guidance.
+**Problems with Raw Bedrock Agents:**
+1. **Limited observability:** Hard to debug why agent made specific decisions
+2. **Context window management:** Agents lose context in long conversations
+3. **Multi-agent coordination:** No native support for agent-to-agent communication
+4. **Prompt versioning:** No built-in system for A/B testing prompts
+5. **Cost optimization:** Difficult to minimize token usage without sacrificing quality
 
-The networking opportunity with other Vietnamese engineers also revealed that security challenges are universal—every startup struggles with IAM complexity, multi-account architectures, and balancing security with development velocity. The solutions presented today are battle-tested patterns that apply across industries and company sizes.
+**CloudThinker's Value Proposition:**
+
+**1. Agentic Orchestration Layer:**
+- **Multi-agent workflows:** Coordinate specialist agents (data analyst agent + report writer agent)
+- **Agent handoff:** Seamlessly transfer context between agents
+- **Parallel execution:** Run multiple agents simultaneously, synthesize results
+- **Conditional routing:** Route to appropriate agent based on query type
+
+**2. Context Optimization:**
+- **Intelligent caching:** Reuse embeddings for repeated queries
+- **Dynamic context pruning:** Keep only relevant conversation history
+- **Hierarchical memory:** Short-term (current session) + long-term (across sessions)
+- **Semantic compression:** Summarize old context to save tokens
+
+**3. Observability & Debugging:**
+- **Agent reasoning traces:** See every decision, tool call, and model invocation
+- **Cost tracking:** Per-conversation, per-agent, per-tool usage metrics
+- **Latency breakdown:** Identify bottlenecks (embedding, retrieval, generation)
+- **A/B testing framework:** Compare prompt variations systematically
+
+The platform demo showed a dashboard (meta: a dashboard for building my dashboard's AI agent) with:
+- Real-time agent execution visualization
+- Token usage graphs
+- Tool invocation frequency
+- Success/failure rates per agent
+
+**Pricing Model:**
+CloudThinker charges based on orchestration complexity, not token usage:
+- Free tier: 1,000 agent executions/month
+- Pro: $99/month for 50,000 executions
+- Enterprise: Custom pricing with dedicated support
+
+Since Bedrock costs are separate, this could be cost-effective for high-volume agent workloads where orchestration optimization reduces overall Bedrock token usage.
+
+**Key Takeaway for My Project:**
+If I build an AI agent for my dashboard, CloudThinker could help with observability and multi-agent coordination (e.g., one agent for GuardDuty analysis, another for IAM policy review, coordinated by orchestrator). However, for a student project, starting with raw Bedrock Agents makes more sense to understand fundamentals before adding abstraction layers.
+
+---
+
+## CloudThinker Agentic Orchestration Deep Dive (10:10 - 10:40 AM)
+
+Henry Bui, Head of Engineering, provided a technical deep dive into CloudThinker's orchestration engine. This session was highly advanced (L300 level) and revealed sophisticated patterns for production agentic systems.
+
+**Context Window Management - The Core Challenge:**
+
+Foundation models have finite context windows:
+- Claude 3.5 Sonnet: 200K tokens (~150K words)
+- GPT-4 Turbo: 128K tokens
+- Llama 3.1: 128K tokens
+
+In long conversations or complex workflows, context can exceed these limits. Traditional approaches:
+- **Truncation:** Drop old messages (loses context)
+- **Summarization:** Compress old context (loses details)
+- **Sliding window:** Keep recent N messages (loses distant but relevant context)
+
+**CloudThinker's Hierarchical Memory System:**
+
+```
+┌─────────────────────────────────────────┐
+│   Working Memory (Current Session)      │
+│   - Last 10 conversation turns          │
+│   - Active tool results                 │
+│   - Temporary variables                 │
+│   Token Budget: 20K tokens              │
+└─────────────────────────────────────────┘
+              ↕ (relevance-based retrieval)
+┌─────────────────────────────────────────┐
+│   Episodic Memory (Past Sessions)       │
+│   - Summarized conversation history     │
+│   - Key decisions & outcomes            │
+│   - User preferences learned            │
+│   Stored in: DynamoDB + Vector DB       │
+└─────────────────────────────────────────┘
+              ↕ (semantic similarity search)
+┌─────────────────────────────────────────┐
+│   Semantic Memory (Long-term Knowledge) │
+│   - Domain facts                        │
+│   - Procedures & best practices         │
+│   - Tool usage patterns                 │
+│   Stored in: Knowledge Base (OpenSearch)│
+└─────────────────────────────────────────┘
+```
+
+**How It Works:**
+
+1. **New user query arrives** → Goes into Working Memory
+2. **Relevance scoring:** Semantic search across Episodic Memory for related past context
+3. **Dynamic loading:** Only relevant past context loaded into Working Memory
+4. **Token budget enforcement:** If over limit, least relevant context pruned
+5. **After response:** Conversation turn compressed and stored in Episodic Memory
+
+Example for my security dashboard:
+
+User today: "Show me recent GuardDuty findings"
+→ Agent retrieves findings, stores in Working Memory
+
+User later: "Are any of these related to the credential exposure incident from last month?"
+→ Agent searches Episodic Memory for "credential exposure" context
+→ Loads relevant findings from that incident
+→ Compares with current findings
+→ Responds with correlation analysis
+
+This enables long-term memory without blowing up context windows.
+
+**Multi-Agent Orchestration Patterns:**
+
+CloudThinker supports three agent collaboration patterns:
+
+**1. Sequential (Pipeline):**
+```
+User Query → Agent A (classifier) → Agent B (executor) → Agent C (formatter) → Response
+```
+Example: Query classification → Data retrieval → Report generation
+
+**2. Parallel (Fan-out/Fan-in):**
+```
+                  ┌→ Agent A (GuardDuty analysis)
+User Query → Router ┼→ Agent B (IAM review) ┼→ Aggregator → Response
+                  └→ Agent C (VPC Flow analysis)
+```
+Example: Comprehensive security assessment across multiple services
+
+**3. Conditional (Decision Tree):**
+```
+User Query → Router → IF security_finding:
+                         Agent A (incident response)
+                      ELIF billing_alert:
+                         Agent B (cost optimization)
+                      ELSE:
+                         Agent C (general assistance)
+```
+
+The demo showed a **fraud detection use case** with parallel agents:
+
+```
+Suspicious Transaction Detected
+         ↓
+    Orchestrator
+         ↓
+   ┌─────┴──────┬────────┐
+   ↓            ↓        ↓
+Account      Behavior  External
+History      Pattern   Threat
+Agent        Agent     Intelligence
+   ↓            ↓        ↓
+ "Normal    "Anomalous  "IP from
+  user      login       known
+  pattern"  location"   fraud list"
+   └─────┬──────┴────────┘
+         ↓
+    Aggregator Agent
+    (Risk Scoring)
+         ↓
+    Block transaction + Alert security team
+```
+
+Each agent runs in parallel, results aggregated, decision made in ~3 seconds.
+
+**For my Cloud Health Dashboard, this pattern enables:**
+
+User: "Analyze the security posture of account X"
+```
+Orchestrator
+    ↓
+┌───┴───┬─────────┬────────┐
+↓       ↓         ↓        ↓
+GuardDuty IAM     VPC      Data
+Analysis  Review  Config   Encryption
+Agent     Agent   Agent    Agent
+    └───┬───┴─────────┴────────┘
+        ↓
+   Report Generation Agent
+        ↓
+   Comprehensive Security Assessment
+```
+
+**Prompt Chaining & Self-Refinement:**
+
+Advanced pattern where agent critiques and improves its own output:
+
+```
+Step 1: Generate initial response
+Step 2: Critique response (separate agent or same agent with critic role)
+Step 3: Refine based on critique
+Step 4: Validate against criteria
+Step 5: Return final response
+```
+
+Demo showed code generation example:
+1. Agent generates Python function
+2. Critic agent reviews for security issues, edge cases, efficiency
+3. Original agent refines code based on feedback
+4. Validator checks if code passes test cases
+5. Iterations continue until validation passes (max 3 iterations)
+
+This self-refinement dramatically improves output quality, especially for complex tasks like IAM policy generation or CloudFormation template creation.
+
+**Cost Optimization Techniques:**
+
+Henry shared production metrics showing CloudThinker's optimizations:
+
+**Without optimization:**
+- Average conversation: 45K tokens
+- Cost per conversation: $0.15 (Claude Sonnet)
+- 10,000 conversations/month: $1,500
+
+**With CloudThinker optimization:**
+- Average conversation: 18K tokens (60% reduction)
+- Cost per conversation: $0.06
+- 10,000 conversations/month: $600
+
+**Optimization techniques used:**
+1. **Semantic caching:** Cache embeddings for repeated queries (50% cache hit rate)
+2. **Lazy loading:** Only load knowledge base chunks when needed
+3. **Compression:** Summarize old context aggressively
+4. **Model routing:** Use cheaper models (Haiku) for simple queries, Sonnet for complex
+5. **Batch processing:** Group similar queries to reuse context
+
+**Key Takeaway for My Project:**
+The hierarchical memory system and multi-agent orchestration patterns are production-critical for any agentic system at scale. For my dashboard, starting with a single agent is appropriate, but architecting for future multi-agent expansion (separate agents for GuardDuty, IAM, Network, Data protection) ensures scalability. The cost optimization techniques are essential if I add AI features - even with AWS credits, efficient token usage matters.
+
+---
+
+## Hands-On Workshop: Building a Bedrock Agent (11:00 - 12:00 PM)
+
+Kha Van led the practical workshop where we went to cloudthinker.io to optimaze cost, security and provide recommendations.
+
+---
+
+## Conclusion & Reflection
+
+The AWS Bedrock Agentic AI workshop transformed my understanding of how AI can move from passive tools (chatbots) to active systems (agents). The five key layers of agentic systems—foundation models, tool integration, knowledge bases, orchestration, and guardrails—create capabilities that go far beyond traditional AI applications.
+
+**Most Valuable Insights:**
+
+1. **Agents enable new UX patterns:** Instead of users figuring out which dashboard section to click or which API to call, they ask natural language questions and the agent orchestrates the solution. This dramatically lowers the barrier to cloud security expertise.
+
+2. **Tool calling is the breakthrough:** The ability for LLMs to reliably call external functions (APIs, databases, AWS services) with correct parameters turns language models from text generators into task executors.
+
+3. **Knowledge bases solve the freshness problem:** Instead of retraining models or hardcoding rules, knowledge bases let agents access up-to-date information (AWS documentation, security best practices) through semantic search.
+
+4. **Multi-agent orchestration enables specialization:** Rather than one monolithic agent trying to handle everything, specialized agents (GuardDuty expert, IAM expert, VPC expert) can collaborate, each leveraging focused knowledge.
+
+5. **Production requires observability:** The reasoning trace feature is essential for debugging, compliance, and continuous improvement. Without visibility into agent decision-making, production deployment is reckless.
+
+**Personal Learning Outcomes:**
+
+1. **Technical Depth:** Gained hands-on experience with Bedrock Agents, action groups, knowledge bases, and OpenAPI schema design. The workshop code examples provide a clear template for my implementation.
+
+2. **Architectural Thinking:** Understanding the tradeoffs between single-agent vs. multi-agent, synchronous vs. asynchronous, and real-time vs. batch processing will inform my dashboard design decisions.
+
+3. **Production Mindset:** The emphasis on observability, cost optimization, and guardrails reinforced that production AI systems require infrastructure beyond the model itself—logging, monitoring, safety controls.
+
+4. **AWS Service Integration:** Learned how Bedrock integrates with broader AWS ecosystem (Lambda, S3, OpenSearch, CloudWatch, IAM). This reinforces my understanding of AWS service orchestration.
 
 ---

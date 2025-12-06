@@ -48,20 +48,7 @@ During my internship, I participated in seven events. Each one was a memorable e
 
 ---
 
-### [Event 4 - AWS Bedrock Agent and Agentic Workflow](4.4-Event4/)
-&emsp;**Event Name:** AWS Bedrock Agent and Agentic Workflow
-
-&emsp;**Date & Time:** 09:00, November 2025
-
-&emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City
-
-&emsp;**Role:** Attendee
-
-&emsp;**Description:** A technical deep-dive into building automated workflows using AWS Bedrock Agent. Covered architecture, core features, operational mechanisms, and real-world use cases. Included hands-on workshop on building Agentic solutions and optimization strategies with CloudThinker's GenAI platform.
-
----
-
-### [Event 5 - DevOps on AWS](4.5-Event5/)
+### [Event 4 - DevOps on AWS](4.4-Event4/)
 &emsp;**Event Name:** DevOps on AWS
 
 &emsp;**Date & Time:** 08:30, November 2025
@@ -74,7 +61,7 @@ During my internship, I participated in seven events. Each one was a memorable e
 
 ---
 
-### [Event 6 - AWS Well-Architected Security Pillar](4.6-Event6/)
+### [Event 5 - AWS Well-Architected Security Pillar](4.5-Event5/)
 &emsp;**Event Name:** AWS Well-Architected Security Pillar
 
 &emsp;**Date & Time:** 08:30, November 2025
@@ -86,8 +73,8 @@ During my internship, I participated in seven events. Each one was a memorable e
 &emsp;**Description:**  A technical deep-dive into security using WAF, shield, NACL, security group, .....
 
 
-### [Event 7 - AWS Bedrock Agentic AI Workshop](4.7-Event7/)
-&emsp;**Event Name:** AWS Bedrock Agentic AI Workshop
+### [Event 6 - BUILDING AGENTIC AI Context Optimization with Amazon Bedrock](4.6-Event6/)
+&emsp;**Event Name:** BUILDING AGENTIC AI Context Optimization with Amazon Bedrock
 
 &emsp;**Date & Time:** 09:00, December 2025
 
