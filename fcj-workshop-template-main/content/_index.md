@@ -24,9 +24,9 @@ chapter: false
 
 &emsp; **Internship Position:** FCJ Cloud Intern
 
-&emsp; **Internship Period:** From September 1, 2025 to November 12, 2025
+&emsp; **Internship Period:** From September 1, 2025 to December 24, 2025
 
-![Your avatar](/images/avatar.png)
+![avatar.jpg](/images/avatar.jpg)
 
 ### Report Content
 

@@ -7,6 +7,8 @@ pre: "  2.  "
 ---
 # AWS Cloud Health Dashboard
 ---
+### 📥 [Download Official Project Plan (Docx)](AWS-Cloud-Health-Dashboard.docx)
+---
 
 ## 1. Executive Summary
 
@@ -65,7 +67,6 @@ Cloud Health Dashboard provides a production-grade platform with DevSecOps pract
 
 - Automated CI/CD pipeline (CodePipeline + CodeBuild)
 - Security scanning (SAST with Bandit, dependency scanning with Safety)
-- Blue-green deployment strategy for zero downtime
 - Infrastructure monitoring with CloudWatch
 - Audit logging with CloudTrail
 - Secrets management with AWS Secrets Manager + KMS

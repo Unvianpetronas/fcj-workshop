@@ -1,46 +1,98 @@
 ---
-title: "Các events đã tham gia"
+title: "Các Sự kiện Đã Tham gia"
 date: "`r Sys.Date()`"
 weight: 400
 chapter: false
 pre: " <b> 4. </b> "
 ---
+Trong kỳ thực tập, tôi đã tham gia 7 sự kiện. Mỗi sự kiện đều là một trải nghiệm đáng nhớ, mang lại nhiều kiến thức mới mẻ, thú vị và bổ ích, cùng với những món quà và những khoảnh khắc tuyệt vời.
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+### [Sự kiện 1 - Vietnam Cloud Day](4.1-Event1/)
+&emsp;**Tên Sự kiện:** Vietnam Cloud Day
 
-> Trong phần này, các bạn cần liệt kê và mô tả chi tiết các sự kiện (event) mà mình đã tham gia trong suốt quá trình thực tập hoặc làm việc. 
-> 
-> Mỗi sự kiện nên được trình bày theo định dạng Event 1, Event 2, Event 3…, kèm theo các thông tin:
-> * Tên sự kiện
-> * Thời gian tổ chức
-> * Địa điểm (nếu có)
-> * Vai trò của bạn trong sự kiện (người tham dự, hỗ trợ tổ chức, diễn giả, v.v.)
-> * Mô tả ngắn gọn nội dung và hoạt động chính trong sự kiện
-> * Kết quả hoặc giá trị đạt được (bài học, kỹ năng mới, đóng góp cho nhóm/dự án)
-> * Việc liệt kê này giúp thể hiện rõ sự tham gia thực tế của bạn, cũng như các kỹ năng mềm và kinh nghiệm bạn đã tích lũy qua từng sự kiện.
+&emsp;**Ngày & Giờ:** 09:00, 18 tháng 9, 2025
 
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
 
-Trong quá trình thực tập, em đã tham gia 2 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là nhứng món quà và những khoảnh khắc rất tuyệt vời.
+&emsp;**Vai trò:** Người tham dự
 
-### [Event 1](4.1-Event1/)
-&emsp;**Tên sự kiện:** Viet Nam Cloud Day
+&emsp;**Mô tả:** Workshop toàn diện về kiến trúc ứng dụng hiện đại, bao gồm Domain-Driven Design (DDD), kiến trúc hướng sự kiện, microservices và serverless computing. Với sự tham gia của các chuyên gia AWS chia sẻ best practices trong hiện đại hóa ứng dụng, sự phát triển của compute (từ EC2 đến Lambda), và các công cụ phát triển được hỗ trợ bởi AI như Amazon Q Developer.
 
-&emsp;**Thời gian:** 09:00 ngày 18/09/2025
+---
 
-&emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
+### [Sự kiện 2 - Amazon Q Developer for SAP ABAP](4.2-Event2/)
+&emsp;**Tên Sự kiện:** Amazon Q Developer for SAP ABAP Workshop
 
-&emsp;**Vai trò trong sự kiện:** Người tham dự 
+&emsp;**Ngày & Giờ:** 09:00, 13 tháng 8, 2025
 
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
 
+&emsp;**Vai trò:** Người tham dự
 
-### [Event 2](4.2-Event2/)
-&emsp;**Tên sự kiện:** GenAI-powered App-DB Modernization workshop
+&emsp;**Mô tả:** Workshop thực hành tập trung vào tác động của Amazon Q Developer đối với phát triển SAP ABAP. Bao gồm hiện đại hóa ứng dụng legacy, các patterns kiến trúc hướng sự kiện, và kỹ thuật prompt engineering thực tế với Amazon Q cho chuyển đổi code và tự động hóa SDLC.
 
-&emsp;**Thời gian:** 09:00 ngày 13/08/2025
+---
 
-&emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
+### [Sự kiện 3 - AI/ML/GenAI on AWS](4.3-Event3/)
+&emsp;**Tên Sự kiện:** AI/ML/GenAI on AWS
 
-&emsp;**Vai trò trong sự kiện:** Người tham dự 
+&emsp;**Ngày & Giờ:** 08:00, Tháng 11/2025
 
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+
+&emsp;**Vai trò:** Người tham dự
+
+&emsp;**Mô tả:** Sự kiện chuyên sâu về các dịch vụ AI/ML của AWS, với Amazon SageMaker cho vòng đời machine learning end-to-end, MLOps best practices, và demo trực tiếp về SageMaker Studio. Khám phá bức tranh ML tại Việt Nam và các ứng dụng thực tế của công cụ AWS AI/ML.
+
+---
+
+### [Sự kiện 4 - AWS Bedrock Agent and Agentic Workflow](4.4-Event4/)
+&emsp;**Tên Sự kiện:** AWS Bedrock Agent and Agentic Workflow
+
+&emsp;**Ngày & Giờ:** 09:00, Tháng 11/2025
+
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+
+&emsp;**Vai trò:** Người tham dự
+
+&emsp;**Mô tả:** Workshop kỹ thuật chuyên sâu về xây dựng các workflow tự động sử dụng AWS Bedrock Agent. Bao gồm kiến trúc, tính năng core, cơ chế hoạt động và các use cases thực tế. Bao gồm workshop thực hành xây dựng giải pháp Agentic và các chiến lược tối ưu hóa với nền tảng GenAI của CloudThinker.
+
+---
+
+### [Sự kiện 5 - DevOps on AWS](4.5-Event5/)
+&emsp;**Tên Sự kiện:** DevOps on AWS
+
+&emsp;**Ngày & Giờ:** 08:30, Tháng 11/2025
+
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+
+&emsp;**Vai trò:** Người tham dự
+
+&emsp;**Mô tả:** Workshop toàn diện về văn hóa DevOps, nguyên tắc và các dịch vụ AWS DevOps. Bao gồm xây dựng CI/CD pipeline sử dụng AWS CodeFamily (CodeCommit, CodeBuild, CodeDeploy), Infrastructure as Code với CloudFormation và CDK, các chiến lược deployment (Blue/Green, Canary, Rolling), và observability với CloudWatch và X-Ray. Nhấn mạnh DORA metrics và các thực践 DevOps hiện đại.
+
+---
+
+### [Sự kiện 6 - AWS Well-Architected Security Pillar](4.6-Event6/)
+&emsp;**Tên Sự kiện:** AWS Well-Architected Security Pillar
+
+&emsp;**Ngày & Giờ:** 08:30, Tháng 11/2025
+
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco, 02 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+
+&emsp;**Vai trò:** Người tham dự
+
+&emsp;**Mô tả:** Workshop kỹ thuật chuyên sâu về bảo mật sử dụng WAF, Shield, NACL, security group, và các dịch vụ bảo mật AWS khác.
+
+---
+
+### [Sự kiện 7 - AWS Bedrock Agentic AI Workshop](4.7-Event7/)
+&emsp;**Tên Sự kiện:** AWS Bedrock Agentic AI Workshop
+
+&emsp;**Ngày & Giờ:** 09:00, Tháng 12/2025
+
+&emsp;**Địa điểm:** Văn phòng AWS Việt Nam, Thành phố Hồ Chí Minh
+
+&emsp;**Vai trò:** Người tham dự
+
+&emsp;**Mô tả:** Workshop toàn diện về xây dựng các hệ thống agentic AI cấp production sử dụng Amazon Bedrock, bao gồm kiến trúc agent, action groups, knowledge bases (RAG), các patterns điều phối multi-agent, và nền tảng CloudThinker cho tối ưu hóa chi phí và observability.
+```
